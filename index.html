@@ -445,20 +445,30 @@
            EFECTO FLASH BLANCO AL PRESIONAR CUALQUIER BOTÓN
            Feedback visual universal al tocar teclas
            ============================================================ */
+        /* A. FLASH SÓLIDO: Exclusivo para teclas numéricas y de control bajo */
         .btn-key:active,
-        .caja-data:active,
+        .btn-back:active,
         .btn-theme:active,
         .btn-receipt:active,
-        .btn-step:active,
-        .btn-add-embedded:active,
-        .btn-power-bottom:active,
-        .btn-hrs-lcd:active,
-        .tab-btn-lcd:active {
+        .btn-power-bottom:active {
             background: #ffffff !important;
             color: #000000 !important;
             filter: brightness(2) contrast(1.5) !important;
             box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
             text-shadow: none !important;
+            transition: none !important;
+        }
+
+        /* B. DESTELLO NEÓN LIMPIO: Para las cajas de menús y selectores de arriba */
+        /* Al tocarlos, brillan intensamente con su color neón sin dar el cantazo blanco */
+        .caja-data:active,
+        .btn-step:active,
+        .btn-add-embedded:active,
+        .btn-hrs-lcd:active,
+        .tab-btn-lcd:active {
+            filter: brightness(1.5) !important;
+            box-shadow: 0 0 18px var(--neon-secondary), inset 0 0 8px #ffffff !important;
+            border-color: #ffffff !important;
             transition: none !important;
         }
 

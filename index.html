@@ -341,25 +341,42 @@
             color: #00f0ff !important;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 0 10px rgba(0,240,255,0.2) !important;
         }
-        .lcd.modo-salario-activo .lcd-header {
-            border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
+        /* A. FLASH SÓLIDO: Exclusivo para teclas numéricas y botones de acción baja (TEMA, RECIBO, CLEAR) */
+        .btn-key:active,
+        .btn-back:active,
+        .btn-theme:active,
+        .btn-receipt:active,
+        .btn-clear-master:active {
+            background: #ffffff !important;
+            color: #000000 !important;
+            filter: brightness(2) contrast(1.5) !important;
+            box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
+            text-shadow: none !important;
+            transition: none !important;
         }
 
-        /* ============================================================
-           ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
-           ============================================================ */
-        @keyframes crtTVClose {
-            0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
-            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
+        /* B. DESTELLO NEÓN SUTIL: Para las cajas de menús y botones dentro del LCD */
+        .caja-data:active,
+        .btn-step:active,
+        .btn-add-embedded:active,
+        .btn-hrs-lcd:active,
+        .tab-btn-lcd:active {
+            filter: brightness(1.4) !important;
+            box-shadow: 0 0 15px var(--neon-secondary), inset 0 0 6px #ffffff !important;
+            border-color: #ffffff !important;
+            transition: none !important;
         }
-        @keyframes crtTVOpen {
-            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
-            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
+
+        /* C. EL GLITCH DE LOS NÚMEROS: Destello sutil de brillo en el LCD que jamás encoge la pantalla */
+        .lcd.glitch-active {
+            animation: flashTeclasLcd 0.08s ease-out !important;
         }
-        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-        .lcd.power-on-crt  { animation: crtTVOpen  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+
+        @keyframes flashTeclasLcd {
+            0%   { filter: brightness(1); }
+            50%  { filter: brightness(1.25) contrast(1.05); }
+            100% { filter: brightness(1); }
+        }
 
         /* Cabecera del LCD (indicadores de estado) */
         .lcd-header {
@@ -1387,7 +1404,7 @@
         <div class="row-acciones-inferior">
             <button id="btnTheme" class="btn-theme" onclick="rotarTema()">TEMA</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
-            <button id="btnTogglePower" class="btn-power-bottom power-active-btn" onclick="solicitarApagado()">⏻</button>
+            <button id="btnClearMaster" class="btn-clear-master" style="border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; font-family: monospace; height: 28px; font-size: 8px; background: var(--num-bg-theme) !important; border: 2px solid var(--neon-primary) !important; color: #fff !important; width: 100%; z-index: 15;" onclick="ejecutarClearDirecto()">CLEAR</button>
         </div>
 
     </div><!-- fin chasis -->

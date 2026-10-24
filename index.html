@@ -1789,25 +1789,36 @@
             const chasis = document.getElementById('calcChasis');
 
             if (sistemaEncendido) {
-                // --- APAGAR ---
+                // ------------------ MODO: APAGAR ------------------
                 sistemaEncendido = false;
                 reproducirSonido('apagar');
+                
+                // 1. Limpiamos cualquier rastro de encendido y clavamos la animación CRT de apagado
                 lcd.classList.remove('power-on-crt');
                 lcd.classList.add('power-off-crt');
+                
                 sSub = "0";
                 document.getElementById('lblSub').innerText = "0";
+                
+                // 2. Apagamos las bombillas neón del chasis después que termine el colapso visual
                 setTimeout(() => {
                     if (!sistemaEncendido) chasis.classList.add('global-power-off');
                 }, 400);
+                
                 toggleTeclasBloqueo(true);
             } else {
-                // --- ENCENDER ---
+                // ------------------ MODO: ENCENDER ------------------
+                // 1. Devolvemos la corriente al chasis al instante
                 chasis.classList.remove('global-power-off');
+                
+                // 2. ⚡ EL TRUCO CLAVE: Limpiamos por completo AMBAS animaciones viejas de la memoria del LCD
                 lcd.classList.remove('power-off-crt', 'power-on-crt');
-                void lcd.offsetWidth; // Fuerza reflow para reiniciar la animación
+                void lcd.offsetWidth; // Fuerza al navegador a resetear los circuitos eléctricos internos (Reflow)
+                
+                // 3. Inyectamos únicamente la animación de encendido limpio
                 lcd.classList.add('power-on-crt');
 
-                // Restaurar opacidad de todos los botones
+                // 4. Encendemos los leds neón de todos los bloques táctiles
                 document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
                     .forEach(b => b.style.opacity = "1");
                 document.querySelectorAll('.pad-num .btn-key')

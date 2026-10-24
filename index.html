@@ -348,42 +348,18 @@
         /* ============================================================
            ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
            ============================================================ */
-        /* EFECTO DE APAGAR: La pantalla colapsa hacia el centro hasta desaparecer */
         @keyframes crtTVClose {
             0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
             40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
+            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
         }
-
-        /* ANIMACIÓN DE ABRIR REAL: La pantalla se expande desde el centro hacia afuera */
         @keyframes crtTVOpen {
-            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
+            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
             40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
             100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
         }
-
-        /* Clases que el JavaScript le inyectará a la pantalla verde */
-        .lcd.power-off-crt { 
-            animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
-        }
-        
-        .lcd.power-on-crt  { 
-            animation: crtTVOpen 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
-        }
-
-        /* EL FLASH DE LOS NÚMEROS: Obligamos a la clase .glitch-active a hacer 
-           UN DESTELLO DE BRILLO y le prohibimos CERRAR o achicar la pantalla visualmente */
-        .lcd.glitch-active {
-            animation: destelloFlashTeclas 0.1s ease-out !important;
-            transform: scale(1, 1) !important; /* Mantiene la pantalla abierta al 100% */
-            opacity: 1 !important;
-        }
-
-        @keyframes destelloFlashTeclas {
-            0%   { filter: brightness(1); }
-            50%  { filter: brightness(1.4) contrast(1.1); }
-            100% { filter: brightness(1); }
-        }
+        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+        .lcd.power-on-crt  { animation: crtTVOpen  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
 
         /* Cabecera del LCD (indicadores de estado) */
         .lcd-header {

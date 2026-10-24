@@ -913,9 +913,9 @@
         /* ============================================================
            FILA INFERIOR: TEMA | RECIBO | ENCENDIDO/APAGADO
            ============================================================ */
-        .btn-theme, .btn-receipt, .btn-power-bottom {
+        .btn-theme, .btn-receipt, .btn-clear-master {
             border-radius: 10px;
-            font-weight: bold;
+            font-weight: 900; /* Le metemos más grosor a las letras */
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
@@ -923,11 +923,12 @@
             justify-content: center;
             align-items: center;
             font-family: monospace;
-            height: 28px;
-            font-size: 8px;
+            height: 38px;       /* Subimos la altura de 28px a 38px pa' que quepa el texto grande */
+            font-size: 11px;    /* Agrandamos la letra de 8px a 11px para que resalte nítido */
+            
             background: var(--num-bg-theme) !important;
             border: 2px solid var(--neon-primary) !important;
-            color: #ccc !important;
+            color: #ffffff !important; /* Texto en blanco sólido brillante */
             width: 100%;
             z-index: 15;
         }
@@ -1404,7 +1405,8 @@
         <div class="row-acciones-inferior">
             <button id="btnTheme" class="btn-theme" onclick="rotarTema()">TEMA</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
-            <button id="btnClearMaster" class="btn-clear-master" style="border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; font-family: monospace; height: 28px; font-size: 8px; background: var(--num-bg-theme) !important; border: 2px solid var(--neon-primary) !important; color: #fff !important; width: 100%; z-index: 15;" onclick="ejecutarClearDirecto()">CLEAR</button>
+            <!-- Botón de Clear Máster limpio de estilos en línea molestosos -->
+            <button id="btnClearMaster" class="btn-clear-master" onclick="ejecutarClearDirecto()">CLEAR</button>
         </div>
 
     </div><!-- fin chasis -->

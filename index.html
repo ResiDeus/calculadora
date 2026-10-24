@@ -1889,6 +1889,9 @@
             // (Eliminamos seleccionarMenu('sub') para que no arrastre lógicas viejas)
             mode = 'sub';
             
+            // ⚡ ¡ESTA ES LA LÍNEA NUEVA! Fuerza a la pantalla a mostrar el cero al instante
+            document.getElementById('lblSub').innerText = "0";
+            
             // Apagamos los parpadeos viejos y encendemos solo el del precio actual
             document.querySelectorAll('.lbl-val span').forEach(el => el.classList.remove('blink-num'));
             document.getElementById('lblSub').classList.add('blink-num');

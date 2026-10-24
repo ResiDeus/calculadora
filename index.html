@@ -549,17 +549,16 @@
 
         .caja-data {
             width: 100%;
-            padding: 4px 2px;
+            padding: 6px 2px; /* Le damos un chispito más de espacio arriba y abajo */
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
-            font-size: 8px;
             transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 48px;
+            min-height: 54px; /* Subimos la altura de 48px a 54px pa' que el texto grande respire */
             position: relative;
             background: var(--btn-bg-theme);
             background-size: 200% 200%;
@@ -570,20 +569,18 @@
             overflow: hidden;
         }
 
-        /* Estado activo de la caja (opción encendida) */
-        @keyframes titileoLentoPixel {
-            0%, 100% { opacity: 0.15; }
-            50%       { opacity: 1; }
+        /* El título de arriba (ej. "Serrucho", "IVU") */
+        .caja-data .lbl-title {
+            font-size: 10px !important; /* Subimos de 8px a 10px para que se lea claro */
+            font-weight: 900 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
         }
 
-        .caja-data.btn-on {
-            background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
-            background-size: 200% 200% !important;
-            animation: neonPulse 1.8s infinite ease-in-out, activeMenuMove 3s infinite ease-in-out !important;
-            color: #ffffff !important;
-            opacity: 1 !important;
-            border-color: #ffffff !important;
-            box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
+        /* El valor numérico de abajo (ej. "11.5%", "N/A") */
+        .caja-data .lbl-val {
+            font-size: 11px !important; /* Subimos de 8px a 11px para que los números resalten */
             font-weight: 900 !important;
         }
 

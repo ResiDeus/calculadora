@@ -1802,12 +1802,20 @@
                 toggleTeclasBloqueo(true);
             } else {
                 // --- ENCENDER ---
+                // Quita el estado de apagado del chasis inmediatamente
                 chasis.classList.remove('global-power-off');
-                lcd.classList.remove('power-off-crt', 'power-on-crt');
-                void lcd.offsetWidth; // Fuerza reflow para reiniciar la animación
+        
+                // Limpia las clases viejas del LCD para que no arrastre el efecto de apagado
+                lcd.classList.remove('power-off-crt');
+                lcd.classList.remove('power-on-crt');
+        
+                // Reinicio de los circuitos del navegador
+                void lcd.offsetWidth; 
+        
+                // Efecto de encendido limpio
                 lcd.classList.add('power-on-crt');
 
-                // Restaurar opacidad de todos los botones
+                // Restaura la opacidad a los botones
                 document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
                     .forEach(b => b.style.opacity = "1");
                 document.querySelectorAll('.pad-num .btn-key')
@@ -1818,6 +1826,8 @@
                 sistemaEncendido = true;
                 toggleTeclasBloqueo(false);
                 reproducirSonido('menu');
+        
+                // Ejecuta el reset de las memorias
                 ejecutarResetTotal();
             }
         }

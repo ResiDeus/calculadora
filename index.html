@@ -348,42 +348,18 @@
         /* ============================================================
            ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
            ============================================================ */
-        /* Animación A: Cierre total de la pantalla hacia adentro */
         @keyframes crtTVClose {
             0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
             40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
+            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
         }
-
-        /* Animación B: Apertura total de la pantalla hacia AFUERA */
         @keyframes crtTVOpen {
-            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
+            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
             40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
             100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
         }
-
-        /* Asignación limpia de clases al LCD. Evitamos que se queden congeladas */
-        .lcd.power-off-crt { 
-            animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
-        }
-        
-        .lcd.power-on-crt  { 
-            animation: crtTVOpen 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
-        }
-
-        /* Definimos que .glitch-active de las teclas haga UN FLASH DE BRILLO 
-           y le prohibimos explícitamente alterar la escala geométrica (transform) del LCD */
-        .lcd.glitch-active {
-            animation: flashTeclasUnico 0.1s ease-out !important;
-            transform: scale(1, 1) !important; /* Congela la pantalla abierta pa' que no se cierre */
-            opacity: 1 !important;
-        }
-
-        @keyframes flashTeclasUnico {
-            0%   { filter: brightness(1); }
-            50%  { filter: brightness(1.35) contrast(1.1); }
-            100% { filter: brightness(1); }
-        }
+        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+        .lcd.power-on-crt  { animation: crtTVOpen  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
 
         /* Cabecera del LCD (indicadores de estado) */
         .lcd-header {
@@ -1817,8 +1793,8 @@
                 sistemaEncendido = false;
                 reproducirSonido('apagar');
                 
-                // Limpiamos encendido y forzamos el cierre
-                lcd.classList.remove('power-on-crt', 'glitch-active');
+                // Remueve encendido y clava apagado
+                lcd.classList.remove('power-on-crt');
                 lcd.classList.add('power-off-crt');
                 
                 sSub = "0";
@@ -1831,16 +1807,16 @@
                 // --- MODO: ENCENDER ---
                 chasis.classList.remove('global-power-off');
                 
-                // ⚡ EL REINICIO MAESTRO: Removemos el fantasma del apagado anterior de cantazo
+                // ⚡ EL TRUCO MAESTRO: Limpiamos las dos clases viejas por completo
                 lcd.classList.remove('power-off-crt', 'power-on-crt', 'glitch-active');
                 
-                // Forzamos al navegador a apagar y encender la corriente del render (Reflow)
+                // Forzamos un reinicio eléctrico en el motor del navegador (Reflow)
                 void lcd.offsetWidth; 
                 
-                // Forzamos la animación de apertura limpia hacia afuera
+                // Inyectamos la animación de abrir limpia
                 lcd.classList.add('power-on-crt');
 
-                // Encendemos las luces del resto del chasis
+                // Restaurar la luz neón de los bloques de la interfaz
                 document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
                     .forEach(b => b.style.opacity = "1");
                 document.querySelectorAll('.pad-num .btn-key')

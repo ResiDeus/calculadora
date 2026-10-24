@@ -1046,9 +1046,9 @@
              ======================================================== -->
         <div class="lcd" id="pantallaVerde">
 
-            <!-- Cabecera: indicadores de estado del sistema -->
+            <!-- Cabecera: indicadores de modo del sistema -->
             <div class="lcd-header">
-                <span id="txtHeaderIndicadores" class="blinking-header-text">SISTEMA ACTIVO</span>
+                <span id="txtHeaderIndicadores" class="blinking-header-text">MODO COMPRAS</span>
             </div>
 
             <!-- Contenedor de la lista de precios / subpantalla salario -->
@@ -1290,7 +1290,7 @@
                     ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', 1)"
                     onmouseup="detenerAutoIncremento()"
                     onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
+                    ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaDesc" class="caja-data btn-off" onclick="seleccionarMenu('desc')">
                     <span class="lbl-title">Descuento</span>
                     <span class="lbl-val">-<span id="lblDesc">0</span>%</span>
@@ -1874,7 +1874,7 @@
             if (incluirPropina) subpartes.push(`TIP: ${memoriaTipPct}%`);
             if (modoDescuentoActivo) subpartes.push(`DTO: -${memoriaDescuentoPct}%`);
             document.getElementById('txtHeaderIndicadores').innerText =
-                subpartes.length > 0 ? subpartes.join(' | ') : "SISTEMA ACTIVO";
+                subpartes.length > 0 ? subpartes.join(' | ') : "MODO COMPRAS";
         }
 
         /* ============================================================

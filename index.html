@@ -1893,8 +1893,14 @@
             memoriaIvuPct = "11.5";
             modoIvuActivo = false;
             document.getElementById('lblIvuBoton').innerText = "0.0";
-
-            seleccionarMenu('sub');
+            
+            /** Hace reset limpio */
+            mode = 'sub';
+            document.getElementById('lblSub').classList.add('blink-num');
+            document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+            
+            actualizarHeaderIndicadores();
+            calc();
         }
 
         /** Actualiza el texto de la cabecera del LCD según el estado actual */

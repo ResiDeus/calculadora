@@ -1,210 +1,455 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- ============================================================
+         CONFIGURACIÓN BÁSICA DEL DOCUMENTO
+         Calculadora de Resi (Puerto Rico) - App tipo PWA
+         ============================================================ -->
     <meta charset="UTF-8">
+    
+    <!-- Viewport optimizado para móviles (iOS y Android).
+         maximum-scale y user-scalable evitan zoom accidental.
+         viewport-fit=cover permite que el contenido llegue hasta los bordes (notch). -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Color de la barra de estado del navegador / PWA -->
     <meta name="theme-color" content="#09011a">
+    
     <title>Calculadora de Resi</title>
 
-    <!-- 🚨 REEMPLAZO PASO 1: PASAPORTE DE ENLACE DE PANTALLA COMPLETA TOTAL (PWA) PARA IOS Y ANDROID -->
+    <!-- ============================================================
+         META TAGS PARA PWA (Progressive Web App)
+         Permiten que la app se abra a pantalla completa en iOS y Android
+         ============================================================ -->
+    
+    <!-- iOS: indica que la web puede funcionar como app nativa -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <!-- iOS: estilo de la barra de estado (transparente sobre el contenido) -->
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- iOS: fuerza modo pantalla completa al añadir a pantalla de inicio -->
     <meta name="apple-touch-fullscreen" content="yes">
+    
+    <!-- Nombre corto que aparece debajo del icono en iOS -->
     <meta name="apple-mobile-web-app-title" content="ResiDeus">
+    
+    <!-- Android / Chrome: permite instalar como app -->
     <meta name="mobile-web-app-capable" content="yes">
     
-    <!-- Enlace al archivo de configuración de pantalla completa nativa de Android -->
+    <!-- Archivo de manifiesto para Android (configuración de PWA) -->
     <link rel="manifest" href="./manifest.json">
     
+    <!-- Icono de la app (favicon y apple-touch-icon).
+         El parámetro ?v=200 fuerza recarga del icono al actualizar. -->
     <link rel="icon" type="image/jpeg" href="./icon.jpg?v=200">
     <link rel="apple-touch-icon" type="image/jpeg" href="./icon.jpg?v=200">
 
     <style>
-
+        /* ============================================================
+           ANIMACIÓN DE PARPADEO DEL NÚMERO EN PANTALLA
+           Se usa en el precio actual para indicar que se puede editar
+           ============================================================ */
         .blink-num {
-    animation: parpadeoCalculadora 0.3s steps(2, start) infinite !important;
-}
+            animation: parpadeoCalculadora 0.3s steps(2, start) infinite !important;
+        }
 
-@keyframes parpadeoCalculadora {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
+        @keyframes parpadeoCalculadora {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
 
-        /* ==========================================================================
-           🎨 ASIGNACIÓN DE TEMAS DINÁMICOS COMPLETA (CON REJILLAS DE PRECIO INTEGRADAS)
-           ========================================================================== */
-        /* 1️⃣ CYBERPUNK (Rejilla Cyan Neón) */
+        /* ============================================================
+           SISTEMA DE TEMAS DINÁMICOS
+           Cada tema define variables CSS (colores neón, fondos, etc.)
+           y una rejilla de fondo para el marcador de precio.
+           Temas disponibles:
+             1. Cyberpunk
+             2. Retro Gold
+             3. Matrix
+             4. Sunset
+             5. Puerto Rico (tema especial del proyecto)
+           ============================================================ */
+
+        /* ---------- TEMA 1: CYBERPUNK (neón rosa + cian) ---------- */
         body.theme-cyberpunk {
             --bg-grad: linear-gradient(180deg, #09011a 0%, #2c044d 100%);
-            --neon-primary: #ff007f; --neon-secondary: #00f0ff; --receipt-glow: #00ff66;
+            --neon-primary: #ff007f;
+            --neon-secondary: #00f0ff;
+            --receipt-glow: #00ff66;
             --btn-bg-theme: linear-gradient(135deg, #150624 0%, #250b3e 50%, #150624 100%);
             --num-bg-theme: linear-gradient(180deg, #2d0e54 0%, #11021f 100%);
             --blue-tech: linear-gradient(45deg, #0066ff, #00f0ff, #0066ff);
         }
         body.theme-cyberpunk #marcadorPrecioUnificado {
-            background-image: 
+            background-image:
                 linear-gradient(rgba(0, 240, 255, 0.25) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 240, 255, 0.25) 1px, transparent 1px) !important;
         }
 
-        /* 2️⃣ RETRO GOLD (Rejilla Oro Ámbar) */
+        /* ---------- TEMA 2: RETRO GOLD (ámbar / oro) ---------- */
         body.theme-retro-gold {
             --bg-grad: linear-gradient(180deg, #1c1917 0%, #44403c 100%);
-            --neon-primary: #d97706; --neon-secondary: #fbbf24; --receipt-glow: #fbbf24;
+            --neon-primary: #d97706;
+            --neon-secondary: #fbbf24;
+            --receipt-glow: #fbbf24;
             --btn-bg-theme: linear-gradient(135deg, #292524 0%, #44403c 50%, #292524 100%);
             --num-bg-theme: linear-gradient(180deg, #44403c 0%, #1c1917 100%);
             --blue-tech: linear-gradient(45deg, #b45309, #fbbf24, #b45309);
         }
         body.theme-retro-gold #marcadorPrecioUnificado {
-            background-image: 
+            background-image:
                 linear-gradient(rgba(251, 191, 36, 0.25) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(251, 191, 36, 0.25) 1px, transparent 1px) !important;
         }
 
-        /* 3️⃣ MATRIX (Rejilla Verde Fósforo) */
+        /* ---------- TEMA 3: MATRIX (verde fósforo) ---------- */
         body.theme-matrix {
             --bg-grad: linear-gradient(180deg, #022c22 0%, #050505 100%);
-            --neon-primary: #10b981; --neon-secondary: #34d399; --receipt-glow: #34d399;
+            --neon-primary: #10b981;
+            --neon-secondary: #34d399;
+            --receipt-glow: #34d399;
             --btn-bg-theme: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #022c22 100%);
             --num-bg-theme: linear-gradient(180deg, #022c22 0%, #050505 100%);
             --blue-tech: linear-gradient(45deg, #047857, #34d399, #047857);
         }
         body.theme-matrix #marcadorPrecioUnificado {
-            background-image: 
+            background-image:
                 linear-gradient(rgba(52, 211, 153, 0.25) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(52, 211, 153, 0.25) 1px, transparent 1px) !important;
         }
 
-        /* 4️⃣ SUNSET (Rejilla Naranja Fuego) */
+        /* ---------- TEMA 4: SUNSET (naranja fuego) ---------- */
         body.theme-sunset {
             --bg-grad: linear-gradient(180deg, #451a03 0%, #78350f 100%);
-            --neon-primary: #f97316; --neon-secondary: #fdba74; --receipt-glow: #fdba74;
+            --neon-primary: #f97316;
+            --neon-secondary: #fdba74;
+            --receipt-glow: #fdba74;
             --btn-bg-theme: linear-gradient(135deg, #292524 0%, #451a03 50%, #292524 100%);
             --num-bg-theme: linear-gradient(180deg, #78350f 0%, #292524 100%);
             --blue-tech: linear-gradient(45deg, #9a3412, #fdba74, #9a3412);
         }
         body.theme-sunset #marcadorPrecioUnificado {
-            background-image: 
+            background-image:
                 linear-gradient(rgba(253, 186, 116, 0.25) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(253, 186, 116, 0.25) 1px, transparent 1px) !important;
-                }
+        }
 
-        /* 🚨 REEMPLAZO MAESTRO: PROTECCIÓN CONTRA FRANJA BLANCA Y NOTCH EN IOS */
-        html { 
-            background-color: #09011a !important; /* Desvanece el bloque blanco de fábrica del iPhone */
+        /* ---------- TEMA 5: PUERTO RICO (azul celeste + rojo bandera) ---------- */
+        body.theme-puertorico {
+            --bg-grad: linear-gradient(180deg, #0050ef 0%, #1c0d3a 100%);
+            --neon-primary: #ef4444;      /* Rojo de la bandera */
+            --neon-secondary: #00d2ff;    /* Azul celeste brillante */
+            --receipt-glow: #00ff66;
+            --btn-bg-theme: linear-gradient(135deg, #051630 0%, #0c2b54 50%, #051630 100%);
+            --num-bg-theme: linear-gradient(180deg, #0d2854 0%, #040d1f 100%);
+            --blue-tech: linear-gradient(45deg, #0050ef, #00d2ff, #0050ef);
+        }
+        body.theme-puertorico #marcadorPrecioUnificado {
+            background-image:
+                linear-gradient(rgba(0, 210, 255, 0.25) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 210, 255, 0.25) 1px, transparent 1px) !important;
+        }
+
+        /* ============================================================
+           ESTILOS GLOBALES DE HTML Y BODY
+           Evitan franja blanca en iOS, notch y scroll no deseado
+           ============================================================ */
+        html {
+            background-color: #09011a !important; /* Evita fondo blanco por defecto en iPhone */
             height: 100vh;
             width: 100vw;
             overflow: hidden;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { 
-            width: 100vw; 
-            height: 100vh; 
-            overflow: hidden; 
-            position: relative; 
-            font-family: monospace; 
-            transition: background 0.3s ease; 
-            /* Crea un colchón háptico automático para que el reloj y la muesca no le pasen por encima al LCD */
-            padding-top: env(safe-area-inset-top); 
-        }
-        body { background: var(--bg-grad) !important; }
 
-        
-        /* ✨ AMBIENTACIÓN RETRO */
-        .sky { position: absolute; width: 100%; height: 100%; background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent), radial-gradient(1.5px 1px at 75px 120px, #fff9, transparent); background-size: 380px 380px; z-index: 1; animation: twk 4s infinite linear; pointer-events: none; }
-        .grid3d { position: absolute; width: 100%; height: 40%; bottom: 0; background-size: 40px 40px; transform: perspective(180px) rotateX(65deg); transform-origin: top center; z-index: 1; animation: gM 2.5s infinite linear; pointer-events: none; }
-        .grid3d { background-image: linear-gradient(rgba(255, 0, 127, 0.12) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 0, 127, 0.12) 2px, transparent 2px); }
-        @keyframes twk { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-        @keyframes gM { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }
-        
-        /* 📟 CHASIS FÍSICO CON REGLA ESTRICTA DE ENERGÍA */
-        .chasis { 
-            width: 340px; 
-            height: auto; 
-            min-height: 580px; 
-            background: #160d21; 
-            border: 4px solid var(--neon-primary); 
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3); 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            /* 🧲 Subimos de -50% a -55% en el eje Y para jalar la calculadora sutilmente hacia arriba y centrarla */
-            transform: translate(-50%, -55%) !important; 
-            z-index: 10; 
-            border-radius: 24px; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            padding: 12px; 
-            gap: 8px; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        /* Reset universal: todos los elementos usan box-sizing border-box */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        
-        /* 🔌 APAGÓN TOTAL ESTRICTO DEL PANEL Y DE LOS BOTONES */
-        .chasis.global-power-off { filter: grayscale(0.5); box-shadow: none !important; border-color: #333 !important; background: #0b0611; }
-        .chasis.global-power-off .lcd { background: #121805 !important; box-shadow: inset 0 4px 10px rgba(0,0,0,0.9) !important; border-color: #222 !important; }
-        .chasis.global-power-off .lcd * { opacity: 0 !important; visibility: hidden !important; text-shadow: none !important; }
-        
-        /* Precio invisible en el apagado */
-        .chasis.global-power-off .contenedor-precio-unificado { opacity: 0 !important; visibility: hidden !important; box-shadow: none !important; outline: none !important; }
-        
-        .chasis.global-power-off .btn-key:not(.power-btn), 
-        .chasis.global-power-off .caja-data, 
-        .chasis.global-power-off .btn-theme, 
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            font-family: monospace;
+            transition: background 0.3s ease;
+            /* Respeta el safe-area del notch / Dynamic Island de iOS */
+            padding-top: env(safe-area-inset-top);
+        }
+
+        body {
+            background: var(--bg-grad) !important;
+        }
+
+        /* ============================================================
+           AMBIENTACIÓN RETRO (cielo estrellado + rejilla 3D inferior)
+           Solo decorativos, no interceptan clics (pointer-events: none)
+           ============================================================ */
+        .sky {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+                radial-gradient(1.5px 1px at 75px 120px, #fff9, transparent);
+            background-size: 380px 380px;
+            z-index: 1;
+            animation: twk 4s infinite linear;
+            pointer-events: none;
+        }
+
+        .grid3d {
+            position: absolute;
+            width: 100%;
+            height: 40%;
+            bottom: 0;
+            background-size: 40px 40px;
+            transform: perspective(180px) rotateX(65deg);
+            transform-origin: top center;
+            z-index: 1;
+            animation: gM 2.5s infinite linear;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 0, 127, 0.12) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255, 0, 127, 0.12) 2px, transparent 2px);
+        }
+
+        /* Animación de parpadeo suave de las estrellas */
+        @keyframes twk {
+            0%, 100% { opacity: 0.6; }
+            50%       { opacity: 1; }
+        }
+
+        /* Animación de movimiento continuo de la rejilla 3D */
+        @keyframes gM {
+            0%   { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
+
+        /* ============================================================
+           CHASIS FÍSICO DE LA CALCULADORA
+           Contenedor principal centrado en pantalla
+           ============================================================ */
+        .chasis {
+            width: 340px;
+            height: auto;
+            min-height: 580px;
+            background: #160d21;
+            border: 4px solid var(--neon-primary);
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* -55% en Y sube ligeramente el chasis para centrarlo mejor */
+            transform: translate(-50%, -55%) !important;
+            z-index: 10;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ============================================================
+           ESTADO DE APAGADO GLOBAL
+           Cuando la calculadora está "apagada" se desactiva casi todo
+           ============================================================ */
+        .chasis.global-power-off {
+            filter: grayscale(0.5);
+            box-shadow: none !important;
+            border-color: #333 !important;
+            background: #0b0611;
+        }
+
+        .chasis.global-power-off .lcd {
+            background: #121805 !important;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.9) !important;
+            border-color: #222 !important;
+        }
+
+        /* Oculta todo el contenido del LCD al apagar */
+        .chasis.global-power-off .lcd * {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            text-shadow: none !important;
+        }
+
+        /* Oculta el marcador de precio al apagar */
+        .chasis.global-power-off .contenedor-precio-unificado {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+        /* Desactiva botones y cajas de datos (excepto el de encendido) */
+        .chasis.global-power-off .btn-key:not(.power-btn),
+        .chasis.global-power-off .caja-data,
+        .chasis.global-power-off .btn-theme,
         .chasis.global-power-off .btn-receipt,
         .chasis.global-power-off .btn-step,
-        .chasis.global-power-off .btn-add-embedded { box-shadow: none !important; text-shadow: none !important; border-color: #222 !important; animation: none !important; opacity: 0 !important; pointer-events: none !important; }
-        
-        /* Botón de encendido verde activo constante al apagarse */
-        .chasis.global-power-off .btn-power-bottom { background: #022c22 !important; border-color: #10b981 !important; color: #34d399 !important; text-shadow: 0 0 8px #10b981 !important; opacity: 1 !important; pointer-events: auto !important; }
-
-        /* 🟢 PANTALLA LCD RETRO DE ALTA DENSIDAD */
-        .lcd { width: 100%; height: 185px; background: #92b043; border: 2px solid #000; border-radius: 14px; color: #000; box-shadow: inset 0 2px 6px rgba(0,0,0,0.3); font-weight: bold; padding: 6px 8px; display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: all 0.4s ease; transform-origin: center; z-index: 12; overflow: hidden; }
-        
-        /* 🔵 MUTACIÓN A SUB-PANTALLA AZUL CIBERNÉTICO CONTRIBUTIVA DE SALARIO */
-        .lcd.modo-salario-activo { background: #051e36 !important; color: #00f0ff !important; box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 0 10px rgba(0,240,255,0.2) !important; }
-        .lcd.modo-salario-activo .lcd-header { border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important; }
-
-        /* Animaciones CRT de Televisor Vintage */
-        @keyframes crtTVClose { 0% { transform: scale(1, 1); filter: brightness(1); opacity: 1; } 40% { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; } 100% { transform: scale(0, 0); filter: brightness(5); opacity: 0; background: #fff; } }
-        @keyframes crtTVOpen { 0% { transform: scale(0, 0); filter: brightness(5); opacity: 0; background: #fff; } 40% { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; } 100% { transform: scale(1, 1); filter: brightness(1); opacity: 1; } }
-        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-        .lcd.power-on-crt { animation: crtTVOpen 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-
-        .lcd-header { display: flex; justify-content: space-between; font-size: 10px; border-bottom: 1px solid rgba(0,0,0,0.2); line-height: 1.2; }
-        .blinking-header-text { opacity: 1; }
-
-        /* Contenedores con altura calibrada para que nada se piche ni rompa el overflow */
-        .lcd-wrapper { position: relative; flex-grow: 1; display: flex; flex-direction: column; margin: 0; max-height: 78px; overflow: visible !important; }
-        .listaPrecios-container { flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow: visible !important; }
-
-        /* 🚨 JAULA ESTRICTA DE 4 ÍTEMS MÁXIMOS CON SCROLL INERIAL */
-        .lcd-historial { 
-            display: grid !important;
-            grid-auto-rows: 12px !important; /* Fuerza a cada línea de artículo a medir exactamente 12px */
-            gap: 0px !important;            /* Destruye cualquier margen dinámico entre filas */
-            font-size: 9px; 
-            height: 48px !important;        /* Dimensión inmutable en el eje vertical */
-            max-height: 48px !important; 
-            overflow-y: auto !important; 
-            text-align: left; 
-            padding-right: 4px; 
-            line-height: 12px !important;   /* Clava la tipografía para que no estire su contenedor */
-            box-sizing: border-box !important;
-            -webkit-overflow-scrolling: touch; 
+        .chasis.global-power-off .btn-add-embedded {
+            box-shadow: none !important;
+            text-shadow: none !important;
+            border-color: #222 !important;
+            animation: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
-        .lcd-body { text-align: left !important; font-size: 9px; line-height: 1.2; }
-        .lcd-total { font-size: 22px; font-weight: 900; text-align: left !important; line-height: 1.1; }
 
-        @keyframes blinkScrollHint { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-        .scroll-hint { position: absolute; bottom: 1px; right: 2px; font-size: 8px; color: rgba(0,0,0,0.8); animation: blinkScrollHint 1s infinite ease-in-out; pointer-events: none; display: none; background: rgba(146, 176, 67, 0.9); padding: 0 4px; border-radius: 3px; font-weight: 900; }
+        /* El botón de encendido permanece visible y usable en modo apagado */
+        .chasis.global-power-off .btn-power-bottom {
+            background: #022c22 !important;
+            border-color: #10b981 !important;
+            color: #34d399 !important;
+            text-shadow: 0 0 8px #10b981 !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
 
-        /* ⚡ CONTROLES DEL EFECTO FLASH BLANCO UNIVERSAL AL TOCAR LAS TECLAS */
-        .btn-key:active, 
-        .caja-data:active, 
-        .btn-theme:active, 
-        .btn-receipt:active, 
-        .btn-step:active, 
+        /* ============================================================
+           PANTALLA LCD RETRO (verde clásico)
+           ============================================================ */
+        .lcd {
+            width: 100%;
+            height: 185px;
+            background: #92b043;
+            border: 2px solid #000;
+            border-radius: 14px;
+            color: #000;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+            font-weight: bold;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.4s ease;
+            transform-origin: center;
+            z-index: 12;
+            overflow: hidden;
+        }
+
+        /* ---------- Modo salario: LCD cambia a azul ciber ---------- */
+        .lcd.modo-salario-activo {
+            background: #051e36 !important;
+            color: #00f0ff !important;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 0 10px rgba(0,240,255,0.2) !important;
+        }
+        .lcd.modo-salario-activo .lcd-header {
+            border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
+        }
+
+        /* ============================================================
+           ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
+           ============================================================ */
+        @keyframes crtTVClose {
+            0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
+            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
+            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
+        }
+        @keyframes crtTVOpen {
+            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
+            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
+            100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
+        }
+        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+        .lcd.power-on-crt  { animation: crtTVOpen  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+
+        /* Cabecera del LCD (indicadores de estado) */
+        .lcd-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+        .blinking-header-text {
+            opacity: 1;
+        }
+
+        /* Contenedores internos del LCD con alturas fijas para evitar desbordes */
+        .lcd-wrapper {
+            position: relative;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            max-height: 78px;
+            overflow: visible !important;
+        }
+        .listaPrecios-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: visible !important;
+        }
+
+        /* ============================================================
+           HISTORIAL DE ARTÍCULOS (jaula de máximo ~4 líneas visibles)
+           ============================================================ */
+        .lcd-historial {
+            display: grid !important;
+            grid-auto-rows: 12px !important; /* Cada fila mide exactamente 12px */
+            gap: 0px !important;
+            font-size: 9px;
+            height: 48px !important;
+            max-height: 48px !important;
+            overflow-y: auto !important;
+            text-align: left;
+            padding-right: 4px;
+            line-height: 12px !important;
+            box-sizing: border-box !important;
+            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+        }
+
+        .lcd-body {
+            text-align: left !important;
+            font-size: 9px;
+            line-height: 1.2;
+        }
+
+        .lcd-total {
+            font-size: 22px;
+            font-weight: 900;
+            text-align: left !important;
+            line-height: 1.1;
+        }
+
+        /* Indicador de scroll (flecha "▼ deslizar") */
+        @keyframes blinkScrollHint {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.2; }
+        }
+        .scroll-hint {
+            position: absolute;
+            bottom: 1px;
+            right: 2px;
+            font-size: 8px;
+            color: rgba(0,0,0,0.8);
+            animation: blinkScrollHint 1s infinite ease-in-out;
+            pointer-events: none;
+            display: none;
+            background: rgba(146, 176, 67, 0.9);
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 900;
+        }
+                /* ============================================================
+           EFECTO FLASH BLANCO AL PRESIONAR CUALQUIER BOTÓN
+           Feedback visual universal al tocar teclas
+           ============================================================ */
+        .btn-key:active,
+        .caja-data:active,
+        .btn-theme:active,
+        .btn-receipt:active,
+        .btn-step:active,
         .btn-add-embedded:active,
         .btn-power-bottom:active,
         .btn-hrs-lcd:active,
@@ -216,82 +461,247 @@
             text-shadow: none !important;
             transition: none !important;
         }
-        /* 🎛️ GRID HORIZONTAL EXPANDIDO: 5 Columnas perfectas alineadas simétricamente */
-        .row-opciones-pasos { display: grid; grid-template-columns: repeat(5, 1fr) !important; gap: 3px; width: 100%; }
-        .wrapper-pasos { display: flex; flex-direction: column; gap: 2px; align-items: center; width: 100%; }
-        
-        /* 🕹️ Flechas acopladas por completo al color del tema activo */
-        .btn-step { width: 100%; height: 22px; background: var(--num-bg-theme); border: 1px solid var(--neon-primary); color: #fff; font-size: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; border-radius: 4px; transition: all 0.1s ease; user-select: none; -webkit-user-select: none; }
 
-        /* Botones de Opciones vinculados al conmutador de temas */
-        @keyframes activeMenuMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes neonPulse {
-            0%, 100% { box-shadow: 0 0 8px var(--neon-primary), inset 0 0 3px var(--neon-primary); border-color: #fff; }
-            50% { box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary); border-color: var(--neon-secondary); }
+        /* ============================================================
+           FILA DE OPCIONES (5 columnas): Serrucho, Propina, Salario,
+           Descuento e IVU. Cada una tiene flechas ▲ ▼ y caja de datos
+           ============================================================ */
+        .row-opciones-pasos {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 3px;
+            width: 100%;
         }
-        .caja-data { width: 100%; padding: 4px 2px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 8px; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 48px; position: relative; background: var(--btn-bg-theme); background-size: 200% 200%; animation: activeMenuMove 6s infinite ease-in-out; border: 2px solid var(--neon-primary); color: #fff !important; opacity: 0.9; overflow: hidden; }
-        
-        /* 🌌 CONFIGURACIÓN CON TEXTO EN NEGRETAS (BOLD) FIJA CON ESTRELLITAS PÍXEL 8-BITS */
-        @keyframes titileoLentoPixel { 0%, 100% { opacity: 0.15; } 50% { opacity: 1; } }
-        .caja-data.btn-on { 
+
+        .wrapper-pasos {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Botones de flecha (incremento / decremento) */
+        .btn-step {
+            width: 100%;
+            height: 22px;
+            background: var(--num-bg-theme);
+            border: 1px solid var(--neon-primary);
+            color: #fff;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            transition: all 0.1s ease;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ============================================================
+           CAJAS DE DATOS (Serrucho, Propina, Salario, Descuento, IVU)
+           ============================================================ */
+        @keyframes activeMenuMove {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Pulso neón cuando una opción está activa */
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow: 0 0 8px var(--neon-primary), inset 0 0 3px var(--neon-primary);
+                border-color: #fff;
+            }
+            50% {
+                box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary);
+                border-color: var(--neon-secondary);
+            }
+        }
+
+        .caja-data {
+            width: 100%;
+            padding: 4px 2px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 48px;
+            position: relative;
+            background: var(--btn-bg-theme);
+            background-size: 200% 200%;
+            animation: activeMenuMove 6s infinite ease-in-out;
+            border: 2px solid var(--neon-primary);
+            color: #fff !important;
+            opacity: 0.9;
+            overflow: hidden;
+        }
+
+        /* Estado activo de la caja (opción encendida) */
+        @keyframes titileoLentoPixel {
+            0%, 100% { opacity: 0.15; }
+            50%       { opacity: 1; }
+        }
+
+        .caja-data.btn-on {
             background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
             background-size: 200% 200% !important;
-            animation: neonPulse 1.8s infinite ease-in-out, activeMenuMove 3s infinite ease-in-out !important; 
-            color: #ffffff !important; opacity: 1 !important; border-color: #ffffff !important;
+            animation: neonPulse 1.8s infinite ease-in-out, activeMenuMove 3s infinite ease-in-out !important;
+            color: #ffffff !important;
+            opacity: 1 !important;
+            border-color: #ffffff !important;
             box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
             font-weight: 900 !important;
         }
+
+        /* Estrellitas pixel decorativas cuando la caja está activa */
         .caja-data.btn-on::before {
-            content: ""; position: absolute; width: 1px; height: 1px; background: #ffffff; top: 10px; left: 12px;
-            box-shadow: 10px 22px 0 #ffffff, 35px 5px 0 #ffffff, 45px 28px 0 #ffffff, 20px -4px 0 #ffffff;
-            z-index: 1; animation: titileoLentoPixel 3.5s infinite ease-in-out !important; pointer-events: none;
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: #ffffff;
+            top: 10px;
+            left: 12px;
+            box-shadow:
+                10px 22px 0 #ffffff,
+                35px 5px 0 #ffffff,
+                45px 28px 0 #ffffff,
+                20px -4px 0 #ffffff;
+            z-index: 1;
+            animation: titileoLentoPixel 3.5s infinite ease-in-out !important;
+            pointer-events: none;
         }
-        .caja-data.btn-on * { position: relative; z-index: 2; font-weight: 900 !important; }
+        .caja-data.btn-on * {
+            position: relative;
+            z-index: 2;
+            font-weight: 900 !important;
+        }
 
-        /* 📟 CONTENEDOR INTEGRADO DE PRECIO ANIMADO DE SQUARES SYNTHWAVE */
-        @keyframes synthwaveShift { 0% { background-position: 0% 0%; } 100% { background-position: 40px 40px; } }
-        .contenedor-precio-unificado { display: flex; width: 100%; gap: 4px; background-color: #0b0214 !important; background-size: 20px 20px !important; animation: synthwaveShift 2.5s infinite linear !important; border-radius: 10px; border: 2px solid var(--neon-secondary); padding: 4px; min-height: 52px; align-items: center; transition: all 0.2s ease; position: relative; overflow: hidden; }
-        .contenedor-precio-unificado.precio-on { border-color: #fff; box-shadow: 0 0 14px var(--neon-secondary); }
-        
-        .btn-add-embedded { width: 55px; height: 100%; min-height: 40px; background: var(--blue-tech) !important; background-size: 200% 200% !important; animation: activeMenuMove 4s infinite ease-in-out; border: 2px solid #fff; border-radius: 6px; color: #ffffff !important; font-size: 24px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px var(--neon-secondary); transition: all 0.1s ease; user-select: none; z-index: 2; }
-        #cajaSub { flex-grow: 1; background: transparent !important; border: none !important; box-shadow: none !important; min-height: auto; align-items: center !important; justify-content: center !important; color: #fff !important; opacity: 1; text-align: center; }
-        #cajaSub .lbl-title { font-size: 8px; text-transform: uppercase; color: var(--neon-secondary); margin-bottom: 1px; font-weight: bold; text-shadow: 0 0 4px rgba(0,240,255,0.2); }
-        #cajaSub .lbl-val { font-size: 18px !important; font-weight: 900; color: #fff !important; }
+        /* ============================================================
+           CONTENEDOR UNIFICADO DE PRECIO (marcador + botón AÑADIR)
+           ============================================================ */
+        @keyframes synthwaveShift {
+            0%   { background-position: 0% 0%; }
+            100% { background-position: 40px 40px; }
+        }
 
-        /* ==========================================================================
-           🌴 TECLADO SYNTHWAVE: NOCHE RELAX CON ESTRELLAS REALES Y AURAS DE NEÓN
-           ========================================================================== */
-        .pad-num { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; }
+        .contenedor-precio-unificado {
+            display: flex;
+            width: 100%;
+            gap: 4px;
+            background-color: #0b0214 !important;
+            background-size: 20px 20px !important;
+            animation: synthwaveShift 2.5s infinite linear !important;
+            border-radius: 10px;
+            border: 2px solid var(--neon-secondary);
+            padding: 4px;
+            min-height: 52px;
+            align-items: center;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-        /* ✨ Animación ultra lenta para que las estrellas parpadeen suavemente */
+        .contenedor-precio-unificado.precio-on {
+            border-color: #fff;
+            box-shadow: 0 0 14px var(--neon-secondary);
+        }
+
+        /* Botón "AÑADIR" embebido en el marcador de precio */
+        .btn-add-embedded {
+            width: 55px;
+            height: 100%;
+            min-height: 40px;
+            background: var(--blue-tech) !important;
+            background-size: 200% 200% !important;
+            animation: activeMenuMove 4s infinite ease-in-out;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            color: #ffffff !important;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px var(--neon-secondary);
+            transition: all 0.1s ease;
+            user-select: none;
+            z-index: 2;
+        }
+
+        /* Área central del precio ($ + valor) */
+        #cajaSub {
+            flex-grow: 1;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            min-height: auto;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #fff !important;
+            opacity: 1;
+            text-align: center;
+        }
+        #cajaSub .lbl-title {
+            font-size: 8px;
+            text-transform: uppercase;
+            color: var(--neon-secondary);
+            margin-bottom: 1px;
+            font-weight: bold;
+            text-shadow: 0 0 4px rgba(0,240,255,0.2);
+        }
+        #cajaSub .lbl-val {
+            font-size: 18px !important;
+            font-weight: 900;
+            color: #fff !important;
+        }
+
+        /* ============================================================
+           TECLADO NUMÉRICO (pad de 3 columnas)
+           ============================================================ */
+        .pad-num {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            width: 100%;
+        }
+
+        /* Animación lenta de estrellas en los botones del teclado */
         @keyframes estrellasRelaxNoche {
             0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.9; }
+            50%       { opacity: 0.9; }
         }
 
-        /* 🔮 Animación de aura parpadeante para los números (Text Glow) */
+        /* Aura neón que parpadea en el texto de los números */
         @keyframes auraNeonParpadeo {
             0%, 100% { text-shadow: 0 0 4px var(--neon-secondary), 0 0 10px var(--neon-secondary); }
-            50% { text-shadow: 0 0 8px var(--neon-secondary), 0 0 18px var(--neon-secondary), 0 0 25px var(--neon-secondary); }
+            50%       { text-shadow: 0 0 8px var(--neon-secondary), 0 0 18px var(--neon-secondary), 0 0 25px var(--neon-secondary); }
         }
 
-        /* Estructura Base de los Botones del Teclado */
-        .btn-key, .btn-back { 
-            height: 38px; 
-            border-radius: 6px; 
-            font-size: 1.1rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: monospace; 
-            position: relative; 
-            overflow: hidden; 
-            z-index: 10; 
-            opacity: 1 !important; 
+        /* Estilo base de cada tecla del pad numérico */
+        .btn-key, .btn-back {
+            height: 38px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: monospace;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+            opacity: 1 !important;
             pointer-events: auto !important;
-            /* Dos capas fijas: El fondo relax azul y el SVG de palmas al borde derecho */
             background-repeat: no-repeat !important;
             background-position: center right !important;
             background-size: contain !important;
@@ -300,7 +710,7 @@
             -webkit-user-select: none;
         }
 
-        /* 🚨 REGLA MAESTRA DE PRESIÓN: Flash Blanco Puro y Sólido instantáneo en cualquier Tema */
+        /* Flash blanco sólido al presionar una tecla */
         .btn-key:active, .btn-back:active {
             background-color: #ffffff !important;
             background-image: none !important;
@@ -311,13 +721,16 @@
             animation: none !important;
             transition: none !important;
         }
-        .btn-key:active::before, .btn-back:active::before { display: none !important; }
+        .btn-key:active::before, .btn-back:active::before {
+            display: none !important;
+        }
 
-        /* 🌌 Capa Vectorial Exclusiva de Estrellas para Alta Visibilidad en iOS */
+        /* Capa de estrellas SVG sobre cada tecla (visibilidad en iOS) */
         .btn-key::before, .btn-back::before {
             content: "";
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><circle cx='15' cy='18' r='1.5' fill='%23ffffff'/><circle cx='82' cy='12' r='1.2' fill='%23ffffff'/><circle cx='42' cy='32' r='1.5' fill='%23ffffff'/><circle cx='22' cy='78' r='1.2' fill='%23ffffff'/><circle cx='72' cy='68' r='1.5' fill='%23ffffff'/></svg>") !important;
             background-size: 100% 100% !important;
             background-repeat: no-repeat !important;
@@ -326,23 +739,23 @@
             z-index: 1;
         }
 
-        /* ==========================================================================
-           🎨 CAPAS CONTRIBUTIVAS Y AURAS DE COLOR DE LOS CONTROLES POR TEMA
-           ========================================================================== */
+        /* ---------- Estilos de teclas por tema ---------- */
 
-        /* 🔵 TEMA 1: CYBERPUNK */
-        body.theme-cyberpunk .btn-key, body.theme-cyberpunk .btn-back {
+        /* Cyberpunk */
+        body.theme-cyberpunk .btn-key,
+        body.theme-cyberpunk .btn-back {
             --neon-secondary: #00f0ff;
             background-color: #040d21 !important;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%2300f0ff' opacity='0.22'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23ff007f' opacity='0.18'/></svg>") !important;
             color: #ffffff !important;
             border: 2px solid #00f0ff !important;
             box-shadow: 0 0 8px rgba(0, 240, 255, 0.3) !important;
-            animation: auraNeonParpadeo 2.5s infinite ease-in-out; /* Activa el aura parpadeante */
+            animation: auraNeonParpadeo 2.5s infinite ease-in-out;
         }
 
-        /* 🟡 TEMA 2: RETRO GOLD */
-        body.theme-retro-gold .btn-key, body.theme-retro-gold .btn-back {
+        /* Retro Gold */
+        body.theme-retro-gold .btn-key,
+        body.theme-retro-gold .btn-back {
             --neon-secondary: #fbbf24;
             background-color: #030a17 !important;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%23fbbf24' opacity='0.2'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23b45309' opacity='0.15'/></svg>") !important;
@@ -352,8 +765,9 @@
             animation: auraNeonParpadeo 2.8s infinite ease-in-out;
         }
 
-        /* 🟢 TEMA 3: MATRIX */
-        body.theme-matrix .btn-key, body.theme-matrix .btn-back {
+        /* Matrix */
+        body.theme-matrix .btn-key,
+        body.theme-matrix .btn-back {
             --neon-secondary: #34d399;
             background-color: #020814 !important;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%2334d399' opacity='0.2'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23047857' opacity='0.15'/></svg>") !important;
@@ -363,8 +777,9 @@
             animation: auraNeonParpadeo 3s infinite ease-in-out;
         }
 
-        /* 🟠 TEMA 4: SUNSET */
-        body.theme-sunset .btn-key, body.theme-sunset .btn-back {
+        /* Sunset */
+        body.theme-sunset .btn-key,
+        body.theme-sunset .btn-back {
             --neon-secondary: #f97316;
             background-color: #02091c !important;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%23f97316' opacity='0.22'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%2378350f' opacity='0.15'/></svg>") !important;
@@ -374,29 +789,11 @@
             animation: auraNeonParpadeo 2.6s infinite ease-in-out;
         }
 
-        /* ==========================================================================
-           🇵🇷 5️⃣ TEMA ADICIONAL: PUERTO RICO (Azul Celeste, Rojo Bandera y Palmas Patrias)
-           ========================================================================== */
-        body.theme-puertorico {
-            --bg-grad: linear-gradient(180deg, #0050ef 0%, #1c0d3a 100%); /* Azul Celeste a Índigo Nocturno */
-            --neon-primary: #ef4444;    /* Rojo Bandera */
-            --neon-secondary: #00d2ff;  /* Azul Celeste Brillante */
-            --receipt-glow: #00ff66;
-            --btn-bg-theme: linear-gradient(135deg, #051630 0%, #0c2b54 50%, #051630 100%);
-            --num-bg-theme: linear-gradient(180deg, #0d2854 0%, #040d1f 100%);
-            --blue-tech: linear-gradient(45deg, #0050ef, #00d2ff, #0050ef);
-        }
-        body.theme-puertorico #marcadorPrecioUnificado {
-            background-image: 
-                linear-gradient(rgba(0, 210, 255, 0.25) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 210, 255, 0.25) 1px, transparent 1px) !important;
-        }
-
-        /* 🚨 REPARACIÓN MAESTRA DE HARDWARE: URL RECONSTRUIDA CON ENLACE XML MAESTRO */
-        body.theme-puertorico .btn-key, body.theme-puertorico .btn-back {
+        /* Puerto Rico */
+        body.theme-puertorico .btn-key,
+        body.theme-puertorico .btn-back {
             --neon-secondary: #00d2ff;
             background-color: #040c1f !important;
-            /* Se sanó el pasaporte XML apuntando a la dirección digital completa para evitar bloqueos en iOS */
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%2300d2ff' opacity='0.22'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23ef4444' opacity='0.18'/></svg>") !important;
             color: #ffffff !important;
             border: 2px solid #00d2ff !important;
@@ -404,55 +801,211 @@
             animation: auraNeonParpadeo 2.6s infinite ease-in-out;
         }
 
-
-
-
-
-
-        /* ➕ / ➖ MICRO BOTONES Y CONTROLES INTERACTIVOS INTERNOS DEL LCD AZUL EN ALTA CAPA */
-        .btn-hrs-lcd { background: #00f0ff; border: none; color: #051e36; font-size: 11px; font-weight: 900; width: 16px; height: 16px; border-radius: 4px; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; margin: 0 1px; vertical-align: middle; transition: all 0.1s ease; font-family: monospace; position: relative !important; z-index: 100 !important; overflow: hidden; }
-        
-        .tab-btn-lcd { background: rgba(0,240,255,0.12); border: 1px solid rgba(0,240,255,0.35); color: rgba(0,240,255,0.8); font-size: 8px; font-weight: 900; padding: 2px 5px; border-radius: 4px; cursor: pointer; font-family: monospace; transition: all 0.15s ease; flex-grow: 1; text-align: center; position: relative !important; z-index: 100 !important; overflow: hidden; }
-        .tab-btn-lcd.active { background: #00f0ff !important; color: #051e36 !important; box-shadow: 0 0 6px #00f0ff !important; border-color: #fff !important; }
-        
-                /* 🚨 REEMPLAZO MODULAR CSS: CONGELACIÓN QUIRÚRGICA DE BORDES ANTI-MOVIMIENTO EN IPHONE */
-        .toggle-label-lcd { 
-            font-size: 8px; 
-            font-weight: 900; 
-            background: rgba(0,0,0,0.2); 
-            border: 1px solid rgba(0,255,102,0.2); 
-            padding: 3px 5px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            width: 100%; 
-            text-align: center; 
-            font-family: monospace; 
-            position: relative !important; 
-            z-index: 100 !important; 
+        /* ============================================================
+           CONTROLES INTERNOS DEL LCD AZUL (modo salario)
+           Botones +/-, pestañas de régimen y toggles de impuestos
+           ============================================================ */
+        .btn-hrs-lcd {
+            background: #00f0ff;
+            border: none;
+            color: #051e36;
+            font-size: 11px;
+            font-weight: 900;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin: 0 1px;
+            vertical-align: middle;
+            transition: all 0.1s ease;
+            font-family: monospace;
+            position: relative !important;
+            z-index: 100 !important;
             overflow: hidden;
-            /* 🛑 SE ELIMINÓ LA TRANSICIÓN DE BORDES Y SOMBRAS PARA CONGELAR LOS PICOS VISUALES EN IOS */
-            transition: color 0.1s ease, background-color 0.1s ease; 
-            box-sizing: border-box !important;
         }
 
-        .toggle-label-lcd.on { color: #00ff66 !important; border-color: #00ff66 !important; text-shadow: 0 0 4px #00ff66 !important; background: rgba(0,255,102,0.12) !important; box-shadow: inset 0 0 4px rgba(0,255,102,0.2); }
-        .toggle-label-lcd.off { color: rgba(255, 191, 36, 0.4) !important; border-color: rgba(255, 191, 36, 0.3) !important; background: rgba(251, 191, 36, 0.05) !important; }
+        .tab-btn-lcd {
+            background: rgba(0,240,255,0.12);
+            border: 1px solid rgba(0,240,255,0.35);
+            color: rgba(0,240,255,0.8);
+            font-size: 8px;
+            font-weight: 900;
+            padding: 2px 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: monospace;
+            transition: all 0.15s ease;
+            flex-grow: 1;
+            text-align: center;
+            position: relative !important;
+            z-index: 100 !important;
+            overflow: hidden;
+        }
+        .tab-btn-lcd.active {
+            background: #00f0ff !important;
+            color: #051e36 !important;
+            box-shadow: 0 0 6px #00f0ff !important;
+            border-color: #fff !important;
+        }
 
-        .btn-theme, .btn-receipt, .btn-power-bottom { border-radius: 10px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; display: flex; justify-content: center; align-items: center; font-family: monospace; height: 28px; font-size: 8px; background: var(--num-bg-theme) !important; border: 2px solid var(--neon-primary) !important; color: #ccc !important; width: 100%; z-index: 15; }
-        .row-acciones-inferior { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 2px; width: 100%; }
-        
-        /* 🚨 ESCUDO ANTI-FANTASMAS POR HARDWARE: Ocultamiento absoluto inicial con display: none */
-        .holograma-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(10, 2, 24, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100; display: none !important; justify-content: center; align-items: center; opacity: 0; }
-        .holograma-overlay.activo { display: flex !important; opacity: 1; }
-        .holograma-ticket { width: 320px; max-height: 80vh; background: rgba(15, 10, 25, 0.95); border: 2px solid var(--receipt-glow); box-shadow: 0 0 30px var(--receipt-glow), inset 0 0 15px rgba(255,255,255,0.05); border-radius: 16px; padding: 16px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; transform: scale(0.85); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: #fff; font-family: monospace; }
-        .holograma-overlay.activo .holograma-ticket { transform: scale(1); }
-        .holograma-lineas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%); background-size: 100% 4px; pointer-events: none; z-index: 5; }
-        .holograma-scrollable { flex-grow: 1; overflow-y: auto; font-size: 11px; line-height: 1.4; white-space: pre-wrap; padding-right: 4px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 8px; background: rgba(0, 0, 0, 0.5); color: var(--receipt-glow); text-shadow: 0 0 3px var(--receipt-glow); }
-        .holograma-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn-holo { padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; border: 1px solid var(--receipt-glow); font-family: monospace; font-size: 11px; text-align: center; background: transparent; color: var(--receipt-glow); transition: all 0.2s ease; }
-                /* ==========================================================================
-           📟 MOTOR DE TIPEO CYBERPUNK REFORZADO INTERNO (SOPORTE COMPLETO IOS)
-           ========================================================================== */
+        /* Etiquetas toggle (S. Social / Medicare) */
+        .toggle-label-lcd {
+            font-size: 8px;
+            font-weight: 900;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(0,255,102,0.2);
+            padding: 3px 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            font-family: monospace;
+            position: relative !important;
+            z-index: 100 !important;
+            overflow: hidden;
+            /* Solo se anima color y fondo para evitar saltos visuales en iOS */
+            transition: color 0.1s ease, background-color 0.1s ease;
+            box-sizing: border-box !important;
+        }
+        .toggle-label-lcd.on {
+            color: #00ff66 !important;
+            border-color: #00ff66 !important;
+            text-shadow: 0 0 4px #00ff66 !important;
+            background: rgba(0,255,102,0.12) !important;
+            box-shadow: inset 0 0 4px rgba(0,255,102,0.2);
+        }
+        .toggle-label-lcd.off {
+            color: rgba(255, 191, 36, 0.4) !important;
+            border-color: rgba(255, 191, 36, 0.3) !important;
+            background: rgba(251, 191, 36, 0.05) !important;
+        }
+
+        /* ============================================================
+           FILA INFERIOR: TEMA | RECIBO | ENCENDIDO/APAGADO
+           ============================================================ */
+        .btn-theme, .btn-receipt, .btn-power-bottom {
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: monospace;
+            height: 28px;
+            font-size: 8px;
+            background: var(--num-bg-theme) !important;
+            border: 2px solid var(--neon-primary) !important;
+            color: #ccc !important;
+            width: 100%;
+            z-index: 15;
+        }
+
+        .row-acciones-inferior {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-top: 2px;
+            width: 100%;
+        }
+
+        /* ============================================================
+           OVERLAYS HOLOGRÁFICOS (recibo y confirmación de apagado)
+           ============================================================ */
+        .holograma-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(10, 2, 24, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 100;
+            display: none !important;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+        }
+        .holograma-overlay.activo {
+            display: flex !important;
+            opacity: 1;
+        }
+
+        .holograma-ticket {
+            width: 320px;
+            max-height: 80vh;
+            background: rgba(15, 10, 25, 0.95);
+            border: 2px solid var(--receipt-glow);
+            box-shadow: 0 0 30px var(--receipt-glow), inset 0 0 15px rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #fff;
+            font-family: monospace;
+        }
+        .holograma-overlay.activo .holograma-ticket {
+            transform: scale(1);
+        }
+
+        /* Líneas de escaneo tipo CRT sobre el ticket */
+        .holograma-lineas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .holograma-scrollable {
+            flex-grow: 1;
+            overflow-y: auto;
+            font-size: 11px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            padding-right: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--receipt-glow);
+            text-shadow: 0 0 3px var(--receipt-glow);
+        }
+
+        .holograma-footer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .btn-holo {
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            border: 1px solid var(--receipt-glow);
+            font-family: monospace;
+            font-size: 11px;
+            text-align: center;
+            background: transparent;
+            color: var(--receipt-glow);
+            transition: all 0.2s ease;
+        }
+
+        /* ============================================================
+           ANIMACIÓN DE PUNTITOS "..." EN "Lista vacía"
+           ============================================================ */
         @keyframes typingRetroPuntitos {
             0%   { content: ""; }
             25%  { content: "."; }
@@ -461,44 +1014,63 @@
             100% { content: ""; }
         }
 
-        /* Bloque inmutable acoplado al texto para evitar saltos de línea */
         .lbl-lista-vacia-texto::after {
             content: "";
             display: inline-block;
             text-align: left;
-            width: 15px; /* Reserva el espacio exacto de los 3 puntos para que el texto no baile */
+            width: 15px; /* Reserva espacio fijo para que el texto no salte */
             animation: typingRetroPuntitos 1.5s infinite steps(4, start) !important;
             font-weight: 900;
             color: inherit;
         }
-
     </style>
 </head>
+
+<!-- ============================================================
+     CUERPO DEL DOCUMENTO
+     Tema inicial: Cyberpunk
+     ============================================================ -->
 <body class="theme-cyberpunk">
+
+    <!-- Capas decorativas de fondo (cielo + rejilla 3D) -->
     <div class="sky"></div>
     <div class="grid3d"></div>
 
+    <!-- ============================================================
+         CHASIS PRINCIPAL DE LA CALCULADORA
+         ============================================================ -->
     <div class="chasis" id="calcChasis">
-        <!-- 🟢 PANTALLA LCD MULTI-MODAL CON ESPACIOS PURGADOS -->
+
+        <!-- ========================================================
+             PANTALLA LCD (verde por defecto / azul en modo salario)
+             ======================================================== -->
         <div class="lcd" id="pantallaVerde">
+
+            <!-- Cabecera: indicadores de estado del sistema -->
             <div class="lcd-header">
                 <span id="txtHeaderIndicadores" class="blinking-header-text">SISTEMA ACTIVO</span>
             </div>
-                        <!-- 🚨 REEMPLAZO MAESTRO: JAULA REFORZADA CON ETIQUETA FLOTANTE ABSOLUTA ANTI-BAILE -->
+
+            <!-- Contenedor de la lista de precios / subpantalla salario -->
             <div class="lcd-wrapper">
                 <div class="listaPrecios-container" style="flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow: visible;">
-                    <!-- Bloque Vista de Compras (Jaula Fija con Scroll) -->
+
+                    <!-- Lista de artículos guardados (modo compras) -->
                     <div class="lcd-historial" id="listaPrecios" style="height: 48px !important; max-height: 48px !important; overflow-y: auto !important; box-sizing: border-box;">
                         <span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>
                     </div>
-                    
-                    <!-- flecha que sale // Etiqueta Flotante Absoluta: Clavada al final de la jaula, a la derecha, sobre la línea discontinua -->
+
+                    <!-- Indicador de scroll cuando hay muchos artículos -->
                     <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 30px; right: 2px; font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1;">▼ deslizar</div>
-                    
-                       <!-- 🚨 PASO 2: MAQUETA LCD CON BOTONES SEPARADOS E INPUT PARPADEANTE -->
+
+                    <!-- ====================================================
+                         SUBPANTALLA DE SALARIO (solo visible en modo salario)
+                         Columna izquierda: paga por hora + horas semana
+                         Columna derecha: régimen, SS, Medicare, retención
+                         ==================================================== -->
                     <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; height: 75px !important; max-height: 75px !important; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0; overflow: visible; position: absolute !important; top: 6px !important; left: 6px !important; z-index: 95; box-sizing: border-box;">
-                        
-                        <!-- COLUMNA IZQUIERDA: Paga y Horas (Botones separados con gap de 6px) -->
+
+                        <!-- COLUMNA IZQUIERDA: Paga por hora y horas semanales -->
                         <div style="display: flex; flex-direction: column; gap: 4px; width: 44%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 8px;">
                             <div style="display: flex; flex-direction: column; gap: 2px;">
                                 <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">PAGA POR HORA:</span>
@@ -507,24 +1079,37 @@
                             <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 2px;">
                                 <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">HORAS SEMANA:</span>
                                 <div style="display: flex; align-items: center; justify-content: flex-start; line-height: 1; height: 18px; width: 100%;">
-                                    <div style="width: 26px; min-width: 26px; display: inline-block; text-align: left;"><span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span></div>
-                                    <!-- Separación de 20px de la caja y GAP de 6px exclusivo entre los dos botones -->
+                                    <div style="width: 26px; min-width: 26px; display: inline-block; text-align: left;">
+                                        <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span>
+                                    </div>
                                     <div style="margin-left: 6px; display: flex; gap: 12px; position: relative; z-index: 100;">
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('horas', -1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('horas', 1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                            onmousedown="iniciarAccionLcdControles('horas', -1)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                            onmousedown="iniciarAccionLcdControles('horas', 1)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- COLUMNA DERECHA: Regímenes, Switches y Hacienda (Botones de más y menos separados con gap de 6px) -->
+                        <!-- COLUMNA DERECHA: Régimen contributivo, SS, Medicare, retención manual -->
                         <div style="display: flex; flex-direction: column; gap: 4px; width: 54%; border-left: 1px dotted rgba(0,240,255,0.25); padding-left: 6px; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0;">
+                            <!-- Pestañas: Nómina (W2) / Freelance (1099) / N/A (Exento) -->
                             <div style="display: flex; align-items: center; gap: 2px; width: 100%; overflow: visible; height: 18px; line-height: 1;">
                                 <button id="tabW2" class="tab-btn-lcd" style="font-size: 8.5px; padding: 3px 4px;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
                                 <button id="tab1099" class="tab-btn-lcd" style="font-size: 8.5px; padding: 3px 4px;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
                                 <button id="tabExento" class="tab-btn-lcd active" style="font-size: 8.5px; padding: 3px 4px;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
                             </div>
-                            
+
+                            <!-- Toggles Seguro Social y Medicare -->
                             <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 1px; height: 16px;">
                                 <tr>
                                     <td style="padding: 0 2px 0 0; width: 50%;">
@@ -535,141 +1120,247 @@
                                     </td>
                                 </tr>
                             </table>
-                            
+
+                            <!-- Retención manual / Hacienda -->
                             <div style="display: flex; flex-direction: column; width: 100%; border-top: 1px dotted rgba(0,240,255,0.15); padding-top: 3px; gap: 2px; overflow: visible; margin-top: 1px !important;">
                                 <span id="lblTextoManual" style="font-size: 9.5px; opacity: 1; font-weight: 900; color: #fff; white-space: nowrap; text-shadow: 0 0 2px rgba(0,240,255,0.25); line-height: 1;">RETENCIÓN MANUAL:</span>
                                 <div style="display: flex; align-items: center; justify-content: flex-start; overflow: visible; position: relative; z-index: 100; height: 18px; line-height: 1; width: 100%;">
-                                    <div style="width: 38px; min-width: 38px; display: inline-block; text-align: left;"><span id="lblManualPctLcd" style="font-size: 11px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 2px;">0.0%</span></div>
-                                    <!-- Separación de 20px de la caja y GAP de 6px exclusivo entre los dos botones -->
+                                    <div style="width: 38px; min-width: 38px; display: inline-block; text-align: left;">
+                                        <span id="lblManualPctLcd" style="font-size: 11px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 2px;">0.0%</span>
+                                    </div>
                                     <div style="margin-left: 14px; display: flex; gap: 12px;">
-                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                            onmousedown="iniciarAccionLcdControles('manual', -0.1)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                            onmousedown="iniciarAccionLcdControles('manual', 0.1)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <!-- Fin subpantalla salario -->
+                                    </div><!-- fin listaPrecios-container -->
+            </div><!-- fin lcd-wrapper -->
 
+            <!-- ========================================================
+                 CUERPO INFERIOR DEL LCD
+                 Muestra totales de compras O totales de salario
+                 ======================================================== -->
+            <div class="lcd-body">
+
+                <!-- ---------- Datos de modo COMPRAS ---------- -->
+                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
+                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">
+                        DESCUENTO: <span id="outDesc">-$0.00</span>
+                    </div>
+                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease;">
+                        PROPINA: <span id="outTip">$0.00</span>
+                    </div>
+                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease;">
+                        IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-
-
-
-
-
-
-                    <div class="scroll-hint" id="flechaGuia" style="bottom: 2px; right: 4px; font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px;">▼ deslizar</div>
-                </div>
-            </div>
-            <div class="lcd-body">
-                <!-- Data Base de Compras -->
-                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">DESCUENTO: <span id="outDesc">-$0.00</span></div>
-                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease;">PROPINA: <span id="outTip">$0.00</span></div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease;">IVU: <span id="outIvu">$0.00</span></div>
-                    
-                    <!-- Fila horizontal: TOTAL a la izquierda y deslizar congelado a la derecha -->
+                    <!-- Fila TOTAL + indicador de scroll -->
                     <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
                         <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
                         <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
                     </div>
-                    
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-top: 1px; transition: opacity 0.15s ease;"><span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span> <span id="outPerPersonaLine"></span></div>
+
+                    <!-- Cuota por persona cuando el Serrucho está activo -->
+                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-top: 1px; transition: opacity 0.15s ease;">
+                        <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
+                        <span id="outPerPersonaLine"></span>
+                    </div>
                 </div>
-                <!-- Data Base de Salario (Outputs Saneados con Nombres de Total) -->
+
+                <!-- ---------- Datos de modo SALARIO ---------- -->
                 <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 2px; font-size: 8.5px; line-height: 1.1;">
-                    <div style="color: #ff3b30; font-weight: 900; font-size: 8px; text-transform: uppercase;">RETENCIÓN TOTAL: <span id="outSalRetencion">-$0.00 (0%)</span></div>
+                    <div style="color: #ff3b30; font-weight: 900; font-size: 8px; text-transform: uppercase;">
+                        RETENCIÓN TOTAL: <span id="outSalRetencion">-$0.00 (0%)</span>
+                    </div>
                     <div>TOTAL SEMANAL  : <span id="outSalSemanal" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
                     <div>TOTAL BISEMANAL: <span id="outSalBisemanal" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
                     <div>TOTAL MENSUAL  : <span id="outSalMensual" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
-                    <div style="border-top: 1px solid rgba(0,240,255,0.2); margin-top: 1px; padding-top: 1px;">TOTAL ANUAL    : <span id="outSalAnual" style="font-weight: 900; font-size: 11px; color: #00ff66;">$0.00</span></div>
+                    <div style="border-top: 1px solid rgba(0,240,255,0.2); margin-top: 1px; padding-top: 1px;">
+                        TOTAL ANUAL    : <span id="outSalAnual" style="font-weight: 900; font-size: 11px; color: #00ff66;">$0.00</span>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </div><!-- fin lcd-body -->
+        </div><!-- fin pantallaVerde (LCD) -->
 
-                <!-- 🎛️ CONTENEDOR UNIFICADO DE PRECIO CENTRADO -->
+        <!-- ============================================================
+             MARCADOR DE PRECIO + BOTÓN AÑADIR
+             ============================================================ -->
         <div class="contenedor-precio-unificado precio-on" id="marcadorPrecioUnificado">
+            <!-- Espaciador izquierdo para centrar el precio -->
             <div style="width:55px; opacity:0; pointer-events:none;"></div>
+
+            <!-- Caja del precio actual (editable con el teclado) -->
             <div id="cajaSub" class="caja-data" onclick="seleccionarMenu('sub')">
                 <span class="lbl-title">Precio</span>
-                <!-- Modificado aquí: Añadidos estilos de tamaño grande alineados -->
                 <span class="lbl-val" style="display: flex; align-items: center; gap: 2px; font-size: 24px !important; font-weight: bold;">
                     <span>$</span><span id="lblSub" class="blink-num">0</span>
                 </span>
             </div>
-            <button id="btnAnadirGlobal" class="btn-add-embedded" style="width: auto; padding: 0 12px; font-size: 11px; text-transform: uppercase;" onclick="addProducto()">AÑADIR</button>
-        </div> <!-- boton de añadir -->
 
-        <!-- 🚨 SECUENCIA FÍSICA EXACTA SOLICITADA EN GRID DE 5 COLUMNAS -->
+            <!-- Botón para añadir el precio actual a la lista de artículos -->
+            <button id="btnAnadirGlobal" class="btn-add-embedded"
+                style="width: auto; padding: 0 12px; font-size: 11px; text-transform: uppercase;"
+                onclick="addProducto()">AÑADIR</button>
+        </div>
+
+        <!-- ============================================================
+             FILA DE 5 OPCIONES CON FLECHAS ▲ ▼
+             1. Serrucho  2. Propina  3. Salario  4. Descuento  5. IVU
+             ============================================================ -->
         <div class="row-opciones-pasos">
-            <!-- 1. Serrucho -->
+
+            <!-- 1. SERRUCHO (dividir la cuenta entre N personas) -->
             <div class="wrapper-pasos">
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('ppl', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('ppl', 1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', 1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaPpl" class="caja-data btn-off" onclick="seleccionarMenu('ppl')">
                     <span class="lbl-title">Serrucho</span>
                     <span class="lbl-val"><span id="lblPpl">N/A</span></span>
                 </div>
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('ppl', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('ppl', -1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', -1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 2. Propina -->
+            <!-- 2. PROPINA (%) -->
             <div class="wrapper-pasos">
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('tip', 1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', 1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaTip" class="caja-data btn-off" onclick="seleccionarMenu('tip')">
                     <span class="lbl-title">Propina</span>
                     <span class="lbl-val"><span id="lblTip">0</span>%</span>
                 </div>
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('tip', -1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', -1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 3. Salario (Ahora en el centro, formato N/A / $10.50/h) -->
+            <!-- 3. SALARIO (activa el modo de cálculo de sueldo) -->
             <div class="wrapper-pasos">
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('sal', 0.01)" ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', 0.01)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('sal', 0.01)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', 0.01)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="btnModoSalario" class="caja-data btn-off" onclick="seleccionarMenu('sal')">
                     <span class="lbl-title">Salario</span>
                     <span class="lbl-val"><span id="lblSalarioBoton">N/A</span></span>
                 </div>
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('sal', -0.01)" ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', -0.01)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('sal', -0.01)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', -0.01)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 4. Descuento -->
+            <!-- 4. DESCUENTO (%) -->
             <div class="wrapper-pasos">
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('desc', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('desc', 1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', 1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
                 <div id="cajaDesc" class="caja-data btn-off" onclick="seleccionarMenu('desc')">
                     <span class="lbl-title">Descuento</span>
                     <span class="lbl-val">-<span id="lblDesc">0</span>%</span>
                 </div>
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('desc', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('desc', -1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', -1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 5. IVU -->
+            <!-- 5. IVU (Impuesto sobre Ventas y Uso de Puerto Rico) -->
             <div class="wrapper-pasos">
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('ivu', 0.1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', 0.1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('ivu', 0.1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', 0.1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="btnToggleIvu" class="caja-data btn-off" onclick="seleccionarMenu('ivu')">
                     <span class="lbl-title">IVU</span>
                     <span class="lbl-val"><span id="lblIvuBoton">0.0</span>%</span>
                 </div>
-                <button class="btn-step" onmousedown="iniciarAutoIncremento('ivu', -0.1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', -0.1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step"
+                    onmousedown="iniciarAutoIncremento('ivu', -0.1)"
+                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', -0.1)"
+                    onmouseup="detenerAutoIncremento()"
+                    onmouseleave="detenerAutoIncremento()"
+                    ontouchend="detenerAutoIncremento()">▼</button>
             </div>
-        </div>
+        </div><!-- fin row-opciones-pasos -->
 
-        <!-- Teclado Numérico -->
+        <!-- ============================================================
+             TECLADO NUMÉRICO (7-8-9 / 4-5-6 / 1-2-3 / . 0 ←)
+             ============================================================ -->
         <div class="pad-num">
-            <button id="btnN7" onclick="num('7')" class="btn-key">7</button><button id="btnN8" onclick="num('8')" class="btn-key">8</button><button id="btnN9" onclick="num('9')" class="btn-key">9</button>
-            <button id="btnN4" onclick="num('4')" class="btn-key">4</button><button id="btnN5" onclick="num('5')" class="btn-key">5</button><button id="btnN6" onclick="num('6')" class="btn-key">6</button>
-            <button id="btnN1" onclick="num('1')" class="btn-key">1</button><button id="btnN2" onclick="num('2')" class="btn-key">2</button><button id="btnN3" onclick="num('3')" class="btn-key">3</button>
-            
+            <button id="btnN7" onclick="num('7')" class="btn-key">7</button>
+            <button id="btnN8" onclick="num('8')" class="btn-key">8</button>
+            <button id="btnN9" onclick="num('9')" class="btn-key">9</button>
+
+            <button id="btnN4" onclick="num('4')" class="btn-key">4</button>
+            <button id="btnN5" onclick="num('5')" class="btn-key">5</button>
+            <button id="btnN6" onclick="num('6')" class="btn-key">6</button>
+
+            <button id="btnN1" onclick="num('1')" class="btn-key">1</button>
+            <button id="btnN2" onclick="num('2')" class="btn-key">2</button>
+            <button id="btnN3" onclick="num('3')" class="btn-key">3</button>
+
             <button id="btnPunto" onclick="num('.')" class="btn-key">.</button>
             <button id="btnN0" onclick="num('0')" class="btn-key">0</button>
             <button id="btnBksp" onclick="bksp()" class="btn-key btn-back">←</button>
         </div>
 
+        <!-- ============================================================
+             FILA INFERIOR DE ACCIONES
+             TEMA | RECIBO | ENCENDIDO/APAGADO
+             ============================================================ -->
         <div class="row-acciones-inferior">
             <button id="btnTheme" class="btn-theme" onclick="rotarTema()">TEMA</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
             <button id="btnTogglePower" class="btn-power-bottom power-active-btn" onclick="solicitarApagado()">⏻</button>
         </div>
-    </div> <!-- Cierre de chasis -->
 
+    </div><!-- fin chasis -->
+
+    <!-- ============================================================
+         OVERLAY: RECIBO HOLOGRÁFICO
+         Muestra el detalle completo de la cuenta y permite copiarlo
+         ============================================================ -->
     <div class="holograma-overlay" id="visorHolograma">
         <div class="holograma-ticket">
             <div class="holograma-lineas"></div>
@@ -682,11 +1373,20 @@
         </div>
     </div>
 
-<div class="holograma-overlay" id="visorConfirmarApagado">
+    <!-- ============================================================
+         OVERLAY: CONFIRMACIÓN DE APAGADO
+         Pregunta si se quiere borrar toda la memoria de la cuenta
+         ============================================================ -->
+    <div class="holograma-overlay" id="visorConfirmarApagado">
         <div class="holograma-ticket" style="border-color: #ef4444; box-shadow: 0 0 30px rgba(239,68,68,0.4);">
             <div class="holograma-lineas"></div>
-            <div style="font-weight: 900; text-align: center; letter-spacing: 1px; font-size: 14px; color: #ef4444;">ALERTA DE SISTEMA</div>
-            <div style="font-size: 12px; text-align: center; line-height: 1.5; padding: 10px 0;">¿CONFIRMA APAGADO MAESTRO?<br><br>Se borrarán todos los flujos de memoria de la cuenta.</div>
+            <div style="font-weight: 900; text-align: center; letter-spacing: 1px; font-size: 14px; color: #ef4444;">
+                ALERTA DE SISTEMA
+            </div>
+            <div style="font-size: 12px; text-align: center; line-height: 1.5; padding: 10px 0;">
+                ¿CONFIRMA APAGADO MAESTRO?<br><br>
+                Se borrarán todos los flujos de memoria de la cuenta.
+            </div>
             <div class="holograma-footer">
                 <button class="btn-holo" onclick="confirmarApagadoSi()" style="border-color:#ef4444; color:#ef4444;">[ SÍ ]</button>
                 <button class="btn-holo" onclick="cerrarConfirmarApagado()" style="border-color:#ccc; color:#ccc;">[ NO ]</button>
@@ -694,28 +1394,72 @@
         </div>
     </div>
 
+    <!-- ============================================================
+         INICIO DEL SCRIPT (la lógica completa va en la Parte 4)
+         ============================================================ -->
     <script>
-        // 💾 CONTROL DE ESTADOS, MEMORIAS Y ACUMULADORES FISCALES
-        let ivu = 0.0, mode = 'sub', sSub = "0", incluirPropina = false, modoSerruchoActivo = false, modoDescuentoActivo = false, modoIvuActivo = false;
-        let sDesc = "0", sTip = "15", sPpl = "2", sIvuModificado = "11.5"; 
-        let memoriaDescuentoPct = "0", memoriaTipPct = "15", memoriaSerruchoCortes = "2", memoriaIvuPct = "11.5";
-        let preciosGuardados = [], cuentaAcumulada = 0, textoReciboGlobal = "";
-        let themes = ['theme-cyberpunk', 'theme-retro-gold', 'theme-matrix', 'theme-sunset', 'theme-puertorico'];
+                /* ============================================================
+           VARIABLES GLOBALES DE ESTADO
+           Controlan precios, modos activos, memorias y temas
+           ============================================================ */
+
+        // --- Modo compras ---
+        let ivu = 0.0;                    // Porcentaje de IVU actual (0 si está apagado)
+        let mode = 'sub';                 // Modo de entrada activo: 'sub' = precio
+        let sSub = "0";                   // String del precio que se está escribiendo
+        let incluirPropina = false;       // ¿Propina activa?
+        let modoSerruchoActivo = false;   // ¿Dividir cuenta entre personas?
+        let modoDescuentoActivo = false;  // ¿Descuento activo?
+        let modoIvuActivo = false;        // ¿IVU activo?
+
+        // Strings de valores actuales (se muestran en las cajas)
+        let sDesc = "0";
+        let sTip = "15";
+        let sPpl = "2";
+        let sIvuModificado = "11.5";
+
+        // Memorias: guardan el último valor usado aunque se apague la opción
+        let memoriaDescuentoPct = "0";
+        let memoriaTipPct = "15";
+        let memoriaSerruchoCortes = "2";
+        let memoriaIvuPct = "11.5";
+
+        // Lista de artículos añadidos y acumuladores
+        let preciosGuardados = [];        // Array de objetos {precio, descuento, ivuCalculado, porcientoIvuUsado, total}
+        let cuentaAcumulada = 0;
+        let textoReciboGlobal = "";       // Texto generado del recibo para copiar
+
+        // Temas disponibles (se rotan con el botón TEMA)
+        let themes = [
+            'theme-cyberpunk',
+            'theme-retro-gold',
+            'theme-matrix',
+            'theme-sunset',
+            'theme-puertorico'
+        ];
         let temaActualIdx = 0;
-        let sistemaEncendido = true; 
 
-        // 📊 VARIABLES DE LA MEMORIA DE SALARIO AVANZADO ($10.50 DEFAULT)
+        // Estado de encendido de la calculadora
+        let sistemaEncendido = true;
+
+        // --- Modo salario ---
         let modoSalarioActivo = false;
-        let precioHoraTrabajo = 10.50; 
-        let horasSemanalesTrabajo = 40; 
-        let regimenContributivo = 'EXENTO'; // El sistema ahora arranca en N/A de fábrica
-        let ssActivo = false;              // Desactivado al inicio por regla N/A
-        let medActivo = false;             // Desactivado al inicio por regla N/A
-        let porcientoManualRetencion = 0.0;
+        let precioHoraTrabajo = 10.50;           // $/hora por defecto
+        let horasSemanalesTrabajo = 40;          // Horas por semana por defecto
+        let regimenContributivo = 'EXENTO';      // 'W2' | '1099' | 'EXENTO'
+        let ssActivo = false;                    // Seguro Social
+        let medActivo = false;                   // Medicare
+        let porcientoManualRetencion = 0.0;      // % retención manual / Hacienda
 
+        // Timers para auto-incremento al mantener pulsado
         let intervaloAutoIncremento = null;
         let timeoutAutoIncremento = null;
 
+        /* ============================================================
+           EFECTOS VISUALES Y SONIDO
+           ============================================================ */
+
+        /** Pequeño glitch visual en el LCD al pulsar teclas */
         function dispararEfectoGlitch() {
             if (!sistemaEncendido) return;
             const lcd = document.getElementById('pantallaVerde');
@@ -725,29 +1469,40 @@
             }
         }
 
+        /**
+         * Reproduce un sonido sintético según el tipo de acción.
+         * Tipos: 'menu' | 'tecla' | 'paso' | 'add' | 'apagar' | 'caja'
+         */
         function reproducirSonido(tipo) {
             if (!sistemaEncendido && tipo !== 'apagar' && tipo !== 'menu') return;
             dispararEfectoGlitch();
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator(), gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
                 if (tipo === 'menu') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                 } else if (tipo === 'tecla') {
-                    osc.type = 'triangle'; osc.frequency.setValueAtTime(350, ctx.currentTime);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(350, ctx.currentTime);
                     gain.gain.setValueAtTime(0.15, ctx.currentTime);
                 } else if (tipo === 'paso') {
-                    osc.type = 'square'; osc.frequency.setValueAtTime(950, ctx.currentTime);
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(950, ctx.currentTime);
                     gain.gain.setValueAtTime(0.04, ctx.currentTime);
                     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.04);
-                    osc.start(); osc.stop(ctx.currentTime + 0.04);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.04);
                     return;
                 } else if (tipo === 'add') {
-                    osc.type = 'sine'; osc.frequency.setValueAtTime(450, ctx.currentTime);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(450, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(950, ctx.currentTime + 0.15);
                     gain.gain.setValueAtTime(0.12, ctx.currentTime);
                 } else if (tipo === 'apagar') {
@@ -756,68 +1511,95 @@
                     osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.4);
                     gain.gain.setValueAtTime(0.2, ctx.currentTime);
                     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
-                    osc.start(); osc.stop(ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
                     return;
                 }
                 gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.15);
-                osc.start(); osc.stop(ctx.currentTime + 0.15);
-            } catch (e) {}
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                // Silenciar errores de AudioContext (navegadores que lo bloquean)
+            }
         }
 
+        /* ============================================================
+           AUTO-INCREMENTO (mantener pulsado ▲ / ▼)
+           ============================================================ */
+
+        /** Versión táctil: evita el scroll del navegador */
         function iniciarAutoIncrementoTouch(e, tipo, delta) {
-            if (e && e.cancelable) e.preventDefault(); 
+            if (e && e.cancelable) e.preventDefault();
             iniciarAutoIncremento(tipo, delta);
         }
 
+        /**
+         * Inicia el incremento/decremento continuo.
+         * tipo: 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal'
+         * delta: cantidad a sumar/restar en cada paso
+         */
         function iniciarAutoIncremento(tipo, delta) {
             if (!sistemaEncendido) return;
+            // Solo se puede ajustar salario en modo salario, y viceversa
             if (modoSalarioActivo && tipo !== 'sal') return;
             if (!modoSalarioActivo && tipo === 'sal') return;
 
             clearTimeout(timeoutAutoIncremento);
             clearInterval(intervaloAutoIncremento);
 
+            // Primer paso inmediato
             ejecutarModificacionPaso(tipo, delta);
-            
+
             let ciclosCorridos = 0;
+            // Después de 350 ms empieza el auto-incremento rápido
             timeoutAutoIncremento = setTimeout(() => {
                 intervaloAutoIncremento = setInterval(() => {
                     ciclosCorridos++;
                     let multiplicadorAceleracion = 1;
-                    
+
+                    // Aceleración progresiva cuanto más tiempo se mantiene pulsado
                     if (ciclosCorridos > 25) {
-                        multiplicadorAceleracion = tipo === 'sal' ? 25 : 5; 
+                        multiplicadorAceleracion = tipo === 'sal' ? 25 : 5;
                     } else if (ciclosCorridos > 10) {
                         multiplicadorAceleracion = tipo === 'sal' ? 8 : 2;
                     }
-                    
+
                     let deltaFinal = delta * multiplicadorAceleracion;
+                    // Redondear a enteros en opciones que no son decimales
                     if (tipo !== 'sal' && tipo !== 'ivu') {
                         deltaFinal = Math.round(deltaFinal);
                     }
                     ejecutarModificacionPaso(tipo, deltaFinal);
-                }, 20); 
+                }, 20);
             }, 350);
         }
 
+        /** Detiene el auto-incremento */
         function detenerAutoIncremento() {
             clearTimeout(timeoutAutoIncremento);
             clearInterval(intervaloAutoIncremento);
         }
 
+        /**
+         * Aplica un solo paso de modificación a la opción indicada
+         * y actualiza la interfaz + cálculos.
+         */
         function ejecutarModificacionPaso(tipo, delta) {
             if (!sistemaEncendido) return;
             reproducirSonido('paso');
-            
+
+            // --- Ajuste de salario por hora ---
             if (tipo === 'sal') {
                 precioHoraTrabajo += delta;
                 if (precioHoraTrabajo < 0) precioHoraTrabajo = 0;
                 if (precioHoraTrabajo > 500) precioHoraTrabajo = 500;
-                document.getElementById('lblSalarioBoton').innerText = "$" + precioHoraTrabajo.toFixed(2) + "/h";
+                document.getElementById('lblSalarioBoton').innerText =
+                    "$" + precioHoraTrabajo.toFixed(2) + "/h";
                 calcularSalarioSubPantalla();
                 return;
             }
 
+            // --- Serrucho (personas) ---
             if (tipo === 'ppl') {
                 modoSerruchoActivo = true;
                 let val = parseInt(memoriaSerruchoCortes) || 2;
@@ -826,8 +1608,10 @@
                 if (val > 99) val = 99;
                 memoriaSerruchoCortes = val.toString();
                 sPpl = memoriaSerruchoCortes;
-                document.getElementById('lblPpl').innerText = modoSerruchoActivo ? sPpl : "N/A";
-            } 
+                document.getElementById('lblPpl').innerText =
+                    modoSerruchoActivo ? sPpl : "N/A";
+            }
+            // --- Descuento ---
             else if (tipo === 'desc') {
                 modoDescuentoActivo = true;
                 let val = parseFloat(memoriaDescuentoPct) || 0;
@@ -837,7 +1621,8 @@
                 memoriaDescuentoPct = val.toFixed(1).replace('.0', '');
                 sDesc = memoriaDescuentoPct;
                 document.getElementById('lblDesc').innerText = sDesc;
-            } 
+            }
+            // --- Propina ---
             else if (tipo === 'tip') {
                 incluirPropina = true;
                 let val = parseFloat(memoriaTipPct) || 0;
@@ -847,9 +1632,11 @@
                 memoriaTipPct = val.toFixed(1).replace('.0', '');
                 sTip = memoriaTipPct;
                 document.getElementById('lblTip').innerText = sTip;
-            } 
+            }
+            // --- IVU ---
             else if (tipo === 'ivu') {
                 if (!modoIvuActivo && delta > 0) {
+                    // Al activar por primera vez, poner el valor típico de PR (11.5%)
                     modoIvuActivo = true;
                     memoriaIvuPct = "11.5";
                 } else {
@@ -860,18 +1647,28 @@
                     memoriaIvuPct = val.toFixed(1);
                 }
                 ivu = modoIvuActivo ? parseFloat(memoriaIvuPct) : 0.0;
-                document.getElementById('lblIvuBoton').innerText = modoIvuActivo ? ivu.toFixed(1) : "0.0";
+                document.getElementById('lblIvuBoton').innerText =
+                    modoIvuActivo ? ivu.toFixed(1) : "0.0";
             }
-            
-            document.getElementById('cajaPpl').className = modoSerruchoActivo ? "caja-data btn-on" : "caja-data btn-off";
-            document.getElementById('cajaDesc').className = modoDescuentoActivo ? "caja-data btn-on" : "caja-data btn-off";
-            document.getElementById('cajaTip').className = incluirPropina ? "caja-data btn-on" : "caja-data btn-off";
-            document.getElementById('btnToggleIvu').className = modoIvuActivo ? "caja-data btn-on" : "caja-data btn-off";
-            
-            actualizarHeaderIndicadores(); calc();
+
+            // Actualizar clases visuales (btn-on / btn-off)
+            document.getElementById('cajaPpl').className =
+                modoSerruchoActivo ? "caja-data btn-on" : "caja-data btn-off";
+            document.getElementById('cajaDesc').className =
+                modoDescuentoActivo ? "caja-data btn-on" : "caja-data btn-off";
+            document.getElementById('cajaTip').className =
+                incluirPropina ? "caja-data btn-on" : "caja-data btn-off";
+            document.getElementById('btnToggleIvu').className =
+                modoIvuActivo ? "caja-data btn-on" : "caja-data btn-off";
+
+            actualizarHeaderIndicadores();
+            calc();
         }
 
-        // 🚨 MOTOR DE RÁFAGA TURBO PARA CONTROLES INTERNOS DEL LCD AZUL
+        /* ============================================================
+           CONTROLES INTERNOS DEL LCD AZUL (horas y retención manual)
+           ============================================================ */
+
         let timerLcdControlesTimeout = null;
         let timerLcdControlesInterval = null;
 
@@ -883,20 +1680,19 @@
         function iniciarAccionLcdControles(destino, delta) {
             if (!sistemaEncendido || !modoSalarioActivo) return;
             ejecutarPasoFiltroLcd(destino, delta);
-            
+
             let ticks = 0;
             clearTimeout(timerLcdControlesTimeout);
             clearInterval(timerLcdControlesInterval);
-            
+
             timerLcdControlesTimeout = setTimeout(() => {
                 timerLcdControlesInterval = setInterval(() => {
                     ticks++;
                     let factorTurbo = 1;
                     if (ticks > 25) factorTurbo = destino === 'horas' ? 4 : 3;
                     else if (ticks > 10) factorTurbo = destino === 'horas' ? 2 : 2;
-                    
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);
-                }, 15); // Ráfaga ultra violenta a 15ms para romper la fricción en iOS
+                }, 15);
             }, 300);
         }
 
@@ -905,6 +1701,7 @@
             clearInterval(timerLcdControlesInterval);
         }
 
+        /** Ajusta horas semanales o % de retención manual */
         function ejecutarPasoFiltroLcd(destino, delta) {
             reproducirSonido('paso');
             if (destino === 'horas') {
@@ -916,13 +1713,20 @@
                 porcientoManualRetencion += delta;
                 if (porcientoManualRetencion < 0) porcientoManualRetencion = 0;
                 if (porcientoManualRetencion > 100) porcientoManualRetencion = 100;
-                document.getElementById('lblManualPctLcd').innerText = porcientoManualRetencion.toFixed(1) + "%";
+                document.getElementById('lblManualPctLcd').innerText =
+                    porcientoManualRetencion.toFixed(1) + "%";
             }
             calcularSalarioSubPantalla();
         }
 
+        /* ============================================================
+           ENCENDIDO / APAGADO DE LA CALCULADORA
+           ============================================================ */
+
+        /** Muestra el diálogo de confirmación de apagado */
         function solicitarApagado() {
             if (!sistemaEncendido) {
+                // Si ya está apagada, simplemente enciende
                 togglePowerAccion();
                 return;
             }
@@ -940,27 +1744,42 @@
             togglePowerAccion();
         }
 
+        /**
+         * Alterna el estado de encendido.
+         * Al apagar: animación CRT + limpia precio.
+         * Al encender: restaura todo y hace reset total.
+         */
         function togglePowerAccion() {
             const lcd = document.getElementById('pantallaVerde');
             const chasis = document.getElementById('calcChasis');
-            
+
             if (sistemaEncendido) {
+                // --- APAGAR ---
                 sistemaEncendido = false;
                 reproducirSonido('apagar');
                 lcd.classList.remove('power-on-crt');
-                lcd.classList.add('power-off-crt'); 
-                sSub = "0"; 
+                lcd.classList.add('power-off-crt');
+                sSub = "0";
                 document.getElementById('lblSub').innerText = "0";
-                setTimeout(() => { if(!sistemaEncendido) chasis.classList.add('global-power-off'); }, 400);
+                setTimeout(() => {
+                    if (!sistemaEncendido) chasis.classList.add('global-power-off');
+                }, 400);
                 toggleTeclasBloqueo(true);
             } else {
+                // --- ENCENDER ---
                 chasis.classList.remove('global-power-off');
                 lcd.classList.remove('power-off-crt', 'power-on-crt');
-                void lcd.offsetWidth; 
+                void lcd.offsetWidth; // Fuerza reflow para reiniciar la animación
                 lcd.classList.add('power-on-crt');
-                document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd').forEach(b => b.style.opacity = "1");
-                document.querySelectorAll('.pad-num .btn-key').forEach(b => b.style.opacity = "1");
-                document.querySelectorAll('.row-opciones-pasos .caja-data, .btn-step').forEach(b => b.style.opacity = "1");
+
+                // Restaurar opacidad de todos los botones
+                document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
+                    .forEach(b => b.style.opacity = "1");
+                document.querySelectorAll('.pad-num .btn-key')
+                    .forEach(b => b.style.opacity = "1");
+                document.querySelectorAll('.row-opciones-pasos .caja-data, .btn-step')
+                    .forEach(b => b.style.opacity = "1");
+
                 sistemaEncendido = true;
                 toggleTeclasBloqueo(false);
                 reproducirSonido('menu');
@@ -968,32 +1787,44 @@
             }
         }
 
+        /** Bloquea o desbloquea casi todos los botones (excepto power y tema) */
         function toggleTeclasBloqueo(bloquear) {
-            const botones = document.querySelectorAll('.btn-key, .caja-data, .btn-receipt, .btn-theme, .btn-step, .btn-add-embedded, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd');
+            const botones = document.querySelectorAll(
+                '.btn-key, .caja-data, .btn-receipt, .btn-theme, .btn-step, .btn-add-embedded, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd'
+            );
             botones.forEach(btn => {
                 if (btn.id !== 'btnTogglePower' && btn.id !== 'btnTheme') {
                     btn.disabled = bloquear;
-                    if (bloquear) btn.style.pointerEvents = 'none';
-                    else btn.style.pointerEvents = 'auto';
+                    btn.style.pointerEvents = bloquear ? 'none' : 'auto';
                 }
             });
         }
 
+        /**
+         * Resetea toda la memoria de la calculadora a valores de fábrica.
+         * Se llama al encender y también se puede invocar manualmente.
+         */
         function ejecutarResetTotal() {
-            sSub = "0"; cuentaAcumulada = 0; preciosGuardados = []; modoSalarioActivo = false;
+            sSub = "0";
+            cuentaAcumulada = 0;
+            preciosGuardados = [];
+            modoSalarioActivo = false;
+
             document.getElementById('btnModoSalario').className = "caja-data btn-off";
             document.getElementById('pantallaVerde').classList.remove('modo-salario-activo');
             document.getElementById('listaPrecios').style.display = "block";
             document.getElementById('vistaSubPantallaSalario').style.display = "none";
             document.getElementById('wrapperDataComprasLcd').style.display = "block";
             document.getElementById('wrapperDataSalarioLcd').style.display = "none";
-            
+
+            // Valores por defecto de salario
             precioHoraTrabajo = 10.50;
             horasSemanalesTrabajo = 40;
             porcientoManualRetencion = 0.0;
             regimenContributivo = 'EXENTO';
-            ssActivo = false; medActivo = false;
-            
+            ssActivo = false;
+            medActivo = false;
+
             document.getElementById('lblSalarioBoton').innerText = "N/A";
             document.getElementById('lblHorasSemanaLcd').innerText = "40";
             document.getElementById('lblManualPctLcd').innerText = "0.0%";
@@ -1002,15 +1833,36 @@
             document.getElementById('lblTextoManual').innerText = "RETENCIÓN MANUAL:";
             actualizarEstilosPestañasLcd('EXENTO');
 
-            document.getElementById('listaPrecios').innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-            document.getElementById('flechaGuia').style.display = "none"; sPpl = "0"; modoSerruchoActivo = false; memoriaSerruchoCortes = "2";
-            document.getElementById('lblPpl').innerText = "N/A"; sDesc = "0"; memoriaDescuentoPct = "0"; modoDescuentoActivo = false; document.getElementById('lblDesc').innerText = "0";
-            sTip = "15"; memoriaTipPct = "15"; incluirPropina = false;
-            ivu = 0.0; sIvuModificado = "11.5"; memoriaIvuPct = "11.5"; modoIvuActivo = false;
+            // Limpiar lista de artículos
+            document.getElementById('listaPrecios').innerHTML =
+                '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+            document.getElementById('flechaGuia').style.display = "none";
+
+            // Reset de opciones de compras
+            sPpl = "0";
+            modoSerruchoActivo = false;
+            memoriaSerruchoCortes = "2";
+            document.getElementById('lblPpl').innerText = "N/A";
+
+            sDesc = "0";
+            memoriaDescuentoPct = "0";
+            modoDescuentoActivo = false;
+            document.getElementById('lblDesc').innerText = "0";
+
+            sTip = "15";
+            memoriaTipPct = "15";
+            incluirPropina = false;
+
+            ivu = 0.0;
+            sIvuModificado = "11.5";
+            memoriaIvuPct = "11.5";
+            modoIvuActivo = false;
             document.getElementById('lblIvuBoton').innerText = "0.0";
+
             seleccionarMenu('sub');
         }
 
+        /** Actualiza el texto de la cabecera del LCD según el estado actual */
         function actualizarHeaderIndicadores() {
             if (!sistemaEncendido) return;
             if (modoSalarioActivo) {
@@ -1021,81 +1873,91 @@
             if (modoIvuActivo) subpartes.push(`IVU: ${ivu.toFixed(1)}%`);
             if (incluirPropina) subpartes.push(`TIP: ${memoriaTipPct}%`);
             if (modoDescuentoActivo) subpartes.push(`DTO: -${memoriaDescuentoPct}%`);
-            document.getElementById('txtHeaderIndicadores').innerText = subpartes.length > 0 ? subpartes.join(' | ') : "SISTEMA ACTIVO";
+            document.getElementById('txtHeaderIndicadores').innerText =
+                subpartes.length > 0 ? subpartes.join(' | ') : "SISTEMA ACTIVO";
         }
 
-        // 🚨 REEMPLAZO MAESTRO JS: AISLAMIENTO ABSOLUTO DE ARTÍCULOS EN LA PANTALLA VERDE DE COMPRAS
+        /* ============================================================
+           SELECCIÓN DE MENÚ (Serrucho / Propina / Salario / Descuento / IVU / Precio)
+           ============================================================ */
+
+        /**
+         * Activa o desactiva una opción del menú.
+         * f = 'sub' | 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal'
+         */
         function seleccionarMenu(f) {
             if (!sistemaEncendido) return;
             reproducirSonido('menu');
-            
+
             const lcd = document.getElementById('pantallaVerde');
             const bloqueListaCompras = document.getElementById('listaPrecios');
             const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
             const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
 
+            // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
                 modoSalarioActivo = !modoSalarioActivo;
-                
                 const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
                 if (modoSalarioActivo) {
+                    // Entrar en modo salario
                     lcd.classList.add('modo-salario-activo');
-                    
-                    if (contenedorPadreLcd) {
-                        contenedorPadreLcd.style.justifyContent = 'flex-start';
-                    }
-                    
-                    // 🔒 ESCUDO ABSOLUTO: Apagamos los contenedores y los bloques estructurales de compras
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+
                     bloqueListaCompras.style.display = "none";
                     wrapperCompras.style.display = "none";
                     document.getElementById('flechaGuia').style.display = "none";
-                    
-                    // 🧼 PURGA DE CAPAS: Vaciamos físicamente el contenido de la lista para que NADA flote por encima en la pantalla azul
-                    bloqueListaCompras.innerHTML = '';
-                    
-                    // Se activa la subpantalla azul ocupando todo el tope del cristal con total limpieza
+                    bloqueListaCompras.innerHTML = ''; // Purga visual
+
                     bloqueSubPantallaSalario.style.display = "flex";
                     wrapperSalario.style.display = "block";
-                    
+
                     document.getElementById('btnModoSalario').className = "caja-data btn-on";
-                    document.getElementById('lblSalarioBoton').innerText = "$" + precioHoraTrabajo.toFixed(2) + "/h";
-                    
+                    document.getElementById('lblSalarioBoton').innerText =
+                        "$" + precioHoraTrabajo.toFixed(2) + "/h";
+
                     actualizarEstilosPestañasLcd(regimenContributivo);
                     calcularSalarioSubPantalla();
                 } else {
+                    // Salir de modo salario → volver a compras
                     lcd.classList.remove('modo-salario-activo');
-                    
-                    if (contenedorPadreLcd) {
-                        contenedorPadreLcd.style.justifyContent = '';
-                    }
-                    
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+
                     bloqueSubPantallaSalario.style.display = "none";
                     wrapperSalario.style.display = "none";
-                    
-                    // Se restauran los contenedores estructurales de compras tradicionales
                     bloqueListaCompras.style.display = "block";
                     wrapperCompras.style.display = "block";
-                    
-                    // 📑 RESTAURACIÓN RECTIFICADA: Reconstruimos y pintamos tus artículos guardados EXACTAMENTE como estaban
+
+                    // Restaurar lista de artículos
                     if (preciosGuardados.length === 0) {
-                        bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                        bloqueListaCompras.innerHTML =
+                            '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                     } else {
-                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) => '<div>• (' + (i+1) + '): $' + item.total.toFixed(2) + ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' + item.descuento.toFixed(2) + '/IVU:' + item.porcientoIvuUsado.toFixed(1) + '%)</span></div>').join('');
+                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                            item.descuento.toFixed(2) + '/IVU:' +
+                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                        ).join('');
                         let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                        bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: \$' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                        bloqueListaCompras.innerHTML +=
+                            '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
+                            totalConTaxAcumulado.toFixed(2) + '</div>';
                     }
-                    
+
                     document.getElementById('btnModoSalario').className = "caja-data btn-off";
                     document.getElementById('lblSalarioBoton').innerText = "N/A";
-                    if (preciosGuardados.length >= 3) document.getElementById('flechaGuia').style.display = "block";
-                    calc(); 
+                    if (preciosGuardados.length >= 3) {
+                        document.getElementById('flechaGuia').style.display = "block";
+                    }
+                    calc();
                 }
                 actualizarHeaderIndicadores();
                 return;
             }
 
+            // Si se elige otra opción mientras está en salario → salir de salario primero
             if (modoSalarioActivo && f !== 'sal') {
                 modoSalarioActivo = false;
                 lcd.classList.remove('modo-salario-activo');
@@ -1105,61 +1967,106 @@
                 wrapperCompras.style.display = "block";
                 document.getElementById('btnModoSalario').className = "caja-data btn-off";
                 document.getElementById('lblSalarioBoton').innerText = "N/A";
-                
+
                 if (preciosGuardados.length === 0) {
-                    bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                    bloqueListaCompras.innerHTML =
+                        '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {
-                    bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) => '<div>• (' + (i+1) + '): $' + item.total.toFixed(2) + ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' + item.descuento.toFixed(2) + '/IVU:' + item.porcientoIvuUsado.toFixed(1) + '%)</span></div>').join('');
+                    bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                        '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                        ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                        item.descuento.toFixed(2) + '/IVU:' +
+                        item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                    ).join('');
                     let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                    bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: \$' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                    bloqueListaCompras.innerHTML +=
+                        '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
+                        totalConTaxAcumulado.toFixed(2) + '</div>';
                 }
             }
 
-            const numSub = document.getElementById('lblSub'), numPpl = document.getElementById('lblPpl'), numDesc = document.getElementById('lblDesc'), numTip = document.getElementById('lblTip'), numIvu = document.getElementById('lblIvuBoton');
+            // Referencias a los spans de valores
+            const numSub = document.getElementById('lblSub');
+            const numPpl = document.getElementById('lblPpl');
+            const numDesc = document.getElementById('lblDesc');
+            const numTip = document.getElementById('lblTip');
+            const numIvu = document.getElementById('lblIvuBoton');
 
+            // Toggle de cada opción
             if (f === 'ppl') {
-                modoSerruchoActivo = !modoSerruchoActivo; sPpl = memoriaSerruchoCortes;
-                document.getElementById('lblPpl').innerText = modoSerruchoActivo ? sPpl : "N/A"; mode = 'sub'; 
+                modoSerruchoActivo = !modoSerruchoActivo;
+                sPpl = memoriaSerruchoCortes;
+                document.getElementById('lblPpl').innerText =
+                    modoSerruchoActivo ? sPpl : "N/A";
+                mode = 'sub';
             } else if (f === 'tip') {
-                incluirPropina = !incluirPropina; sTip = memoriaTipPct;
-                document.getElementById('lblTip').innerText = incluirPropina ? sTip : "0"; mode = 'sub';
+                incluirPropina = !incluirPropina;
+                sTip = memoriaTipPct;
+                document.getElementById('lblTip').innerText =
+                    incluirPropina ? sTip : "0";
+                mode = 'sub';
             } else if (f === 'desc') {
-                modoDescuentoActivo = !modoDescuentoActivo; sDesc = memoriaDescuentoPct;
-                document.getElementById('lblDesc').innerText = modoDescuentoActivo ? sDesc : "0"; mode = 'sub';
+                modoDescuentoActivo = !modoDescuentoActivo;
+                sDesc = memoriaDescuentoPct;
+                document.getElementById('lblDesc').innerText =
+                    modoDescuentoActivo ? sDesc : "0";
+                mode = 'sub';
             } else if (f === 'ivu') {
-                modoIvuActivo = !modoIvuActivo; ivu = modoIvuActivo ? (parseFloat(memoriaIvuPct) || 11.5) : 0.0;
-                document.getElementById('lblIvuBoton').innerText = modoIvuActivo ? ivu.toFixed(1) : "0.0"; mode = 'sub';
-            } else { mode = f; }
-            
-            ['marcadorPrecioUnificado', 'cajaPpl', 'cajaDesc', 'cajaTip', 'btnToggleIvu', 'btnModoSalario'].forEach(id => { 
-                const el = document.getElementById(id);
-                if (el) {
-                    if (id === 'marcadorPrecioUnificado') el.className = 'contenedor-precio-unificado';
-                    else el.className = 'caja-data btn-off';
-                }
-            });
-            [numSub, numPpl, numDesc, numTip, numIvu].forEach(el => { if(el) el.classList.remove('blink-num'); });
+                modoIvuActivo = !modoIvuActivo;
+                ivu = modoIvuActivo ? (parseFloat(memoriaIvuPct) || 11.5) : 0.0;
+                document.getElementById('lblIvuBoton').innerText =
+                    modoIvuActivo ? ivu.toFixed(1) : "0.0";
+                mode = 'sub';
+            } else {
+                mode = f; // 'sub' u otro
+            }
 
+            // Apagar todas las cajas visualmente
+            ['marcadorPrecioUnificado', 'cajaPpl', 'cajaDesc', 'cajaTip', 'btnToggleIvu', 'btnModoSalario']
+                .forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        if (id === 'marcadorPrecioUnificado') {
+                            el.className = 'contenedor-precio-unificado';
+                        } else {
+                            el.className = 'caja-data btn-off';
+                        }
+                    }
+                });
+            [numSub, numPpl, numDesc, numTip, numIvu].forEach(el => {
+                if (el) el.classList.remove('blink-num');
+            });
+
+            // Encender las que estén activas
             if (modoDescuentoActivo) document.getElementById('cajaDesc').className = "caja-data btn-on";
             if (modoSerruchoActivo) document.getElementById('cajaPpl').className = "caja-data btn-on";
             if (incluirPropina) document.getElementById('cajaTip').className = "caja-data btn-on";
             if (modoIvuActivo) document.getElementById('btnToggleIvu').className = "caja-data btn-on";
             if (modoSalarioActivo) document.getElementById('btnModoSalario').className = "caja-data btn-on";
 
+            // Si el modo es precio, mostrar parpadeo y resaltar el marcador
             if (mode === 'sub') {
                 numPpl.innerText = modoSerruchoActivo ? memoriaSerruchoCortes : "N/A";
                 numDesc.innerText = modoDescuentoActivo ? memoriaDescuentoPct : "0";
                 numTip.innerText = incluirPropina ? memoriaTipPct : "0";
                 numIvu.innerText = modoIvuActivo ? parseFloat(memoriaIvuPct).toFixed(1) : "0.0";
-                numSub.classList.add('blink-num'); 
-                document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+                numSub.classList.add('blink-num');
+                document.getElementById('marcadorPrecioUnificado').className =
+                    "contenedor-precio-unificado precio-on";
             }
-            actualizarHeaderIndicadores(); calc();
+
+            actualizarHeaderIndicadores();
+            calc();
         }
 
+        /* ============================================================
+           LÓGICA DE SALARIO / RETENCIONES (Puerto Rico)
+           ============================================================ */
 
-
-
+        /**
+         * Cambia el régimen contributivo.
+         * 'W2' = Nómina, '1099' = Freelance, 'EXENTO' = N/A
+         */
         function cambiarRegimenContributivo(regimen) {
             if (!sistemaEncendido || !modoSalarioActivo) return;
             reproducirSonido('menu');
@@ -1170,50 +2077,77 @@
             if (regimen === 'W2') {
                 lblTexto.innerText = "HACIENDA:";
                 porcientoManualRetencion = 0.0;
-                ssActivo = true; medActivo = true;
+                ssActivo = true;
+                medActivo = true;
             } else if (regimen === '1099') {
                 lblTexto.innerText = "HACIENDA:";
-                porcientoManualRetencion = 10.0;
-                ssActivo = true; medActivo = true;
+                porcientoManualRetencion = 10.0; // Típico 10% para 1099
+                ssActivo = true;
+                medActivo = true;
             } else if (regimen === 'EXENTO') {
                 lblTexto.innerText = "RETENCIÓN MANUAL:";
                 porcientoManualRetencion = 0.0;
-                ssActivo = false; medActivo = false;
+                ssActivo = false;
+                medActivo = false;
             }
 
-            document.getElementById('lblManualPctLcd').innerText = porcientoManualRetencion.toFixed(1) + "%";
+            document.getElementById('lblManualPctLcd').innerText =
+                porcientoManualRetencion.toFixed(1) + "%";
 
             actualizarEstilosPestañasLcd(regimen);
             calcularSalarioSubPantalla();
         }
 
+        /** Actualiza el aspecto de las pestañas y toggles según el régimen */
         function actualizarEstilosPestañasLcd(regimen) {
-            document.getElementById('tabW2').className = (regimen === 'W2') ? "tab-btn-lcd active" : "tab-btn-lcd";
-            document.getElementById('tab1099').className = (regimen === '1099') ? "tab-btn-lcd active" : "tab-btn-lcd";
-            document.getElementById('tabExento').className = (regimen === 'EXENTO') ? "tab-btn-lcd active" : "tab-btn-lcd";
-            
-            document.getElementById('toggleSS').className = ssActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
-            document.getElementById('toggleMED').className = medActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
+            document.getElementById('tabW2').className =
+                (regimen === 'W2') ? "tab-btn-lcd active" : "tab-btn-lcd";
+            document.getElementById('tab1099').className =
+                (regimen === '1099') ? "tab-btn-lcd active" : "tab-btn-lcd";
+            document.getElementById('tabExento').className =
+                (regimen === 'EXENTO') ? "tab-btn-lcd active" : "tab-btn-lcd";
 
+            document.getElementById('toggleSS').className =
+                ssActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
+            document.getElementById('toggleMED').className =
+                medActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
+
+            // Los botones +/- de retención siempre habilitados
             const bMas = document.getElementById('btnManualMas');
             const bMenos = document.getElementById('btnManualMenos');
-            bMas.disabled = false; bMas.style.opacity = "1"; bMas.style.pointerEvents = "auto";
-            bMenos.disabled = false; bMenos.style.opacity = "1"; bMenos.style.pointerEvents = "auto";
+            bMas.disabled = false;
+            bMas.style.opacity = "1";
+            bMas.style.pointerEvents = "auto";
+            bMenos.disabled = false;
+            bMenos.style.opacity = "1";
+            bMenos.style.pointerEvents = "auto";
         }
 
+        /** Activa/desactiva Seguro Social o Medicare individualmente */
         function toggleImpuestoIndividual(tipo) {
             if (!sistemaEncendido || !modoSalarioActivo || regimenContributivo === 'EXENTO') return;
             reproducirSonido('paso');
-            
+
             if (tipo === 'SS') ssActivo = !ssActivo;
             if (tipo === 'MED') medActivo = !medActivo;
 
-            document.getElementById('toggleSS').className = ssActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
-            document.getElementById('toggleMED').className = medActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
-            
+            document.getElementById('toggleSS').className =
+                ssActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
+            document.getElementById('toggleMED').className =
+                medActivo ? "toggle-label-lcd on" : "toggle-label-lcd off";
+
             calcularSalarioSubPantalla();
         }
 
+        /**
+         * Calcula el salario neto semanal, bisemanal, mensual y anual
+         * aplicando las retenciones correspondientes al régimen.
+         *
+         * Tasas aproximadas (Puerto Rico / federal simplificadas):
+         *   W2  → SS 6.2%  + Medicare 1.45%
+         *   1099→ SS 12.4% + Medicare 2.9%  (self-employment)
+         *   + % manual de Hacienda / retención adicional
+         */
         function calcularSalarioSubPantalla() {
             let tasaSS = 0.0;
             let tasaMED = 0.0;
@@ -1226,171 +2160,269 @@
                 tasaMED = medActivo ? 0.029 : 0.0;
             }
 
+            // Porcentaje total de deducción (SS + Medicare + retención manual)
             let porcientoTotalDeduccion = tasaSS + tasaMED + (porcientoManualRetencion / 100);
 
+            // Brutos
             let brutoSemanal = precioHoraTrabajo * horasSemanalesTrabajo;
             let brutoBisemanal = brutoSemanal * 2;
-            let brutoMensual = brutoSemanal * 4.3333;
+            let brutoMensual = brutoSemanal * 4.3333;   // ~52/12
             let brutoAnual = brutoSemanal * 52;
 
+            // Retenciones
             let retencionSemanal = brutoSemanal * porcientoTotalDeduccion;
             let retencionBisemanal = brutoBisemanal * porcientoTotalDeduccion;
             let retencionMensual = brutoMensual * porcientoTotalDeduccion;
             let retencionAnual = brutoAnual * porcientoTotalDeduccion;
 
-            document.getElementById('lblSalHoraLcd').innerText = "$" + precioHoraTrabajo.toFixed(2) + "/h";
-            document.getElementById('outSalRetencion').innerText = "-$" + retencionSemanal.toFixed(2) + " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
-            
-            document.getElementById('outSalSemanal').innerText = "$" + (brutoSemanal - retencionSemanal).toFixed(2);
-            document.getElementById('outSalBisemanal').innerText = "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
-            document.getElementById('outSalMensual').innerText = "$" + (brutoMensual - retencionMensual).toFixed(2);
-            document.getElementById('outSalAnual').innerText = "$" + (brutoAnual - retencionAnual).toFixed(2);
+            // Actualizar etiquetas del LCD
+            document.getElementById('lblSalHoraLcd').innerText =
+                "$" + precioHoraTrabajo.toFixed(2) + "/h";
+            document.getElementById('outSalRetencion').innerText =
+                "-$" + retencionSemanal.toFixed(2) +
+                " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
+
+            document.getElementById('outSalSemanal').innerText =
+                "$" + (brutoSemanal - retencionSemanal).toFixed(2);
+            document.getElementById('outSalBisemanal').innerText =
+                "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
+            document.getElementById('outSalMensual').innerText =
+                "$" + (brutoMensual - retencionMensual).toFixed(2);
+            document.getElementById('outSalAnual').innerText =
+                "$" + (brutoAnual - retencionAnual).toFixed(2);
         }
 
+        /* ============================================================
+           ENTRADA DE NÚMEROS (teclado)
+           ============================================================ */
+
+        /** Añade un dígito o punto decimal al precio actual */
         function num(c) {
-            if (!sistemaEncendido || modoSalarioActivo) return; 
+            if (!sistemaEncendido || modoSalarioActivo) return;
             if (mode !== 'sub') mode = 'sub';
             reproducirSonido('tecla');
+
+            // Si el valor es "0" y no se escribe punto, reemplazar
             if (sSub === "0" && c !== '.') sSub = "";
+            // Evitar más de un punto decimal
             if (c === '.' && sSub.includes('.')) return;
-            sSub += c; 
+
+            sSub += c;
+            // Límite máximo de 1,000,000
             if (parseFloat(sSub) > 1000000) sSub = "1000000";
+
             document.getElementById('lblSub').innerText = sSub;
             calc();
         }
 
+        /** Borra el último carácter del precio (backspace) */
         function bksp() {
-            if (!sistemaEncendido || modoSalarioActivo) return; 
+            if (!sistemaEncendido || modoSalarioActivo) return;
             if (mode !== 'sub') mode = 'sub';
             reproducirSonido('tecla');
-            sSub = sSub.slice(0, -1); 
-            if (!sSub) sSub = "0"; 
+
+            sSub = sSub.slice(0, -1);
+            if (!sSub) sSub = "0";
+
             document.getElementById('lblSub').innerText = sSub;
             calc();
         }
 
+        /* ============================================================
+           AÑADIR PRODUCTO A LA LISTA
+           ============================================================ */
+
+        /**
+         * Toma el precio actual del teclado, aplica descuento e IVU,
+         * y lo guarda en preciosGuardados. Luego limpia el teclado.
+         */
         function addProducto() {
-            if (!sistemaEncendido || modoSalarioActivo) return; 
+            if (!sistemaEncendido || modoSalarioActivo) return;
+
             let val = parseFloat(sSub) || 0;
             if (val > 0) {
                 reproducirSonido('add');
+
+                // Calcular descuento e IVU del artículo
                 let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
-                let rebaja = val * (dPct / 100), precioDescontado = val - rebaja;
+                let rebaja = val * (dPct / 100);
+                let precioDescontado = val - rebaja;
                 let ivuIndividual = precioDescontado * (ivu / 100);
                 let totalArticulo = precioDescontado + ivuIndividual;
-                
-                preciosGuardados.push({ precio: val, descuento: rebaja, ivuCalculado: ivuIndividual, porcientoIvuUsado: ivu, total: totalArticulo });
-                sSub = "0"; document.getElementById('lblSub').innerText = "0";
+
+                // Guardar objeto completo del artículo
+                preciosGuardados.push({
+                    precio: val,
+                    descuento: rebaja,
+                    ivuCalculado: ivuIndividual,
+                    porcientoIvuUsado: ivu,
+                    total: totalArticulo
+                });
+
+                // Limpiar teclado
+                sSub = "0";
+                document.getElementById('lblSub').innerText = "0";
+
+                // Redibujar lista de artículos en el LCD
                 const con = document.getElementById('listaPrecios');
-                
-                con.innerHTML = preciosGuardados.map((item, i) => '<div>• (' + (i+1) + '): $' + item.total.toFixed(2) + ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' + item.descuento.toFixed(2) + '/IVU:' + item.porcientoIvuUsado.toFixed(1) + '%)</span></div>').join('');
-                
-                if(preciosGuardados.length > 0) {
-                    let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                    con.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: \$' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                con.innerHTML = preciosGuardados.map((item, i) =>
+                    '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                    ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                    item.descuento.toFixed(2) + '/IVU:' +
+                    item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                ).join('');
+
+                // Línea de total acumulado al final de la lista
+                if (preciosGuardados.length > 0) {
+                    let totalConTaxAcumulado = preciosGuardados.reduce(
+                        (sum, item) => sum + item.total, 0
+                    );
+                    con.innerHTML +=
+                        '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
+                        totalConTaxAcumulado.toFixed(2) + '</div>';
                 }
-                
-                // Control del indicador flotante superior basado en la jaula de 4 ítems
-                const f = document.getElementById('flechaGuia'); 
+
+                // Mostrar flecha de scroll si hay 3 o más artículos
+                const f = document.getElementById('flechaGuia');
                 if (f) {
-                    if (preciosGuardados.length >= 3) f.style.display = "inline-block";
-                    else f.style.display = "none";
+                    f.style.display = preciosGuardados.length >= 3 ? "inline-block" : "none";
                 }
-                
-                con.scrollTop = con.scrollHeight; calc();
+
+                // Scroll automático al final
+                con.scrollTop = con.scrollHeight;
+                calc();
             }
         }
 
+        /** Función de clear (por si se necesita en el futuro) */
         function clr() {
             if (!sistemaEncendido) return;
             reproducirSonido('tecla');
             ejecutarResetTotal();
         }
 
+        /* ============================================================
+           CÁLCULO PRINCIPAL DE LA CUENTA (modo compras)
+           ============================================================ */
+
+        /**
+         * Recalcula descuento, propina, IVU, total y cuota por persona
+         * a partir de los artículos guardados + el precio que está en el teclado.
+         */
         function calc() {
             if (!sistemaEncendido || modoSalarioActivo) return;
+
+            // Número de personas para el serrucho
             let numPplRaw = parseInt(sPpl);
-            let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
+            let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1)
+                ? numPplRaw : 1;
+
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
             let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
-            
-            let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
-            let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
-            let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
-            
+
+            // Sumas de lo ya guardado
+            let sumaPreciosGuardados = preciosGuardados.reduce(
+                (sum, item) => sum + item.precio, 0
+            );
+            let sumaDescuentosGuardados = preciosGuardados.reduce(
+                (sum, item) => sum + item.descuento, 0
+            );
+            let impuestoTotalAcumulado = preciosGuardados.reduce(
+                (sum, item) => sum + item.ivuCalculado, 0
+            );
+
+            // Valores del precio que aún está en el teclado (no añadido)
             let precioEnTeclado = parseFloat(sSub) || 0;
             let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
             let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
-            let impuestoEnTeclado = precioDescontadoTeclado * (ivu / 100); 
-            
+            let impuestoEnTeclado = precioDescontadoTeclado * (ivu / 100);
+
+            // Totales combinados
             let nSub = sumaPreciosGuardados + precioEnTeclado;
             let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
             let impuestoTotal = impuestoTotalAcumulado + impuestoEnTeclado;
-            
+
             let subtotalDescontado = nSub - rebajaTotal;
             let propinaTotal = subtotalDescontado * (tPct / 100);
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
             let porSerrucho = totalNetoGlobal / nSerrucho;
-            
-            document.getElementById('outDesc').innerText = '-\$' + rebajaTotal.toFixed(2); 
-            document.getElementById('outTip').innerText = '\$' + propinaTotal.toFixed(2);
-            document.getElementById('outIvu').innerText = '\$' + impuestoTotal.toFixed(2); 
+
+            // Actualizar pantalla
+            document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
+            document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
+            document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
             document.getElementById('outPer').innerText = totalNetoGlobal.toFixed(2);
-            
+
+            // Opacidad de las filas según si están activas
             document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
             document.getElementById('rowTip').style.opacity = incluirPropina ? "1" : "0.3";
             document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
 
+            // Cuota por persona (Serrucho)
             if (modoSerruchoActivo) {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
                 document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
-                document.getElementById('rowPersonaCuota').style.opacity = "1"; 
+                document.getElementById('rowPersonaCuota').style.opacity = "1";
             } else {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
                 document.getElementById('outPerPersonaLine').innerText = ``;
-                document.getElementById('rowPersonaCuota').style.opacity = "0.3"; 
+                document.getElementById('rowPersonaCuota').style.opacity = "0.3";
             }
+
             actualizarHeaderIndicadores();
         }
-        // 🚨 PASO 3: INTERCEPTOR INTELIGENTE PRE-RECIBO DESDE MODO SALARIO O COMPRAS
+
+        /* ============================================================
+           RECIBO HOLOGRÁFICO
+           ============================================================ */
+
+        /**
+         * Genera el texto del recibo y muestra el overlay.
+         * Si hay un precio pendiente en el teclado, lo añade primero.
+         */
         function abrirHologramaRecibo() {
             if (!sistemaEncendido) return;
-            
+
             let precioColgadoEnTeclado = parseFloat(sSub) || 0;
-            
+
+            // Si hay precio pendiente → salir de salario (si aplica) y añadirlo
             if (precioColgadoEnTeclado > 0) {
-                // 💼 SI EL MODO SALARIO ESTÁ SELECCIONADO: Fuerza el apagado y lo añade a la lista verde antes
                 if (modoSalarioActivo) {
-                    seleccionarMenu('sal'); // Apaga el modo salario devolviendo el LCD a compras
+                    seleccionarMenu('sal'); // Apaga modo salario
                 }
-                addProducto(); // Añade automáticamente el número colgado a la lista
+                addProducto();
             }
-            
+
             reproducirSonido('caja');
-            
-            let numPplRaw = parseInt(sPpl);  
-            let nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
+
+            // Cálculos finales para el recibo
+            let numPplRaw = parseInt(sPpl);
+            let nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1)
+                ? numPplRaw : 1;
             let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
-            
-            let nSub = preciosGuardados.reduce((sum, sum_item) => sum + sum_item.precio, 0);
-            let rebajaTotal = preciosGuardados.reduce((sum, sum_item) => sum + sum_item.descuento, 0);
-            let impuestoTotal = preciosGuardados.reduce((sum, sum_item) => sum + sum_item.ivuCalculado, 0);
-            
+
+            let nSub = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
+            let rebajaTotal = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
+            let impuestoTotal = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
+
             let subtotalDescontado = nSub - rebajaTotal;
             let propinaTotal = subtotalDescontado * (tPct / 100);
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
-            
-            let txt = `===============================\n     DETALLE DE LA CUENTA\n===============================\n`;
+
+            // Construcción del texto del recibo
+            let txt = `===============================\n`;
+            txt += `     DETALLE DE LA CUENTA\n`;
+            txt += `===============================\n`;
             txt += `Fecha: ${new Date().toLocaleDateString()} | Hora: ${new Date().toLocaleTimeString()}\n`;
             txt += `-------------------------------\n`;
-            
-            if(preciosGuardados.length > 0) {
+
+            if (preciosGuardados.length > 0) {
                 txt += `Artículos Guardados:\n`;
                 preciosGuardados.forEach((a, i) => {
                     let ivuFormateadoStr = a.porcientoIvuUsado.toFixed(2);
-                    txt += ` Art. #${i+1}\n`;
+                    txt += ` Art. #${i + 1}\n`;
                     txt += `  Precio Base   : $${a.precio.toFixed(2)}\n`;
-                    if(a.descuento > 0) {
+                    if (a.descuento > 0) {
                         txt += `  Descuento     : -$${a.descuento.toFixed(2)}\n`;
                     }
                     if (a.ivuCalculado > 0) {
@@ -1403,76 +2435,92 @@
                 txt += ` No hay artículos guardados.\n`;
                 txt += ` -------------------------------\n`;
             }
-            
+
             txt += `Subtotal        : $${nSub.toFixed(2)}\n`;
-            if(rebajaTotal > 0) {
+            if (rebajaTotal > 0) {
                 txt += `Descuento Total : -$${rebajaTotal.toFixed(2)}\n`;
             }
-            
-            // Filtro estricto: Si el IVU es 0, no se escribe la línea en el recibo
             if (impuestoTotal > 0) {
                 txt += `IVU Acumulado   : +$${impuestoTotal.toFixed(2)}\n`;
             }
-            
-            if(propinaTotal > 0) {
+            if (propinaTotal > 0) {
                 txt += `Propina (${tPct}%)   : $${propinaTotal.toFixed(2)}\n`;
             }
             txt += `===============================\n`;
             txt += `TOTAL FINAL     : $${totalNetoGlobal.toFixed(2)}\n`;
             txt += `===============================\n`;
 
-            if(modoSerruchoActivo && numPplRaw > 1) {
-                txt += `SERRUCHO COMPARTI'O: ${numPplRaw} panas\n`;
+            if (modoSerruchoActivo && numPplRaw > 1) {
+                txt += `SERRUCHO COMPARTIDO: ${numPplRaw} panas\n`;
                 txt += `CUOTA POR CABEZA: $${(totalNetoGlobal / nPpl).toFixed(2)}\n`;
                 txt += `===============================\n`;
             }
             txt += `    ¡Gracias por usar la app!`;
-            
+
+            // Mostrar en el overlay
             textoReciboGlobal = txt;
             document.getElementById('textoContenidoHolo').innerText = txt;
             document.getElementById('btnCopiarHolo').innerText = "Copiar";
             document.getElementById('visorHolograma').classList.add('activo');
         }
 
-
+        /** Cierra el overlay del recibo */
         function cerrarHologramaRecibo() {
             reproducirSonido('menu');
-            // Saneamiento de clases estándar para evitar que se cuelgue el modal de fondo
             document.getElementById('visorHolograma').classList.remove('activo');
         }
 
-
+        /** Copia el texto del recibo al portapapeles */
         function copiarTextoHolograma() {
             if (!sistemaEncendido) return;
             reproducirSonido('caja');
             navigator.clipboard.writeText(textoReciboGlobal).then(() => {
                 document.getElementById('btnCopiarHolo').innerText = "¡Copiado!";
-            }).catch(() => { alert("Error al copiar, usa captura."); });
+            }).catch(() => {
+                alert("Error al copiar, usa captura.");
+            });
         }
 
+        /* ============================================================
+           ROTACIÓN DE TEMAS
+           ============================================================ */
+
+        /** Cambia al siguiente tema de la lista (5 temas en total) */
         function rotarTema() {
+            // Sonido de cambio de tema
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator(), gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
                 gain.gain.setValueAtTime(0.1, ctx.currentTime);
                 gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.15);
-                osc.start(); osc.stop(ctx.currentTime + 0.15);
-            } catch(e){}
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {}
 
-            // 🧼 LIMPIEZA DE CAPAS SEGURA: Remueve de forma estricta cualquier tema previo para evitar colisiones
-            document.body.classList.remove('theme-cyberpunk', 'theme-retro-gold', 'theme-matrix', 'theme-sunset', 'theme-puertorico');
-            
-            // Avanza de forma matemática segura en el carrusel de 5 posiciones
+            // Quitar todos los temas anteriores
+            document.body.classList.remove(
+                'theme-cyberpunk',
+                'theme-retro-gold',
+                'theme-matrix',
+                'theme-sunset',
+                'theme-puertorico'
+            );
+
+            // Avanzar al siguiente tema (ciclo)
             temaActualIdx = (temaActualIdx + 1) % themes.length;
-            
-            // Inyecta el nuevo tema en el chasis del iPhone
             document.body.classList.add(themes[temaActualIdx]);
         }
 
-        actualizarHeaderIndicadores(); 
+        /* ============================================================
+           INICIALIZACIÓN AL CARGAR LA PÁGINA
+           ============================================================ */
+        actualizarHeaderIndicadores();
         calc();
     </script>
 </body>

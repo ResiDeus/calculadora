@@ -349,17 +349,40 @@
            ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
            ============================================================ */
         @keyframes crtTVClose {
-            0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
-            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
+            0%   { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+            50%  { transform: scale(1, 0.02); opacity: 1; filter: brightness(3); }
+            100% { transform: scale(0, 0); opacity: 0; filter: brightness(5); }
         }
+
+        /* Animación de Encendido: Abre desde la nada hasta tamaño completo */
         @keyframes crtTVOpen {
-            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #fff; }
-            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
-            100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
+            0%   { transform: scale(0, 0); opacity: 0; filter: brightness(5); }
+            50%  { transform: scale(1, 0.02); opacity: 1; filter: brightness(3); }
+            100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
         }
-        .lcd.power-off-crt { animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
-        .lcd.power-on-crt  { animation: crtTVOpen  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; }
+
+        /* ⚡ AQUÍ ESTÁ EL TRUCO ELÉCTRICO:
+           Al apagar, usamos 'forwards' para mantener el apagado.
+           Al encender, NO usamos 'forwards' para que el navegador libere la pantalla 
+           y la deje abierta al 100% de forma natural y permanente. */
+        .lcd.power-off-crt { 
+            animation: crtTVClose 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
+        }
+        
+        .lcd.power-on-crt  { 
+            animation: crtTVOpen 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) normal !important; 
+        }
+
+        /* Evitamos que la clase del flash de las teclas interfiera con la escala geométrica */
+        .lcd.glitch-active {
+            animation: flashTeclasLcd 0.08s ease-out !important;
+        }
+
+        @keyframes flashTeclasLcd {
+            0%   { filter: brightness(1); }
+            50%  { filter: brightness(1.25) contrast(1.05); }
+            100% { filter: brightness(1); }
+        }
 
         /* Cabecera del LCD (indicadores de estado) */
         .lcd-header {

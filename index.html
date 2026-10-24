@@ -1023,6 +1023,42 @@
             font-weight: 900;
             color: inherit;
         }
+
+        /* ============================================================
+   EFECTO GLITCH NEÓN PARA LA PANTALLA LCD
+   Hace una distorsión rápida cuando tocas cualquier tecla
+   ============================================================ */
+.lcd.glitch-active {
+    animation: vibracionGlitchLcd 0.12s linear infinite !important;
+    position: relative;
+}
+
+@keyframes vibracionGlitchLcd {
+    0% {
+        transform: translate(0) skew(0deg);
+        filter: hue-rotate(0deg) saturate(1);
+    }
+    20% {
+        transform: translate(-1px, 1px) skew(-1deg);
+        filter: saturate(1.5);
+    }
+    40% {
+        transform: translate(-2px, -1px) skew(2deg);
+        box-shadow: 0 0 15px var(--neon-secondary);
+    }
+    60% {
+        transform: translate(2px, 1px) skew(-2deg);
+        filter: hue-rotate(10deg);
+    }
+    80% {
+        transform: translate(1px, -2px) skew(1deg);
+    }
+    100% {
+        transform: translate(0) skew(0deg);
+        filter: hue-rotate(0deg) saturate(1);
+    }
+}
+        
     </style>
 </head>
 
@@ -1171,7 +1207,6 @@
                     <!-- Fila TOTAL + indicador de scroll -->
                     <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
                         <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
-                        <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
                     </div>
 
                     <!-- Cuota por persona cuando el Serrucho está activo -->

@@ -1048,7 +1048,7 @@
 
             <!-- Cabecera: indicadores de modo del sistema -->
             <div class="lcd-header">
-                <span id="txtHeaderIndicadores" class="blinking-header-text">MODO COMPRAS</span>
+                <span id="txtHeaderIndicadores" class="blinking-header-text">MODO: COMPRAS</span>
             </div>
 
             <!-- Contenedor de la lista de precios / subpantalla salario -->
@@ -1874,7 +1874,7 @@
             if (incluirPropina) subpartes.push(`TIP: ${memoriaTipPct}%`);
             if (modoDescuentoActivo) subpartes.push(`DTO: -${memoriaDescuentoPct}%`);
             document.getElementById('txtHeaderIndicadores').innerText =
-                subpartes.length > 0 ? subpartes.join(' | ') : "MODO COMPRAS";
+                subpartes.length > 0 ? subpartes.join(' | ') : "MODO: COMPRAS";
         }
 
         /* ============================================================

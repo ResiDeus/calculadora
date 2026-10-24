@@ -1887,9 +1887,14 @@
 
             // ⚡ FIJAMOS EL ESTADO BASE EN SILENCIO TOTAL
             // (Eliminamos seleccionarMenu('sub') para que no arrastre lógicas viejas)
+                        document.getElementById('cajaPpl').className = "caja-data btn-off";
+            document.getElementById('cajaDesc').className = "caja-data btn-off";
+            document.getElementById('cajaTip').className = "caja-data btn-off";
+            document.getElementById('btnToggleIvu').className = "caja-data btn-off";
+
             mode = 'sub';
             
-            // ⚡ ¡ESTA ES LA LÍNEA NUEVA! Fuerza a la pantalla a mostrar el cero al instante
+            // Fuerza a la pantalla a mostrar el cero al instante
             document.getElementById('lblSub').innerText = "0";
             
             // Apagamos los parpadeos viejos y encendemos solo el del precio actual

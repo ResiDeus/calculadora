@@ -348,39 +348,40 @@
         /* ============================================================
            ANIMACIONES CRT (efecto de apagado/encendido de televisor viejo)
            ============================================================ */
+        /* EFECTO DE APAGAR: La pantalla colapsa hacia el centro hasta desaparecer */
         @keyframes crtTVClose {
-            0%   { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
-            50%  { transform: scale(1, 0.02); opacity: 1; filter: brightness(3); }
-            100% { transform: scale(0, 0); opacity: 0; filter: brightness(5); }
+            0%   { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
+            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
+            100% { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
         }
 
-        /* Animación de Encendido: Abre desde la nada hasta tamaño completo */
+        /* ANIMACIÓN DE ABRIR REAL: La pantalla se expande desde el centro hacia afuera */
         @keyframes crtTVOpen {
-            0%   { transform: scale(0, 0); opacity: 0; filter: brightness(5); }
-            50%  { transform: scale(1, 0.02); opacity: 1; filter: brightness(3); }
-            100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+            0%   { transform: scale(0, 0);    filter: brightness(5); opacity: 0; background: #ffffff; }
+            40%  { transform: scale(1, 0.01); filter: brightness(3); opacity: 1; }
+            100% { transform: scale(1, 1);    filter: brightness(1); opacity: 1; }
         }
 
-        /* ⚡ AQUÍ ESTÁ EL TRUCO ELÉCTRICO:
-           Al apagar, usamos 'forwards' para mantener el apagado.
-           Al encender, NO usamos 'forwards' para que el navegador libere la pantalla 
-           y la deje abierta al 100% de forma natural y permanente. */
+        /* Clases que el JavaScript le inyectará a la pantalla verde */
         .lcd.power-off-crt { 
-            animation: crtTVClose 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
+            animation: crtTVClose 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
         }
         
         .lcd.power-on-crt  { 
-            animation: crtTVOpen 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) normal !important; 
+            animation: crtTVOpen 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important; 
         }
 
-        /* Evitamos que la clase del flash de las teclas interfiera con la escala geométrica */
+        /* EL FLASH DE LOS NÚMEROS: Obligamos a la clase .glitch-active a hacer 
+           UN DESTELLO DE BRILLO y le prohibimos CERRAR o achicar la pantalla visualmente */
         .lcd.glitch-active {
-            animation: flashTeclasLcd 0.08s ease-out !important;
+            animation: destelloFlashTeclas 0.1s ease-out !important;
+            transform: scale(1, 1) !important; /* Mantiene la pantalla abierta al 100% */
+            opacity: 1 !important;
         }
 
-        @keyframes flashTeclasLcd {
+        @keyframes destelloFlashTeclas {
             0%   { filter: brightness(1); }
-            50%  { filter: brightness(1.25) contrast(1.05); }
+            50%  { filter: brightness(1.4) contrast(1.1); }
             100% { filter: brightness(1); }
         }
 

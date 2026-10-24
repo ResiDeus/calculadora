@@ -1785,51 +1785,52 @@
          * Al encender: restaura todo y hace reset total.
          */
         function togglePowerAccion() {
-            const lcd = document.getElementById('pantallaVerde');
-            const chasis = document.getElementById('calcChasis');
+    const lcd = document.getElementById('pantallaVerde');
+    const chasis = document.getElementById('calcChasis');
 
-            if (sistemaEncendido) {
-                // --- MODO: APAGAR ---
-                sistemaEncendido = false;
-                reproducirSonido('apagar');
-                
-                // Remueve encendido y clava apagado
-                lcd.classList.remove('power-on-crt');
-                lcd.classList.add('power-off-crt');
-                
-                sSub = "0";
-                document.getElementById('lblSub').innerText = "0";
-                setTimeout(() => {
-                    if (!sistemaEncendido) chasis.classList.add('global-power-off');
-                }, 400);
-                toggleTeclasBloqueo(true);
-            } else {
-                // --- MODO: ENCENDER ---
-                chasis.classList.remove('global-power-off');
-                
-                // ⚡ EL TRUCO MAESTRO: Limpiamos las dos clases viejas por completo
-                lcd.classList.remove('power-off-crt', 'power-on-crt', 'glitch-active');
-                
-                // Forzamos un reinicio eléctrico en el motor del navegador (Reflow)
-                void lcd.offsetWidth; 
-                
-                // Inyectamos la animación de abrir limpia
-                lcd.classList.add('power-on-crt');
+    if (sistemaEncendido) {
+        // --- APAGAR ---
+        sistemaEncendido = false;
+        reproducirSonido('apagar');
+        lcd.classList.remove('power-on-crt');
+        lcd.classList.add('power-off-crt');
+        sSub = "0";
+        document.getElementById('lblSub').innerText = "0";
+        setTimeout(() => {
+            if (!sistemaEncendido) chasis.classList.add('global-power-off');
+        }, 400);
+        toggleTeclasBloqueo(true);
+    } else {
+        // --- ENCENDER ---
+        // 1. Quitamos el estado de apagado del chasis inmediatamente
+        chasis.classList.remove('global-power-off');
+        
+        // 2. Limpiamos las clases viejas del LCD para que no arrastre el efecto de apagado
+        lcd.classList.remove('power-off-crt');
+        lcd.classList.remove('power-on-crt');
+        
+        // 3. Forzamos el reinicio de los circuitos del navegador
+        void lcd.offsetWidth; 
+        
+        // 4. Aplicamos el efecto de encendido limpio
+        lcd.classList.add('power-on-crt');
 
-                // Restaurar la luz neón de los bloques de la interfaz
-                document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
-                    .forEach(b => b.style.opacity = "1");
-                document.querySelectorAll('.pad-num .btn-key')
-                    .forEach(b => b.style.opacity = "1");
-                document.querySelectorAll('.row-opciones-pasos .caja-data, .btn-step')
-                    .forEach(b => b.style.opacity = "1");
+        // 5. Devolvemos la opacidad a los botones
+        document.querySelectorAll('.btn-theme, .btn-receipt, .btn-hrs-lcd, .tab-btn-lcd, .toggle-label-lcd')
+            .forEach(b => b.style.opacity = "1");
+        document.querySelectorAll('.pad-num .btn-key')
+            .forEach(b => b.style.opacity = "1");
+        document.querySelectorAll('.row-opciones-pasos .caja-data, .btn-step')
+            .forEach(b => b.style.opacity = "1");
 
-                sistemaEncendido = true;
-                toggleTeclasBloqueo(false);
-                reproducirSonido('menu');
-                ejecutarResetTotal();
-            }
-        }
+        sistemaEncendido = true;
+        toggleTeclasBloqueo(false);
+        reproducirSonido('menu');
+        
+        // 6. Ejecutamos el reset de las memorias
+        ejecutarResetTotal();
+    }
+}
 
         /** Bloquea o desbloquea casi todos los botones (excepto power y tema) */
         function toggleTeclasBloqueo(bloquear) {
@@ -1903,8 +1904,13 @@
             modoIvuActivo = false;
             document.getElementById('lblIvuBoton').innerText = "0.0";
 
-            seleccionarMenu('sub');
-        }
+            mode = 'sub';
+            document.getElementById('lblSub').classList.add('blink-num');
+            document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+    
+            actualizarHeaderIndicadores();
+            calc();
+        } // Aquí cierra la función ejecutarResetTotal
 
         /** Actualiza el texto de la cabecera del LCD según el estado actual */
         function actualizarHeaderIndicadores() {

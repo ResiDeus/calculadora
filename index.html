@@ -1108,15 +1108,18 @@
                     <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; height: 75px !important; max-height: 75px !important; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0; overflow: visible; position: absolute !important; top: 6px !important; left: 6px !important; z-index: 95; box-sizing: border-box;">
 
                         <!-- COLUMNA IZQUIERDA: Paga por hora y horas semanales -->
-                        <div style="display: flex; flex-direction: column; gap: 4px; width: 44%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 8px;">
-                            <!-- NUEVO INPUT DE SALARIO CON SU PROPIO JUEGO DE BOTONES +/- -->
-                            <div style="display: flex; flex-direction: column; gap: 2px;">
-                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">PAGA POR HORA:</span>
-                                <div style="display: flex; align-items: center; justify-content: flex-start; line-height: 1; height: 18px; width: 100%;">
-                                    <div style="width: 58px; min-width: 58px; display: inline-block; text-align: left;">
-                                        <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 4px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3);">$10.50</span>
+                        <div style="display: flex; flex-direction: column; gap: 4px; width: 44%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 4px; align-items: flex-start; text-align: left;">
+                            
+                            <!-- PAGA POR HORA (Texto y número pegados a la izquierda) -->
+                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
+                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1; text-align: left;">PAGA POR HORA:</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; line-height: 1; height: 18px; width: 100%;">
+                                    <!-- El número se queda pegado estrictamente a la izquierda -->
+                                    <div style="text-align: left; display: inline-block;">
+                                        <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 4px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: left; display: inline-block;">$10.50</span>
                                     </div>
-                                    <div style="margin-left: 4px; display: flex; gap: 6px; position: relative; z-index: 100;">
+                                    <!-- Los botones de más y menos se quedan exactamente en su ubicación original -->
+                                    <div style="display: flex; gap: 4px; position: relative; z-index: 100;">
                                         <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
                                             onmousedown="iniciarAccionLcdControles('paga', -0.25)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.25)"
@@ -1132,14 +1135,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- HORAS SEMANALES (Mantenemos tu bloque intacto pero optimizado) -->
-                            <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 2px;">
-                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">HORAS SEMANA:</span>
-                                <div style="display: flex; align-items: center; justify-content: flex-start; line-height: 1; height: 18px; width: 100%;">
-                                    <div style="width: 58px; min-width: 58px; display: inline-block; text-align: left;">
-                                        <span id="lblHorasSemanaLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span>
+
+                            <!-- HORAS SEMANA (Texto y número pegados a la izquierda) -->
+                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 2px;">
+                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1; text-align: left;">HORAS SEMANA:</span>
+                                <div style="display: flex; align-items: center; justify-content: space-between; line-height: 1; height: 18px; width: 100%;">
+                                    <!-- El número se queda pegado estrictamente a la izquierda -->
+                                    <div style="text-align: left; display: inline-block;">
+                                        <span id="lblHorasSemanaLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px; text-align: left; display: inline-block;">40</span>
                                     </div>
-                                    <div style="margin-left: 4px; display: flex; gap: 6px; position: relative; z-index: 100;">
+                                    <!-- Los botones de más y menos se quedan exactamente en su ubicación original -->
+                                    <div style="display: flex; gap: 4px; position: relative; z-index: 100;">
                                         <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
                                             onmousedown="iniciarAccionLcdControles('horas', -1)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)"
@@ -1155,6 +1161,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
                         <!-- COLUMNA DERECHA: Régimen contributivo, SS, Medicare, retención manual -->
@@ -1831,7 +1838,6 @@
             modoSalarioActivo = false;
 
             document.getElementById('btnModoSalario').className = "caja-data btn-off";
-            document.getElementById('pantallaVerde').classList.remove('modo-salario-activo');
             document.getElementById('listaPrecios').style.display = "block";
             document.getElementById('vistaSubPantallaSalario').style.display = "none";
             document.getElementById('wrapperDataComprasLcd').style.display = "block";

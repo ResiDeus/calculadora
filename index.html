@@ -692,19 +692,88 @@
         }
 
         /* ============================================================
-           TECLADO NUMÉRICO (pad de 3 columnas)
+           CIRCUITO DE COLORES INDIVIDUALES POR BOTÓN (TEMA PRINCIPAL)
+           ============================================================ */
+
+        /* Base estructural unificada para los 4 botones inferiores */
+        .btn-theme, .btn-receipt, .btn-clear-master, .btn-salario-bottom {
+            border-radius: 10px !important;
+            font-weight: 900 !important; 
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-family: monospace !important;
+            height: 38px !important;       
+            font-size: 11px !important;    
+            width: 100% !important;
+            z-index: 15 !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Colores exclusivos para cada botón SOLO en el tema principal (Cyberpunk) */
+        body.theme-cyberpunk .btn-theme {
+            background: rgba(0, 240, 255, 0.05) !important;
+            border: 2px solid #00f0ff !important;
+            color: #00f0ff !important;
+        }
+        body.theme-cyberpunk .btn-receipt {
+            background: rgba(0, 255, 102, 0.05) !important;
+            border: 2px solid #00ff66 !important;
+            color: #00ff66 !important;
+        }
+        body.theme-cyberpunk .btn-salario-bottom {
+            background: rgba(251, 133, 0, 0.05) !important;
+            border: 2px solid #fb8500 !important;
+            color: #fb8500 !important;
+        }
+        body.theme-cyberpunk .btn-clear-master {
+            background: rgba(255, 59, 48, 0.05) !important;
+            border: 2px solid #ff3b30 !important;
+            color: #ff3b30 !important;
+        }
+
+        /* El feedback táctil de Flash de Alta Intensidad (Active) al presionarlos */
+        .btn-theme:active, 
+        .btn-receipt:active, 
+        .btn-salario-bottom:active, 
+        .btn-clear-master:active { 
+            background: #ffffff !important;
+            color: #000000 !important;
+            filter: brightness(2) contrast(1.5) !important;
+            box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
+            text-shadow: none !important;
+            transition: none !important;
+        }
+
+        /* Cuando la pantalla azul está ABIERTA, Salario se torna GRIS */
+        body.theme-cyberpunk .btn-salario-bottom.btn-on {
+            background: rgba(150, 150, 150, 0.15) !important;
+            border: 2px solid #8e8e93 !important;
+            color: #8e8e93 !important;
+            text-shadow: 0 0 4px rgba(142, 142, 147, 0.4) !important;
+            animation: none !important; 
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.4) !important;
+            opacity: 1 !important;
+        }
+
+        /* ============================================================
+           TECLADO NUMÉRICO (pad de 3 columnas) - RESTAURADO A SU SITIO
            ============================================================ */
         .pad-num {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            width: 100%;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 4px !important;
+            width: 100% !important;
         }
 
         /* Animación lenta de estrellas en los botones del teclado */
         @keyframes estrellasRelaxNoche {
-            0%, 100% { opacity: 0.2; }
-            50%       { opacity: 0.9; }
+            0% { text-shadow: 0 0 2px rgba(255,255,255,0.2); }
+            50% { text-shadow: 0 0 8px rgba(255,255,255,0.6); }
+            100% { text-shadow: 0 0 2px rgba(255,255,255,0.2); }
         }
 
         /* Aura neón que parpadea en el texto de los números */

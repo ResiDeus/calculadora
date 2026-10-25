@@ -388,10 +388,12 @@
         /* Historial de artículos guardados */
         .lcd-historial {
             display: grid !important;
-            grid-auto-rows: 15px !important; /* ⚡ Cada fila sube de 12px a 15px */
+            grid-auto-rows: 15px !important;
             gap: 2px !important;
-            font-size: 11px; /* ⚡ Agrandamos la letra de los artículos guardados de 9px a 11px */
-            height: 90px !important; /* ⚡ Jaula más alta para ver más artículos a la vez */
+            font-size: 11px;
+            /* 🔒 ALTURA ESTABLE: Forzamos a que la lista mida EXACTAMENTE 90px siempre, esté vacía o llena */
+            height: 90px !important; 
+            min-height: 90px !important; /* Evita que colapse hacia arriba al dar CLEAR */
             max-height: 90px !important;
             overflow-y: auto !important;
             text-align: left;
@@ -405,14 +407,13 @@
             text-align: left !important;
             font-size: 11px; 
             line-height: 1.3;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: flex-start !important;
+            /* 🔒 BLOQUEO DE POSICIÓN: Mantiene el desglose anclado en su mismo sitio original */
+            display: block !important; 
             height: auto !important;
-            overflow: visible !important;
+            margin-top: 4px !important;
         }
 
-        /* 🔒 UBICACIÓN FIJA SOBERANA: Tranca las filas en su posición default y hereda el color original del LCD */
+        /* 🔒 UBICACIÓN FIJA COMPRAS: Hereda el color verde original de fábrica y congela el lugar */
         #rowPersonaCuota, #rowDesc, #rowTip, #rowIvu {
             display: block !important;
             width: 100% !important;
@@ -420,12 +421,15 @@
             margin-bottom: 2px !important;
             margin-top: 0 !important;
             padding: 0 !important;
-            color: inherit !important; /* ⚡ Devuelve el color verde neón original del LCD, barriendo las plastas blancas */
+            
+            /* ⚡ REGRESAN LOS COLORES ORIGINALES: Cero blanco, hereda el verde neón de tu LCD */
+            color: inherit !important; 
+            text-shadow: none !important;
             transform: none !important;
         }
 
         .lcd-total {
-            font-size: 26px; /* ⚡ El TOTAL gigante sube de 22px a 26px para que impacte duro */
+            font-size: 26px;
             font-weight: 900;
             text-align: left !important;
             line-height: 1.1;

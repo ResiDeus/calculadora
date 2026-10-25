@@ -1108,25 +1108,24 @@
                     <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; height: 75px !important; max-height: 75px !important; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0; overflow: visible; position: absolute !important; top: 6px !important; left: 6px !important; z-index: 95; box-sizing: border-box;">
 
                         <!-- COLUMNA IZQUIERDA: Paga por hora y horas semanales -->
-                        <div style="display: flex; flex-direction: column; gap: 4px; width: 44%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 0px; align-items: flex-start; text-align: left;">
+                        <div style="display: flex; flex-direction: column; gap: 5px; width: 46%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 0px; align-items: flex-start; text-align: left;">
                             
-                            <!-- PAGA POR HORA (Alineación en bloque a la izquierda) -->
+                            <!-- PAGA POR HORA (Agrandado y alineado en la M de MODO) -->
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
-                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1; text-align: left; padding-left: 2px;">PAGA POR HORA:</span>
+                                <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left;">PAGA POR HORA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
-                                    <!-- El número ahora se queda bien pegado a la izquierda, alineado con el texto -->
-                                    <div style="text-align: left; display: inline-block; margin-right: auto; padding-left: 2px;">
-                                        <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 4px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3);"> $10.50</span>
+                                    <div style="text-align: left; display: inline-block; margin-right: auto;">
+                                        <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: left;">$10.50/h</span>
                                     </div>
-                                    <!-- Los botones de más y menos SE QUEDAN EXACTAMENTE EN SU UBICACIÓN ORIGINAL A LA DERECHA -->
-                                    <div style="display: flex; gap: 4px; position: relative; z-index: 100;">
-                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                    <!-- Mismo tamaño y separación que los de Retención Manual -->
+                                    <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('paga', -0.25)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.25)"
                                             onmouseup="detenerAccionLcdControles()"
                                             onmouseleave="detenerAccionLcdControles()"
                                             ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('paga', 0.25)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.25)"
                                             onmouseup="detenerAccionLcdControles()"
@@ -1136,23 +1135,22 @@
                                 </div>
                             </div>
 
-                            <!-- HORAS SEMANA (Alineación en bloque a la izquierda) -->
-                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 2px;">
-                                <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1; text-align: left; padding-left: 2px;">HORAS SEMANA:</span>
+                            <!-- HORAS SEMANA (Agrandado y alineado en la M de MODO) -->
+                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 3px;">
+                                <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left;">HORAS SEMANA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
-                                    <!-- El número ahora se queda bien pegado a la izquierda, alineado con el texto -->
-                                    <div style="text-align: left; display: inline-block; margin-right: auto; padding-left: 2px;">
-                                        <span id="lblHorasSemanaLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span>
+                                    <div style="text-align: left; display: inline-block; margin-right: auto;">
+                                        <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 5px; border-radius: 3px; text-align: left;">40</span>
                                     </div>
-                                    <!-- 🔒 Los botones de más y menos SE QUEDAN EXACTAMENTE EN SU UBICACIÓN ORIGINAL A LA DERECHA -->
-                                    <div style="display: flex; gap: 4px; position: relative; z-index: 100;">
-                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                    <!-- Mismo tamaño y separación que los de Retención Manual -->
+                                    <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('horas', -1)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)"
                                             onmouseup="detenerAccionLcdControles()"
                                             onmouseleave="detenerAccionLcdControles()"
                                             ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('horas', 1)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)"
                                             onmouseup="detenerAccionLcdControles()"

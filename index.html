@@ -552,6 +552,25 @@
     text-transform: uppercase !important;
 }
 
+/* === REGLA MAESTRA UNIFICADA: Mismo font y tamaño exacto para ACTIVADO y DESACTIVADO === */
+.caja-data .lbl-title {
+    font-size: 9.5px !important; /* Punto medio perfecto para que no sea ni gigante ni muy pequeño */
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 5px !important; /* Separación sutil y limpia para que el texto respire y no pegue con el número */
+    animation: none !important;
+    text-shadow: none !important;
+}
+
+.caja-data .lbl-val {
+    font-size: 10.5px !important; /* Proporción idéntica y fija para los números de abajo en ambos estados */
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
+
 /* === Estado de los botones de arriba cuando estan encendidos con el violeta galactico === */
 .caja-data.btn-on {
     background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
@@ -563,23 +582,9 @@
     box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
 }
 
-/* === Ajuste para que las letras se vean un poquitito mas pequeñas cuando estan activas === */
-.caja-data.btn-on .lbl-title {
-    font-size: 9px !important; /* Bajamos un chispito de 10px a 9px para que respire mejor */
-    font-family: monospace !important;
-    font-weight: 900 !important;
+/* Forzamos que el color blanco sólido se mantenga brillante en los textos al prenderse */
+.caja-data.btn-on * {
     color: #ffffff !important;
-    animation: none !important;
-    text-shadow: none !important;
-}
-
-.caja-data.btn-on .lbl-val {
-    font-size: 10px !important; /* Bajamos un chispito de 11px a 10px para mantener la proporcion */
-    font-family: monospace !important;
-    font-weight: 900 !important;
-    color: #ffffff !important;
-    animation: none !important;
-    text-shadow: none !important;
 }
 
 /* === Primer corillo de estrellitas para el parpadeo cruzado === */

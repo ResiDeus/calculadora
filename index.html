@@ -1879,23 +1879,22 @@
             modoIvuActivo = false;
             document.getElementById('lblIvuBoton').innerText = "0.0";
 
-            // ⚡ FIJAMOS EL ESTADO BASE EN SILENCIO TOTAL
-            // (Eliminamos seleccionarMenu('sub') para que no arrastre lógicas viejas)
-                        document.getElementById('cajaPpl').className = "caja-data btn-off";
-            document.getElementById('cajaDesc').className = "caja-data btn-off";
-            document.getElementById('cajaTip').className = "caja-data btn-off";
-            document.getElementById('btnToggleIvu').className = "caja-data btn-off";
+            // Le removemos el btn-off viejo y lo dejamos en su clase de botón maestro limpia
+            document.getElementById('btnModoSalario').className = "btn-salario-bottom";
 
+            // Aseguramos que el texto de Lista vacía aparezca limpio y visible en la pantalla verde de fábrica
+            const txtVac = document.getElementById('lblArtText');
+            if (txtVac) {
+                txtVac.style.display = "block";
+                txtVac.innerHTML = 'Lista vacía';
+            }
+            document.getElementById('flechaGuia').style.display = "none";
+
+            // Reset manual del precio
             mode = 'sub';
-            
-            // Fuerza a la pantalla a mostrar el cero al instante
             document.getElementById('lblSub').innerText = "0";
-            
-            // Apagamos los parpadeos viejos y encendemos solo el del precio actual
             document.querySelectorAll('.lbl-val span').forEach(el => el.classList.remove('blink-num'));
             document.getElementById('lblSub').classList.add('blink-num');
-            
-            // Encendemos el chasis del precio
             document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
             
             actualizarHeaderIndicadores();
@@ -1934,44 +1933,70 @@
             const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
             const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
+            const textoListaVacia = document.getElementById('lblArtText'); // 🚀 Referencia al texto fantasma
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-            modoSalarioActivo = !modoSalarioActivo;
-            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+                modoSalarioActivo = !modoSalarioActivo;
+                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
-            if (modoSalarioActivo) {
-                lcd.classList.add('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+                if (modoSalarioActivo) {
+                    lcd.classList.add('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                bloqueListaCompras.style.display = "none";
-                wrapperCompras.style.display = "none";
-                document.getElementById('flechaGuia').style.display = "none";
+                    bloqueListaCompras.style.display = "none";
+                    wrapperCompras.style.display = "none";
+                    document.getElementById('flechaGuia').style.display = "none";
+                    
+                    // Apagamos el texto de Lista Vacía para que no flote en la pantalla azul
+                    if (textoListaVacia) textoListaVacia.style.display = "none";
 
-                bloqueSubPantallaSalario.style.display = "flex";
-                wrapperSalario.style.display = "block";
+                    bloqueSubPantallaSalario.style.display = "flex";
+                    wrapperSalario.style.display = "block";
 
-                // Prende el botón de abajo
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
-                calcularSalarioSubPantalla();
-            } else {
-                lcd.classList.remove('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+                    // Se enciende abajo manteniendo su forma física intacta
+                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                    calcularSalarioSubPantalla();
+                } else {
+                    lcd.classList.remove('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
-                bloqueSubPantallaSalario.style.display = "none";
-                wrapperSalario.style.display = "none";
-                bloqueListaCompras.style.display = "block";
-                wrapperCompras.style.display = "block";
+                    bloqueSubPantallaSalario.style.display = "none";
+                    wrapperSalario.style.display = "none";
+                    bloqueListaCompras.style.display = "block";
+                    wrapperCompras.style.display = "block";
 
-                // Apaga el botón de abajo
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-off";
-                calc();
+                    // Devolvemos el texto a la vida si la lista de compras está vacía
+                    if (textoListaVacia && preciosGuardados.length === 0) {
+                        textoListaVacia.style.display = "block";
+                    }
+
+                    // Restaurar lista de artículos si hay guardados
+                    if (preciosGuardados.length === 0) {
+                        if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                    } else {
+                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                            item.descuento.toFixed(2) + '/IVU:' +
+                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                        ).join('');
+                        let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+                        bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                    }
+
+                    // Se apaga abajo manteniendo su forma de botón normal limpia
+                    document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                    if (preciosGuardados.length >= 3) {
+                        document.getElementById('flechaGuia').style.display = "block";
+                    }
+                    calc();
+                }
+                actualizarHeaderIndicadores();
+                return;
             }
-            actualizarHeaderIndicadores();
-            return;
-        }
 
-            // Si se elige otra opción mientras está en salario → salir de salario primero
+            // Si se elige otra opción de arriba mientras está en salario → apagar salario limpiamente primero
             if (modoSalarioActivo && f !== 'sal') {
                 modoSalarioActivo = false;
                 lcd.classList.remove('modo-salario-activo');
@@ -1979,12 +2004,15 @@
                 wrapperSalario.style.display = "none";
                 bloqueListaCompras.style.display = "block";
                 wrapperCompras.style.display = "block";
-                document.getElementById('btnModoSalario').className = "caja-data btn-off";
-                document.getElementById('lblSalarioBoton').innerText = "N/A";
+                
+                // Restauramos el texto en el amague de salida
+                if (textoListaVacia && preciosGuardados.length === 0) textoListaVacia.style.display = "block";
+                
+                // Evita que el botón se mutile al tocar opciones superiores
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
 
                 if (preciosGuardados.length === 0) {
-                    bloqueListaCompras.innerHTML =
-                        '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                    bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {
                     bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
                         '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
@@ -1993,80 +2021,67 @@
                         item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
                     ).join('');
                     let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                    bloqueListaCompras.innerHTML +=
-                        '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
-                        totalConTaxAcumulado.toFixed(2) + '</div>';
+                    bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
                 }
             }
 
-            // Referencias a los spans de valores
+            // Referencias a las etiquetas de los números
             const numSub = document.getElementById('lblSub');
             const numPpl = document.getElementById('lblPpl');
             const numDesc = document.getElementById('lblDesc');
             const numTip = document.getElementById('lblTip');
             const numIvu = document.getElementById('lblIvuBoton');
 
-            // Toggle de cada opción
             if (f === 'ppl') {
                 modoSerruchoActivo = !modoSerruchoActivo;
                 sPpl = memoriaSerruchoCortes;
-                document.getElementById('lblPpl').innerText =
-                    modoSerruchoActivo ? sPpl : "N/A";
+                document.getElementById('lblPpl').innerText = modoSerruchoActivo ? sPpl : "N/A";
                 mode = 'sub';
             } else if (f === 'tip') {
                 incluirPropina = !incluirPropina;
                 sTip = memoriaTipPct;
-                document.getElementById('lblTip').innerText =
-                    incluirPropina ? sTip : "0";
+                document.getElementById('lblTip').innerText = incluirPropina ? sTip : "0";
                 mode = 'sub';
             } else if (f === 'desc') {
                 modoDescuentoActivo = !modoDescuentoActivo;
                 sDesc = memoriaDescuentoPct;
-                document.getElementById('lblDesc').innerText =
-                    modoDescuentoActivo ? sDesc : "0";
+                document.getElementById('lblDesc').innerText = modoDescuentoActivo ? sDesc : "0";
                 mode = 'sub';
             } else if (f === 'ivu') {
                 modoIvuActivo = !modoIvuActivo;
                 ivu = modoIvuActivo ? (parseFloat(memoriaIvuPct) || 11.5) : 0.0;
-                document.getElementById('lblIvuBoton').innerText =
-                    modoIvuActivo ? ivu.toFixed(1) : "0.0";
+                document.getElementById('lblIvuBoton').innerText = modoIvuActivo ? ivu.toFixed(1) : "0.0";
                 mode = 'sub';
             } else {
-                mode = f; // 'sub' u otro
+                mode = f;
             }
 
-            // Apagar todas las cajas visualmente
-            ['marcadorPrecioUnificado', 'cajaPpl', 'cajaDesc', 'cajaTip', 'btnToggleIvu', 'btnModoSalario']
+            // Apagamos los botones superiores sin tocar el ID del botón de salario abajo
+            ['marcadorPrecioUnificado', 'cajaPpl', 'cajaDesc', 'cajaTip', 'btnToggleIvu']
                 .forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
-                        if (id === 'marcadorPrecioUnificado') {
-                            el.className = 'contenedor-precio-unificado';
-                        } else {
-                            el.className = 'caja-data btn-off';
-                        }
+                        if (id === 'marcadorPrecioUnificado') el.className = 'contenedor-precio-unificado';
+                        else el.className = 'caja-data btn-off';
                     }
                 });
-            [numSub, numPpl, numDesc, numTip, numIvu].forEach(el => {
-                if (el) el.classList.remove('blink-num');
-            });
 
-            // Encender las que estén activas
+            // Apagamos los parpadeos viejos
+            [numSub, numPpl, numDesc, numTip, numIvu].forEach(el => { if (el) el.classList.remove('blink-num'); });
+
+            // Prendemos las luces neón de las celdas de arriba que sigan activas
             if (modoDescuentoActivo) document.getElementById('cajaDesc').className = "caja-data btn-on";
             if (modoSerruchoActivo) document.getElementById('cajaPpl').className = "caja-data btn-on";
             if (incluirPropina) document.getElementById('cajaTip').className = "caja-data btn-on";
             if (modoIvuActivo) document.getElementById('btnToggleIvu').className = "caja-data btn-on";
-            if (modoSalarioActivo) document.getElementById('btnModoSalario').className = "caja-data btn-on";
 
-            // Si el modo es precio, mostrar parpadeo y resaltar el marcador
             if (mode === 'sub') {
                 numPpl.innerText = modoSerruchoActivo ? memoriaSerruchoCortes : "N/A";
                 numDesc.innerText = modoDescuentoActivo ? memoriaDescuentoPct : "0";
                 numTip.innerText = incluirPropina ? memoriaTipPct : "0";
                 numIvu.innerText = modoIvuActivo ? parseFloat(memoriaIvuPct).toFixed(1) : "0.0";
                 numSub.classList.add('blink-num');
-                document.getElementById('marcadorPrecioUnificado').className =
-                    "contenedor-precio-unificado precio-on";
+                document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
             }
 
             actualizarHeaderIndicadores();

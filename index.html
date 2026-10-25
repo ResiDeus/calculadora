@@ -810,8 +810,8 @@ body.theme-cyberpunk .btn-salario-bottom {
     z-index: 15 !important;
     box-sizing: border-box !important;
     
-    /* Mantiene el fluido gris claro transparente notable */
-    background: linear-gradient(90deg, rgba(220, 220, 230, 0.18), rgba(220, 220, 230, 0.32), rgba(220, 220, 230, 0.18)) !important;
+    /* Bajamos la opacidad para que el fluido gris claro sea mas sutil y transparente */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
     background-size: 200% auto !important;
     animation: activeMenuMove 3s infinite linear !important;
     
@@ -820,17 +820,17 @@ body.theme-cyberpunk .btn-salario-bottom {
     
     /* Texto en blanco solido mate limpio y sin nada de efectos glow */
     color: #ffffff !important;
-    text-shadow: none !important; /* Volamos el glow blanco por completo */
-    box-shadow: 0 0 6px rgba(142, 142, 147, 0.2) !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
 }
 
-/* Forzamos que las letras internas de estos botones se queden en blanco mate sin sombras de show */
+/* Forzamos que las letras internas de estos botones se queden en blanco mate sin sombras */
 body.theme-cyberpunk .btn-theme *, 
 body.theme-cyberpunk .btn-receipt *, 
 body.theme-cyberpunk .btn-clear-master *, 
 body.theme-cyberpunk .btn-salario-bottom * {
     color: #ffffff !important;
-    text-shadow: none !important; /* Asegura que ningun hijo herede el glow */
+    text-shadow: none !important;
 }
 
         /* El feedback táctil de Flash Blanco */

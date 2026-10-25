@@ -1688,7 +1688,6 @@
         /* ============================================================
            CONTROLES INTERNOS DEL LCD AZUL (horas y retención manual)
            ============================================================ */
-
         let timerLcdControlesTimeout = null;
         let timerLcdControlesInterval = null;
 
@@ -1709,8 +1708,14 @@
                 timerLcdControlesInterval = setInterval(() => {
                     ticks++;
                     let factorTurbo = 1;
-                    if (ticks > 25) factorTurbo = destino === 'horas' ? 4 : 3;
-                    else if (ticks > 10) factorTurbo = destino === 'horas' ? 2 : 2;
+                    
+                    // multiplicador que reacciona mucho antes y con pasos más grandes
+                    if (ticks > 12) {
+                        factorTurbo = destino === 'horas' ? 10 : 3; // Brinca de 10 en 10 si lo dejas pegado
+                    } else if (ticks > 5) {
+                        factorTurbo = destino === 'horas' ? 5 : 2;  // Brinca de 5 en 5 casi de cantazo
+                    }
+                    
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);
                 }, 15);
             }, 300);

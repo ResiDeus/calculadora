@@ -791,34 +791,47 @@ body .btn-salario-bottom.btn-on::after {
         }
 
         /* Base estructural y estética calada: Outline Gris Brillante y Fondo Oscuro Translúcido */
-        body.theme-cyberpunk .btn-theme, 
-        body.theme-cyberpunk .btn-receipt, 
-        body.theme-cyberpunk .btn-clear-master, 
-        body.theme-cyberpunk .btn-salario-bottom {
-            border-radius: 10px !important;
-            font-weight: 900 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            text-transform: uppercase !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            height: 38px !important;       
-            font-size: 11px !important;    
-            width: 100% !important;
-            z-index: 15 !important;
-            box-sizing: border-box !important;
-            
-            /* Color Gris Synthwave / Industrial calado */
-            background: rgba(20, 20, 25, 0.4) !important; 
-            border: 2px solid #8e8e93 !important; /* Outline en gris brillante sólido */
-            
-            /* Texto y sombras en perfecta armonía gris neón */
-            color: #d1d1d6 !important;
-            text-shadow: 0 0 4px rgba(142, 142, 147, 0.5) !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.15) !important;
-        }
+body.theme-cyberpunk .btn-theme, 
+body.theme-cyberpunk .btn-receipt, 
+body.theme-cyberpunk .btn-clear-master, 
+body.theme-cyberpunk .btn-salario-bottom {
+    border-radius: 10px !important;
+    font-weight: 900 !important; 
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-family: monospace !important;
+    height: 38px !important;       
+    font-size: 11px !important;    
+    width: 100% !important;
+    z-index: 15 !important;
+    box-sizing: border-box !important;
+    
+    /* Bajamos la opacidad para que el fluido gris claro sea mas sutil y transparente */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
+    background-size: 200% auto !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    
+    /* Outline en gris brillante solido de fabrica */
+    border: 2px solid #8e8e93 !important; 
+    
+    /* Texto en blanco solido mate limpio y sin nada de efectos glow */
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
+}
+
+/* Forzamos que las letras internas de estos botones se queden en blanco mate sin sombras */
+body.theme-cyberpunk .btn-theme *, 
+body.theme-cyberpunk .btn-receipt *, 
+body.theme-cyberpunk .btn-clear-master *, 
+body.theme-cyberpunk .btn-salario-bottom * {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
 
         /* El feedback táctil de Flash Blanco */
         body.theme-cyberpunk .btn-theme:active, 
@@ -1269,6 +1282,21 @@ body .btn-salario-bottom.btn-on::after {
                 box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
             }
         }
+
+        /* Forzamos a la lista a quedarse encerrada en su espacio con scroll independiente */
+        .listaPrecios-container, 
+        #listaPrecios {
+            max-height: 140px !important; /* Congela la altura de la lista para que no empuje a nadie hacia arriba */
+            overflow-y: auto !important;  /* Activa la barra de deslizamiento vertical para los artículos */
+            box-sizing: border-box !important;
+        }
+
+        #lblTotalGeneralLcd,
+        #lblTotalGeneral,
+        .total-grande-lcd {
+            white-space: nowrap !important;
+            display: inline-block !important;
+        }
         
     </style>
 </head>
@@ -1307,8 +1335,7 @@ body .btn-salario-bottom.btn-on::after {
                         <span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>
                     </div>
 
-                    <!-- Indicador de scroll cuando hay muchos artículos -->
-                    <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 30px; right: 2px; font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1;">▼ deslizar</div>
+                  <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 35px !important; right: 4px; font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase;">▼ deslizar</div>
 
                     <!-- ====================================================
                          SUBPANTALLA DE SALARIO (solo visible en modo salario)
@@ -1416,7 +1443,7 @@ body .btn-salario-bottom.btn-on::after {
             <div class="lcd-body">
 
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
-                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
+                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%;">
                     
                     <!-- SERRUCHO aparece primero -->
                     <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
@@ -1434,10 +1461,17 @@ body .btn-salario-bottom.btn-on::after {
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- Fila TOTAL + indicador de scroll -->
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
-                        <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
-                        <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
+                    <!-- Fila TOTAL: Separación horizontal estricta con guiones divisores -->
+                    <div style="display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; margin-top: 5px !important; border-top: 1px dashed rgba(255,255,255,0.2) !important; padding-top: 3px !important; position: relative !important; flex-wrap: nowrap !important; box-sizing: border-box !important;">
+                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 13px !important; text-transform: uppercase !important; color: inherit; white-space: nowrap !important;">TOTAL:</span>
+                        
+                        <!-- El número se recuesta firmemente a la derecha en la misma línea sin romperse -->
+                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: inherit; white-space: nowrap !important; text-align: right !important; display: inline-block !important;">
+                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important;">0.00</span>
+                        </div>
+
+                        <!-- Indicador de scroll flotando perfectamente calibrado arriba del total -->
+                        <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 30px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
                     </div>
                 </div>
                 <!-- ---------- Fin de modo COMPRAS ---------- -->
@@ -2154,7 +2188,7 @@ body .btn-salario-bottom.btn-on::after {
          * Activa o desactiva una opción del menú.
          * f = 'sub' | 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal'
          */
-        function seleccionarMenu(f) {
+function seleccionarMenu(f) {
             if (!sistemaEncendido) return;
             reproducirSonido('menu');
 
@@ -2163,50 +2197,64 @@ body .btn-salario-bottom.btn-on::after {
             const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
             const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
-            const textoListaVacia = document.getElementById('lblArtText'); // 🚀 Referencia al texto fantasma
+            const textoListaVacia = document.getElementById('lblArtText'); 
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-            modoSalarioActivo = !modoSalarioActivo;
-            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
-            
-            // ⚡ REFERENCIAS PRECISAS A LA LISTA DE COMPRAS
-            const bloqueListaCompras = document.getElementById('listaPrecios');
-            const textoListaVacia = document.getElementById('lblArtText');
+                modoSalarioActivo = !modoSalarioActivo;
+                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
-            if (modoSalarioActivo) {
-                lcd.classList.add('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+                if (modoSalarioActivo) {
+                    lcd.classList.add('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                // 🔒 EXCLUSIVIDAD ABSOLUTA: Apagamos por completo el listado impreso de compras y su texto fantasma
-                if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
-                if (textoListaVacia) textoListaVacia.style.display = "none";
-                
-                // Mantenemos oculto el indicador de scroll
-                if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
+                    // Apagamos por completo el listado impreso de compras y su texto fantasma
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
+                    if (textoListaVacia) textoListaVacia.style.display = "none";
+                    
+                    // Mantenemos oculto el indicador de scroll
+                    if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-                // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
-                bloqueSubPantallaSalario.style.display = "flex";
-                wrapperSalario.style.display = "block";
-                wrapperCompras.style.display = "none"; // Apaga el total de compras verde
+                    // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
+                    bloqueSubPantallaSalario.style.display = "flex";
+                    wrapperSalario.style.display = "block";
+                    wrapperCompras.style.display = "none"; 
 
-                // Se enciende el botón de abajo con su glitch eléctrico global
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
-                calcularSalarioSubPantalla();
-            } else {
-                lcd.classList.remove('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+                    // Se enciende el botón de abajo con su glitch eléctrico global
+                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                    calcularSalarioSubPantalla();
+                } else {
+                    lcd.classList.remove('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
-                // Apagamos la pantalla de nómina azul por completo
-                bloqueSubPantallaSalario.style.display = "none";
-                wrapperSalario.style.display = "none";
-                
-                // 🔄 REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
-                if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
-                if (wrapperCompras) wrapperCompras.style.display = "block";
+                    // Apagamos la pantalla de nómina azul por completo
+                    bloqueSubPantallaSalario.style.display = "none";
+                    wrapperSalario.style.display = "none";
+                    
+                    // REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+                    if (wrapperCompras) wrapperCompras.style.display = "block";
 
-                // Si no hay artículos, restauramos el texto de Lista Vacía estable
-                if (preciosGuardados.length === 0) {
+                    // 🚀 SENSOR ELÁSTICO PARA EL TOTAL GRANDE DE ABAJO
+                    if (wrapperCompras) {
+                        let textoTotalGrande = wrapperCompras.innerText || "";
+                        
+                        // Si el número es gigante (ej: $1,250.75), encoge la letra para que no suba
+                        if (textoTotalGrande.length >= 8) {
+                            wrapperCompras.style.fontSize = "16px";
+                        } 
+                        // Si es mediano (ej: $150.25), lo ajusta estable en 20px
+                        else if (textoTotalGrande.length === 7) {
+                            wrapperCompras.style.fontSize = "20px";
+                        } 
+                        // Si es un número corto, mantiene la letra masiva original de fábrica
+                        else {
+                            wrapperCompras.style.fontSize = "26px"; 
+                        }
+                    }
+
+                    // Si no hay artículos, restauramos el texto de Lista Vacía estable
+                    if (preciosGuardados.length === 0) {
                     if (textoListaVacia) textoListaVacia.style.display = "block";
                     if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {

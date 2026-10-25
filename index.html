@@ -536,102 +536,102 @@
            SISTEMA MAESTRO DE HIPER-GLITCH GLOBAL (TODOS LOS TEMAS)
            ============================================================ */
 
-        /* Las dos animaciones de fading suave con ritmos diferentes */
-        @keyframes estrellasBrilloLentoA {
-            0%, 100% { opacity: 0.1; }
-            50%      { opacity: 0.9; }
-        }
+/* === Animaciones para que las estrellitas prendan y apaguen suave en tiempos distintos === */
+@keyframes estrellasBrilloLentoA {
+    0%, 100% { opacity: 0.1; }
+    50%      { opacity: 0.9; }
+}
 
-        @keyframes estrellasBrilloLentoB {
-            0%, 100% { opacity: 0.8; }
-            50%      { opacity: 0.1; }
-        }
+@keyframes estrellasBrilloLentoB {
+    0%, 100% { opacity: 0.8; }
+    50%      { opacity: 0.1; }
+}
 
-        /* El estado seleccionado para las celdas de arriba (Violeta Galáctico) */
-        .caja-data.btn-on {
-            background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
-            background-size: 200% 200% !important;
-            animation: activeMenuMove 3s infinite linear !important;
-            color: #ffffff !important;
-            opacity: 1 !important;
-            
-            /* Outline blanco brillante y pulso neón exterior restaurados */
-            border-color: #ffffff !important;
-            box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
-            font-weight: 900 !important;
-        }
+/* === Estado de los botones de arriba cuando estan encendidos con el violeta galactico === */
+.caja-data.btn-on {
+    background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
+    background-size: 200% 200% !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
+}
 
-        /* Limpias, estables y sin temblores glitch */
-        .caja-data.btn-on * {
-            position: relative;
-            z-index: 5;
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            animation: none !important; /* Barremos cualquier rastro del glitch de texto */
-            text-shadow: none !important;
-        }
+/* === Se mantienden los textos de arriba quietos con su letra original de maquina de show === */
+.caja-data.btn-on * {
+    position: relative;
+    z-index: 5;
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
 
-        /* LAS ESTRELLITAS con brillo intermedio */
-        .caja-data.btn-on::before {
-            content: "";
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #ffffff;
-            top: 12px;
-            left: 14px;
-            box-shadow:
-                15px 24px 0 #ffffff,
-                38px 6px 0 #ffffff;
-            z-index: 1;
-            animation: estrellasBrilloLentoA 2.8s infinite ease-in-out !important;
-            pointer-events: none;
-        }
+/* === Primer corillo de estrellitas para el parpadeo cruzado === */
+.caja-data.btn-on::before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 12px;
+    left: 14px;
+    box-shadow:
+        15px 24px 0 #ffffff,
+        38px 6px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoA 2.8s infinite ease-in-out !important;
+    pointer-events: none;
+}
 
-        /* Brillo cruzado y asíncrono para que no parpadeen al mismo tiempo */
-        .caja-data.btn-on::after {
-            content: "";
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #ffffff;
-            top: 8px;
-            left: 8px;
-            box-shadow:
-                42px 28px 0 #ffffff,
-                18px -2px 0 #ffffff;
-            z-index: 1;
-            animation: estrellasBrilloLentoB 3.4s infinite ease-in-out !important;
-            animation-delay: 0.7s !important; /* Desfase de tiempo clave */
-            pointer-events: none;
-        }
+/* === Segundo corillo de estrellitas con un aguaje de tiempo para que no prendan juntas === */
+.caja-data.btn-on::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 8px;
+    left: 8px;
+    box-shadow:
+        42px 28px 0 #ffffff,
+        18px -2px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoB 3.4s infinite ease-in-out !important;
+    animation-delay: 0.7s !important;
+    pointer-events: none;
+}
 
-        /* 3. EL BOTÓN DE SALARIO DE ABAJO MANTIENE SU GLITCH */
-        .btn-salario-bottom.btn-on {
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border-color: #00f0ff !important;
-            color: #ffffff !important;
-            text-transform: uppercase !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
+/* === El boton de salario de abajo se queda con toda la grasa del glitch intacto === */
+.btn-salario-bottom.btn-on {
+    background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+    background-size: 200% auto !important;
+    border-color: #00f0ff !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+    box-shadow: 0 0 18px #ff0055 !important;
+    animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+    opacity: 1 !important;
+}
 
-        body .btn-salario-bottom.btn-on::after {
-            content: "SALARIO";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.1);
-            color: #00f0ff;
-            text-shadow: -2px 0 #ff0055;
-            clip-path: inset(0 0 0 0);
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none;
-            z-index: 1;
-        }
+/* === La sombra doble electrizante para el efecto de distorsion del boton de abajo === */
+body .btn-salario-bottom.btn-on::after {
+    content: "SALARIO";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    background: rgba(0,0,0,0.1);
+    color: #00f0ff;
+    text-shadow: -2px 0 #ff0055;
+    clip-path: inset(0 0 0 0);
+    animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+    pointer-events: none;
+    z-index: 1;
+}
 
         /* ============================================================
            CONTENEDOR UNIFICADO DE PRECIO (marcador + botón AÑADIR)

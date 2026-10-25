@@ -791,7 +791,7 @@ body .btn-salario-bottom.btn-on::after {
         }
 
         /* Base estructural y estética calada: Outline Gris Brillante y Fondo Oscuro Translúcido */
-        body.theme-cyberpunk .btn-theme, 
+body.theme-cyberpunk .btn-theme, 
 body.theme-cyberpunk .btn-receipt, 
 body.theme-cyberpunk .btn-clear-master, 
 body.theme-cyberpunk .btn-salario-bottom {
@@ -810,18 +810,18 @@ body.theme-cyberpunk .btn-salario-bottom {
     z-index: 15 !important;
     box-sizing: border-box !important;
     
-    /* Fondo Gris Claro sutil, transparente y animado de corrido */
-    background: linear-gradient(90deg, rgba(200, 200, 210, 0.08), rgba(200, 200, 210, 0.16), rgba(200, 200, 210, 0.08)) !important;
+    /* Subimos la opacidad para que el fluido gris claro transparente sea bien notable */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.18), rgba(220, 220, 230, 0.32), rgba(220, 220, 230, 0.18)) !important;
     background-size: 200% auto !important;
-    animation: activeMenuMove 4s infinite linear !important; /* Mueve el fluido gris suavemente */
+    animation: activeMenuMove 3s infinite linear !important; /* Movimiento fluido mas vivo */
     
-    /* Outline en gris brillante sólido */
+    /* Outline en gris brillante solido de fabrica */
     border: 2px solid #8e8e93 !important; 
     
-    /* Texto y sombras en perfecta armonía industrial */
-    color: #d1d1d6 !important;
-    text-shadow: 0 0 4px rgba(142, 142, 147, 0.5) !important;
-    box-shadow: 0 0 6px rgba(142, 142, 147, 0.15) !important;
+    /* Modificacion: Texto en blanco limpio y brillante para maxima legibilidad */
+    color: #ffffff !important;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.2) !important;
 }
 
         /* El feedback táctil de Flash Blanco */

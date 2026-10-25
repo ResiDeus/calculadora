@@ -1516,39 +1516,44 @@ body.theme-cyberpunk .btn-salario-bottom * {
             <div class="lcd-body">
 
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
-                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%;">
+                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
                     
-                    <!-- Cambiadas las clases e inyectados los estilos en línea para el color nativo original === */
-                    <!-- SERRUCHO aparece primero (Letra pequeña de show) -->
-                    <div id="rowPersonaCuota" style="font-size: 10px !important; margin-bottom: 2px; transition: opacity 0.15s ease; font-family: monospace; font-weight: 900; color: rgba(0, 60, 0, 0.3) !important;">
+                    <!-- SERRUCHO (Maneja sus estados Negro / Verde Opacado directo por JS) -->
+                    <div id="rowPersonaCuota" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
 
-                    <!-- Desglose con tipografía de 10px para que no compitan con el Total -->
-                    <div id="rowDesc" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px; color: rgba(0, 60, 0, 0.3) !important;">
+                    <!-- DESCUENTO (Contraste nativo de fábrica) -->
+                    <div id="rowDesc" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px; color: rgba(0, 60, 0, 0.3) !important;">
+
+                    <!-- PROPINA (Gris opacado default exacto al IVU) -->
+                    <div id="rowTip" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 2px; color: rgba(0, 60, 0, 0.3) !important;">
+
+                    <!-- IVU (Independiente y alineado) -->
+                    <div id="rowIvu" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 4px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- ============================================================
-                       🚀 ¡REEMPLAZA ESTA FILA DEL TOTAL COMPLETA POR ESTA VERSIÓN!
-                       ============================================================ */
-                    <!-- Fila TOTAL: Nace oculta por defecto, despegada del piso y alineada a la izquierda con el número al lado -->
-                    <div id="contenedorTotalGeneralCompras" class="lcd-total-container" style="display: none !important;">
-                        <span class="lcd-total">TOTAL:</span>
-                        <span class="lcd-total">$<span id="outPer">0.00</span></span>
+                    <!-- 🔒 FILA DEL TOTAL GLOBAL: Siempre visible, despegada del piso y alineada a la izquierda -->
+                    <div id="contenedorTotalGeneralCompras" style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; gap: 6px !important; width: 100% !important; margin-top: 4px !important; border-top: 1px dashed #000000 !important; padding-top: 4px !important; position: absolute !important; bottom: 12px !important; left: 0 !important; box-sizing: border-box !important; height: 26px !important; overflow: visible !important;">
+                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 16px !important; text-transform: uppercase !important; color: #000000 !important; white-space: nowrap !important;">TOTAL:</span>
                         
+                        <!-- El número se amarra grande y pegadito al texto en negro sólido siempre visible -->
+                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: #000000 !important; white-space: nowrap !important; display: inline-block !important;">
+                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important;">0.00</span>
+                        </div>
+
                         <!-- Indicador de scroll flotando perfectamente calibrado arriba del total -->
                         <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 32px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
                     </div>
                 </div>
                 <!-- ---------- Fin de modo COMPRAS ---------- -->
+            </div>
 
 
                 <!-- ---------- Datos de modo SALARIO ---------- -->
@@ -2243,20 +2248,26 @@ body.theme-cyberpunk .btn-salario-bottom * {
             }
 
             // Reseteamos las clases de las filas para regresaras a verde opaco nativo de fábrica sin heredar texto viejo
+            if (document.getElementById('rowDesc')) document.getElementById('rowDesc').style.color = "rgba(0, 50, 0, 0.35)";
+            if (document.getElementById('rowTip')) document.getElementById('rowTip').style.color = "rgba(0, 50, 0, 0.35)";
+            if (document.getElementById('rowIvu')) document.getElementById('rowIvu').style.color = "rgba(0, 50, 0, 0.35)";
+            if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').style.color = "rgba(0, 50, 0, 0.35)";
+
+            // Reseteamos las clases de las filas para regresarlas a su estado limpio original sin heredar texto viejo
             if (document.getElementById('rowDesc')) document.getElementById('rowDesc').className = "";
             if (document.getElementById('rowTip')) document.getElementById('rowTip').className = "";
             if (document.getElementById('rowIvu')) document.getElementById('rowIvu').className = "";
             if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').className = "";
 
-            // Removemos los residuos de estilos manuales para que hereden puramente del CSS default
+            // Removemos los residuos de opacidad manuales para que hereden puramente del CSS default
             if (document.getElementById('rowDesc')) document.getElementById('rowDesc').style.opacity = "";
             if (document.getElementById('rowTip')) document.getElementById('rowTip').style.opacity = "";
             if (document.getElementById('rowIvu')) document.getElementById('rowIvu').style.opacity = "";
             if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').style.opacity = "";
 
-            // Corremos el cálculo final para dejar el sistema estable y marcando $0.00
+            // Corremos el cálculo final para sembrar el $0.00 simétrico en su sitio
             calc();
-        } // <--- Cierre de tu función ejecutarResetTotal
+        } // <--- Cierre de tu función ejecutarResetTotal // <--- Cierre de tu función ejecutarResetTotal
 
         /** Actualiza el texto de la cabecera del LCD según el estado actual */
         function actualizarHeaderIndicadores() {
@@ -2798,10 +2809,15 @@ function seleccionarMenu(f) {
             }
 
             // Mapeo dinámico de clases: Muta entre Negro sólido (.active) y Verde opaco sutil
-            document.getElementById('rowDesc').className = modoDescuentoActivo ? "active" : "";
-            document.getElementById('rowTip').className = (incluirPropina || modoTipActivo) ? "active" : "";
-            document.getElementById('rowIvu').className = modoIvuActivo ? "active" : "";
-            document.getElementById('rowPersonaCuota').className = modoSerruchoActivo ? "active" : "";
+            const rDesc = document.getElementById('rowDesc');
+            const rTip = document.getElementById('rowTip');
+            const rIvu = document.getElementById('rowIvu');
+            const rSerrucho = document.getElementById('rowPersonaCuota');
+
+            if (rDesc) rDesc.style.color = modoDescuentoActivo ? "#000000" : "rgba(0, 50, 0, 0.35)";
+            if (rTip) rTip.style.color = (incluirPropina || modoTipActivo) ? "#000000" : "rgba(0, 50, 0, 0.35)";
+            if (rIvu) rIvu.style.color = modoIvuActivo ? "#000000" : "rgba(0, 50, 0, 0.35)";
+            if (rSerrucho) rSerrucho.style.color = modoSerruchoActivo ? "#000000" : "rgba(0, 50, 0, 0.35)";
 
             if (modoSerruchoActivo) {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
@@ -2811,13 +2827,14 @@ function seleccionarMenu(f) {
                 document.getElementById('outPerPersonaLine').innerText = ``;
             }
 
+            // Ocultamos la lista de la tienda si entras al modo salario azul
             if (modoSalarioActivo) {
                 const containerLista = document.getElementById('listaPrecios');
                 if (containerLista) containerLista.style.setProperty('display', 'none', 'important');
                 return;
             }
 
-            // Activación automática del letrero deslizar al pasar los 2 artículos límite
+            // Activación del letrero deslizar al pasar los 2 artículos límite en el carrito
             if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                 document.getElementById('flechaGuia').style.display = "block";
             } else if (document.getElementById('flechaGuia')) {

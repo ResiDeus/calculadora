@@ -2076,8 +2076,8 @@ body.theme-cyberpunk .btn-salario-bottom * {
         function ejecutarResetTotal() {
             reproducirSonido('clear');
 
-            // 1. Limpieza absoluta de la memoria de la pantalla principal
-            sSub = "0"; // 🔒 Forzamos el precio principal a volver a 0
+            // 1. Limpieza absoluta de las variables del teclado de entrada
+            sSub = "0"; 
             cuentaAcumulada = 0;
             preciosGuardados = [];
             modoSalarioActivo = false; 
@@ -2119,7 +2119,7 @@ body.theme-cyberpunk .btn-salario-bottom * {
             }
             if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-            // 2. 🔒 RESET ABSOLUTO DE VARIABLES DE LA COMPRA VERDE
+            // 2. RESET ABSOLUTO DE VARIABLES DE LA COMPRA VERDE
             sPpl = "0";
             sTip = "0";
             sDesc = "0";
@@ -2128,7 +2128,7 @@ body.theme-cyberpunk .btn-salario-bottom * {
             // Reseteamos las memorias a sus valores limpios de fábrica
             memoriaTipPct = "0";
             memoriaDescuentoPct = "0";
-            memoriaIvuPct = "11.5"; // 🔒 Forzamos a que el IVU regrese a su tasa original
+            memoriaIvuPct = "11.5"; // La memoria retiene el 11.5% en el fondo
             memoriaSerruchoCortes = "0";
 
             // Apagamos estrictamente todos los interruptores logados
@@ -2136,13 +2136,19 @@ body.theme-cyberpunk .btn-salario-bottom * {
             modoTipActivo = false;
             modoDescuentoActivo = false;
             modoSerruchoActivo = false;
-            modoIvuActivo = false; // 🔒 Apagamos el IVU en el reset general
+            modoIvuActivo = false; 
 
-            // 🔒 REPARACIÓN DE TEXTOS EN LOS BOTONES NEÓN DE ARRIBA
+            // REPARACIÓN DE TEXTOS EN LOS BOTONES NEÓN SUPERIORES
             if (document.getElementById('lblTip')) document.getElementById('lblTip').innerText = "0";
             if (document.getElementById('lblDesc')) document.getElementById('lblDesc').innerText = "0";
-            if (document.getElementById('lblPpl')) document.getElementById('lblPpl').innerText = "N/A"; // 🔒 Clavamos N/A en vez de 0
-            if (document.getElementById('lblIvuBoton')) document.getElementById('lblIvuBoton').innerText = "11.5%"; // 🔒 Seteamos 11.5%
+            if (document.getElementById('lblPpl')) document.getElementById('lblPpl').innerText = "N/A"; 
+            
+            // 🔒 REPARACIÓN DEL IVU: Al dar CLEAR y estar apagado, muestra un limpio 0 en la carcasa
+            if (document.getElementById('lblIvuBoton')) document.getElementById('lblIvuBoton').innerText = "0"; 
+
+            // 🔒 REPARACIÓN DEL MARCADOR: Forzamos a limpiar tu menú de entrada de precios para borrar el "0 invisible"
+            if (document.getElementById('lblSub')) document.getElementById('lblSub').innerText = "0";
+            if (document.getElementById('txtMain')) document.getElementById('txtMain').innerText = "0";
 
             // Apagamos los ennegrecidos y luces de las celdas superiores
             const cajasSuperiores = document.querySelectorAll('.caja-data');
@@ -2152,10 +2158,6 @@ body.theme-cyberpunk .btn-salario-bottom * {
 
             const btnSalario = document.getElementById('btnModoSalario');
             if (btnSalario) btnSalario.className = "btn-salario-bottom";
-
-            // Forzamos a que la pantalla principal limpie sus números y marque cero redondo
-            const txtMain = document.getElementById('txtMain');
-            if (txtMain) txtMain.innerText = "0";
 
             // Reseteamos las filas del desglose a su look gris deshabilitado original uniforme (0.3)
             if (document.getElementById('rowDesc')) document.getElementById('rowDesc').style.opacity = "0.3";

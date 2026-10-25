@@ -1185,6 +1185,13 @@
 
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
+                    
+                    <!-- 🚀 ¡EL SERRUCHO MUDADO PARA ARRIBA! Ahora aparece primero -->
+                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
+                        <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
+                        <span id="outPerPersonaLine"></span>
+                    </div>
+
                     <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
@@ -1198,14 +1205,10 @@
                     <!-- Fila TOTAL + indicador de scroll -->
                     <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
                         <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
-                    </div>
-
-                    <!-- Cuota por persona cuando el Serrucho está activo -->
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-top: 1px; transition: opacity 0.15s ease;">
-                        <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
-                        <span id="outPerPersonaLine"></span>
+                        <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
                     </div>
                 </div>
+                <!-- ---------- Fin de modo COMPRAS ---------- -->
 
                 <!-- ---------- Datos de modo SALARIO ---------- -->
                 <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 2px; font-size: 8.5px; line-height: 1.1;">
@@ -2260,18 +2263,25 @@
         function addProducto() {
             if (!sistemaEncendido || modoSalarioActivo) return;
 
-            let val = parseFloat(sSub) || 0;
+            // Si pones 0.1, lo convierte a 0.01 automáticamente
+            let textoPrecio = sSub;
+            if (textoPrecio.includes('.')) {
+                let partes = textoPrecio.split('.');
+                if (partes[1].length === 1) {
+                    textoPrecio = partes[0] + '.0' + partes[1];
+                }
+            }
+
+            let val = parseFloat(textoPrecio) || 0;
             if (val > 0) {
                 reproducirSonido('add');
 
-                // Calcular descuento e IVU del artículo
                 let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
                 let rebaja = val * (dPct / 100);
                 let precioDescontado = val - rebaja;
                 let ivuIndividual = precioDescontado * (ivu / 100);
                 let totalArticulo = precioDescontado + ivuIndividual;
 
-                // Guardar objeto completo del artículo
                 preciosGuardados.push({
                     precio: val,
                     descuento: rebaja,
@@ -2280,11 +2290,9 @@
                     total: totalArticulo
                 });
 
-                // Limpiar teclado
                 sSub = "0";
                 document.getElementById('lblSub').innerText = "0";
 
-                // Redibujar lista de artículos en el LCD
                 const con = document.getElementById('listaPrecios');
                 con.innerHTML = preciosGuardados.map((item, i) =>
                     '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
@@ -2293,23 +2301,16 @@
                     item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
                 ).join('');
 
-                // Línea de total acumulado al final de la lista
                 if (preciosGuardados.length > 0) {
-                    let totalConTaxAcumulado = preciosGuardados.reduce(
-                        (sum, item) => sum + item.total, 0
-                    );
-                    con.innerHTML +=
-                        '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
-                        totalConTaxAcumulado.toFixed(2) + '</div>';
+                    let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+                    con.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
                 }
 
-                // Mostrar flecha de scroll si hay 3 o más artículos
                 const f = document.getElementById('flechaGuia');
                 if (f) {
                     f.style.display = preciosGuardados.length >= 3 ? "inline-block" : "none";
                 }
 
-                // Scroll automático al final
                 con.scrollTop = con.scrollHeight;
                 calc();
             }
@@ -2333,32 +2334,30 @@
         function calc() {
             if (!sistemaEncendido || modoSalarioActivo) return;
 
-            // Número de personas para el serrucho
             let numPplRaw = parseInt(sPpl);
-            let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1)
-                ? numPplRaw : 1;
+            let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
 
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
             let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
 
-            // Sumas de lo ya guardado
-            let sumaPreciosGuardados = preciosGuardados.reduce(
-                (sum, item) => sum + item.precio, 0
-            );
-            let sumaDescuentosGuardados = preciosGuardados.reduce(
-                (sum, item) => sum + item.descuento, 0
-            );
-            let impuestoTotalAcumulado = preciosGuardados.reduce(
-                (sum, item) => sum + item.ivuCalculado, 0
-            );
+            let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
+            let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
+            let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
 
-            // Valores del precio que aún está en el teclado (no añadido)
-            let precioEnTeclado = parseFloat(sSub) || 0;
+            // ⚡ FILTRO MAESTRO EN VIVO: Formatea el precio del teclado antes de calcular el total
+            let textoPrecioTeclado = sSub;
+            if (textoPrecioTeclado.includes('.')) {
+                let partes = textoPrecioTeclado.split('.');
+                if (partes[1].length === 1) {
+                    textoPrecioTeclado = partes[0] + '.0' + partes[1];
+                }
+            }
+
+            let precioEnTeclado = parseFloat(textoPrecioTeclado) || 0;
             let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
             let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
             let impuestoEnTeclado = precioDescontadoTeclado * (ivu / 100);
 
-            // Totales combinados
             let nSub = sumaPreciosGuardados + precioEnTeclado;
             let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
             let impuestoTotal = impuestoTotalAcumulado + impuestoEnTeclado;
@@ -2368,18 +2367,15 @@
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
             let porSerrucho = totalNetoGlobal / nSerrucho;
 
-            // Actualizar pantalla
             document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
             document.getElementById('outPer').innerText = totalNetoGlobal.toFixed(2);
 
-            // Opacidad de las filas según si están activas
             document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
             document.getElementById('rowTip').style.opacity = incluirPropina ? "1" : "0.3";
             document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
 
-            // Cuota por persona (Serrucho)
             if (modoSerruchoActivo) {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
                 document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);

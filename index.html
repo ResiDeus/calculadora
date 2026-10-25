@@ -403,8 +403,25 @@
 
         .lcd-body {
             text-align: left !important;
-            font-size: 11px; /* ⚡ Subimos los textos del desglose (IVU, DTO, PROPINA) de 9px a 11px */
+            font-size: 11px; 
             line-height: 1.3;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        /* 🔒 UBICACIÓN FIJA SOBERANA: Tranca las filas en su posición default y hereda el color original del LCD */
+        #rowPersonaCuota, #rowDesc, #rowTip, #rowIvu {
+            display: block !important;
+            width: 100% !important;
+            font-size: 11px !important;
+            margin-bottom: 2px !important;
+            margin-top: 0 !important;
+            padding: 0 !important;
+            color: inherit !important; /* ⚡ Devuelve el color verde neón original del LCD, barriendo las plastas blancas */
+            transform: none !important;
         }
 
         .lcd-total {

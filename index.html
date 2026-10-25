@@ -1709,17 +1709,17 @@
                     ticks++;
                     let factorTurbo = 1;
                     
-                    // multiplicador que reacciona mucho antes y con pasos más grandes
+                    // ⚡ NUEVA CALIBRACIÓN DE VELOCIDAD INVERTIDA
                     if (ticks > 6) {
-                        factorTurbo = destino === 'horas' ? 20 : 5; // Cambia de 10 a 20 (¡Brinca de 20 en 20!
+                        // La paga por hora vuela de 40 en 40 ticks, las horas se frenan a paso de 3
+                        factorTurbo = destino === 'paga' ? 40 : (destino === 'horas' ? 3 : 5);
                     } else if (ticks > 2) {
-                        factorTurbo = destino === 'horas' ? 10 : 3; // Cambia de 5 a 10 y baja el tick de 5 a 2
+                        // Al dejarlo pegado, la paga arranca a brincar de 15 en 15, las horas de 2 en 2
+                        factorTurbo = destino === 'paga' ? 15 : (destino === 'horas' ? 2 : 3);
                     }
                     
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);
                 }, 15);
-            }, 300);
-        }
 
         function detenerAccionLcdControles() {
             clearTimeout(timerLcdControlesTimeout);

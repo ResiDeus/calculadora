@@ -1340,9 +1340,18 @@ body.theme-cyberpunk .btn-salario-bottom * {
 
         #lblTotalGeneralLcd,
         #lblTotalGeneral,
-        .total-grande-lcd {
+        .total-grande-lcd,
+        .lcd-total {
             white-space: nowrap !important;
             display: inline-block !important;
+            font-family: monospace !important;
+            font-weight: 900 !important;
+            color: #000000 !important;
+        }
+
+        /* Quitamos cualquier residuo de contenedor absoluto viejo */
+        .lcd-total-container {
+            display: none !important;
         }
 
 /* ============================================================
@@ -1513,37 +1522,37 @@ body.theme-cyberpunk .btn-salario-bottom * {
                  CUERPO INFERIOR DEL LCD
                  Muestra totales de compras O totales de salario
                  ======================================================== -->
-            <div class="lcd-body">
+            <div class="lcd-body" style="display: flex !important; flex-direction: column !important; width: 100% !important; box-sizing: border-box !important; padding: 2px 4px !important;">
 
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
-                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; gap: 1px;">
                     
-                    <!-- SERRUCHO (Maneja sus estados Negro / Verde Opacado directo por JS) -->
-                    <div id="rowPersonaCuota" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
+                    <!-- SERRUCHO (Color nativo que muta por JS) -->
+                    <div id="rowPersonaCuota" style="display: block !important; width: 100% !important; font-size: 11px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
 
-                    <!-- DESCUENTO (Contraste nativo de fábrica) -->
-                    <div id="rowDesc" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
+                    <!-- DESCUENTO -->
+                    <div id="rowDesc" style="display: block !important; width: 100% !important; font-size: 11px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
 
-                    <!-- PROPINA (Gris opacado default exacto al IVU) -->
-                    <div id="rowTip" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 2px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
+                    <!-- PROPINA -->
+                    <div id="rowTip" style="display: block !important; width: 100% !important; font-size: 11px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
 
-                    <!-- IVU (Independiente y alineado) -->
-                    <div id="rowIvu" style="display: block !important; width: 100% !important; font-size: 11px !important; margin-bottom: 4px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
+                    <!-- IVU -->
+                    <div id="rowIvu" style="display: block !important; width: 100% !important; font-size: 11px !important; font-family: monospace; font-weight: 900; transition: color 0.1s ease;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- 🔒 FILA DEL TOTAL GLOBAL: Siempre visible, despegada del piso y alineada a la izquierda -->
-                    <div id="contenedorTotalGeneralCompras" style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; gap: 6px !important; width: 100% !important; margin-top: 4px !important; border-top: 1px dashed #000000 !important; padding-top: 4px !important; position: absolute !important; bottom: 12px !important; left: 0 !important; box-sizing: border-box !important; height: 26px !important; overflow: visible !important;">
+                    <!-- 🔒 FILA DEL TOTAL ESTABLE: Alineado a la izquierda, despegado del piso y sin romper el teclado vertical -->
+                    <div id="contenedorTotalGeneralCompras" style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; gap: 6px !important; width: 100% !important; margin-top: 5px !important; border-top: 1px dashed #000000 !important; padding-top: 5px !important; margin-bottom: 6px !important; box-sizing: border-box !important; height: 26px !important; overflow: visible !important; flex-wrap: nowrap !important;">
                         <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 16px !important; text-transform: uppercase !important; color: #000000 !important; white-space: nowrap !important;">TOTAL:</span>
                         
-                        <!-- El número se amarra grande y pegadito al texto en negro sólido siempre visible -->
+                        <!-- El número se queda pegadito al texto en negro sólido siempre visible -->
                         <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: #000000 !important; white-space: nowrap !important; display: inline-block !important;">
                             $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important;">0.00</span>
                         </div>

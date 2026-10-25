@@ -1163,41 +1163,43 @@
                         </div>
 
                         <!-- COLUMNA DERECHA: Régimen contributivo, SS, Medicare, retención manual -->
-                        <div style="display: flex; flex-direction: column; gap: 0px; width: 54%; border-left: 1px dotted rgba(0,240,255,0.25); padding-left: 8px; height: 100%; justify-content: space-between !important; overflow: visible; margin: 0; box-sizing: border-box;">
+                        <div style="display: flex; flex-direction: column; gap: 0px; width: 54%; border-left: 1px dotted rgba(0,240,255,0.25); padding-left: 6px; height: 100%; justify-content: space-between !important; overflow: visible; margin: 0; box-sizing: border-box;">
                             
-                            <!-- Pestañas de Régimen e Impuestos subidos al tope y masivos -->
-                            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; overflow: visible; margin-top: 1px;">
-                                <!-- Pestañas de Régimen Agrandadas -->
-                                <div style="display: flex; align-items: center; gap: 3px; width: 100%; overflow: visible; height: 20px; line-height: 1;">
-                                    <button id="tabW2" class="tab-btn-lcd" style="font-size: 10px; padding: 4px 4px; font-weight: 900;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
-                                    <button id="tab1099" class="tab-btn-lcd" style="font-size: 10px; padding: 4px 4px; font-weight: 900;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
-                                    <button id="tabExento" class="tab-btn-lcd active" style="font-size: 10px; padding: 4px 4px; font-weight: 900;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
+                            <!-- Pegado al ras del tope del LCD (-4px de margen superior) -->
+                            <div style="display: flex; flex-direction: column; gap: 3px; width: 100%; overflow: visible; margin-top: -4px !important;">
+                                <!-- Pestañas de Régimen -->
+                                <div style="display: flex; align-items: center; gap: 2px; width: 100%; overflow: visible; height: 18px; line-height: 1;">
+                                    <button id="tabW2" class="tab-btn-lcd" style="font-size: 9.5px; padding: 3px 2px; font-weight: 900; letter-spacing: -0.2px;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
+                                    <button id="tab1099" class="tab-btn-lcd" style="font-size: 9.5px; padding: 3px 2px; font-weight: 900; letter-spacing: -0.2px;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
+                                    <button id="tabExento" class="tab-btn-lcd active" style="font-size: 9.5px; padding: 3px 2px; font-weight: 900; letter-spacing: -0.2px;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
                                 </div>
                                 
-                                <!-- Toggles de Impuestos Agrandados -->
-                                <table style="width: 100%; table-layout: fixed; border-collapse: collapse; height: 20px; margin-top: 1px;">
+                                <!-- Toggles de Impuestos -->
+                                <table style="width: 100%; table-layout: fixed; border-collapse: collapse; height: 18px; margin-top: 0px;">
                                     <tr>
-                                        <td style="padding: 0 3px 0 0; width: 50%;">
-                                            <button id="toggleSS" class="toggle-label-lcd off" style="width: 100%; height: 20px; padding: 0; font-size: 9.5px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('SS')">S. SOCIAL</button>
+                                        <td style="padding: 0 2px 0 0; width: 50%;">
+                                            <button id="toggleSS" class="toggle-label-lcd off" style="width: 100%; height: 18px; padding: 0; font-size: 9px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('SS')">S. SOCIAL</button>
                                         </td>
-                                        <td style="padding: 0 0 0 3px; width: 50%;">
-                                            <button id="toggleMED" class="toggle-label-lcd off" style="width: 100%; height: 20px; padding: 0; font-size: 9.5px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('MED')">MEDICARE</button>
+                                        <td style="padding: 0 0 0 2px; width: 50%;">
+                                            <button id="toggleMED" class="toggle-label-lcd off" style="width: 100%; height: 18px; padding: 0; font-size: 9px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('MED')">MEDICARE</button>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
 
-                            <!-- Retención Manual perfectamente alineada con Horas Semana -->
+                            <!-- Retención Manual rescatada y perfectamente alineada con Horas Semana -->
                             <div style="display: flex; flex-direction: column; width: 100%; gap: 2px; overflow: visible; margin-bottom: 2px;">
                                 <span id="lblTextoManual" style="font-size: 11px; opacity: 1; font-weight: 900; color: #fff; white-space: nowrap; text-shadow: 0 0 2px rgba(0,240,255,0.25); line-height: 1;">RETENCIÓN MANUAL:</span>
-                                <div style="display: flex; align-items: center; justify-content: flex-start; overflow: visible; position: relative; z-index: 100; height: 18px; line-height: 1; width: 100%;">
-                                    <div style="text-align: left; display: inline-block; margin-right: auto;">
-                                        <span id="lblManualPctLcd" style="font-size: 12px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.15); padding: 2px 5px; border-radius: 2px;">0.0%</span>
+                                <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%; overflow: visible;">
+                                    <!-- Fijamos el ancho del número en 38px para que los botones de la derecha no se salgan del LCD -->
+                                    <div style="text-align: left; display: inline-block; width: 38px; min-width: 38px; margin-right: auto;">
+                                        <span id="lblManualPctLcd" style="font-size: 12px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 2px;">0.0%</span>
                                     </div>
-                                    <!-- Botones clonados con el tamaño de 18px y gap de 12px exacto de las horas -->
-                                    <div style="display: flex; gap: 12px;">
+                                    <!-- Los botones se quedan fijos a la derecha con la separación idéntica de 12px -->
+                                    <div style="display: flex; gap: 12px; position: relative; z-index: 100; padding-right: 2px;">
                                         <button id="btnManualMenos" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                     </div>
+                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -1215,7 +1217,7 @@
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
                     
-                    <!-- 🚀 ¡EL SERRUCHO MUDADO PARA ARRIBA! Ahora aparece primero -->
+                    <!-- SERRUCHO aparece primero -->
                     <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>

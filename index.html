@@ -409,13 +409,24 @@
         .btn-back:active,
         .btn-theme:active,
         .btn-receipt:active,
-        .btn-power-bottom:active {
+        .btn-clear-master:active,
+        .btn-salario-bottom:active,
+        .btn-step:active,
+        .btn-add-embedded:active,
+        .caja-data:active,
+        .btn-conv:active {
             background: #ffffff !important;
             color: #000000 !important;
+            border-color: #ffffff !important;
             filter: brightness(2) contrast(1.5) !important;
             box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
             text-shadow: none !important;
             transition: none !important;
+        }
+        
+        .btn-key:active::before,
+        .btn-back:active::before {
+            display: none !important;
         }
 
         /* Destello neón limpio pa' cajas y selectores de arriba */
@@ -695,20 +706,20 @@
         .btn-add-embedded {
             width: 55px;
             height: 100%;
-            min-height: 40px;
+            min-height: 44px !important;
             background: var(--blue-tech) !important;
             background-size: 200% 200% !important;
             animation: activeMenuMove 4s infinite ease-in-out;
             border: 2px solid #fff;
             border-radius: 6px;
             color: #ffffff !important;
-            font-size: 28px;
-            font-weight: 900;
-            line-height: 1;
+            font-size: 30px !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
             box-shadow: 0 0 10px var(--neon-secondary);
             transition: all 0.1s ease;
             user-select: none;
@@ -1411,7 +1422,7 @@
 
             <!-- Botón de añadir pa' meter el precio a la lista de artículos -->
             <button id="btnAnadirGlobal" class="btn-add-embedded"
-    style="width: auto; padding: 0 14px; font-size: 28px; font-weight: 900; line-height: 1; text-transform: uppercase;"
+    style="width: 48px; min-height: 44px; padding: 0; font-size: 30px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center;"
     onclick="addProducto()">+</button>
         </div>
 
@@ -1620,10 +1631,17 @@
                     osc.stop(ctx.currentTime + 0.04);
                     return;
                 } else if (tipo === 'add') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(450, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(950, ctx.currentTime + 0.15);
-                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                    // Chord synthwave corto
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+                    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.22);
+                    gain.gain.setValueAtTime(0.14, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.12);
+                    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.28);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.28);
+                    return;
                 } else if (tipo === 'apagar') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(300, ctx.currentTime);
@@ -2183,10 +2201,12 @@
                 item.descuento.toFixed(2) + '/IVU:' +
                 item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
             ).join('');
-
+        
             let totalConTax = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-            contenedor.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTax.toFixed(2) + '</div>';
-
+            contenedor.innerHTML +=
+                '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
+                'TOTAL: $' + totalConTax.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(con IVU/DTO)</span></div>';
+        
             if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                 document.getElementById('flechaGuia').style.display = "block";
             }

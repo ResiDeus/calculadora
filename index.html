@@ -1435,7 +1435,7 @@
                 <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaTip" class="caja-data btn-off" onclick="seleccionarMenu('tip')">
                     <span class="lbl-title">Propina</span>
-                    <span class="lbl-val"><span id="lblTip">15</span>%</span>
+                    <span class="lbl-val"><span id="lblTip">0</span>%</span>
                 </div>
                 <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
             </div>
@@ -1972,6 +1972,7 @@
             sTip = "15";
             memoriaTipPct = "15";
             incluirPropina = false;
+            if (document.getElementById('lblTip')) document.getElementById('lblTip').innerText = "0";
 
             ivu = 0.0;
             sIvuModificado = "11.5";
@@ -2124,7 +2125,7 @@
                 mode = 'sub';
             } else if (f === 'tip') {
                 incluirPropina = !incluirPropina;
-                sTip = memoriaTipPct;
+                sTip = memoriaTipPct; // sigue siendo "15" en memoria
                 document.getElementById('lblTip').innerText = incluirPropina ? sTip : "0";
                 mode = 'sub';
             } else if (f === 'desc') {
@@ -2422,62 +2423,44 @@
          * con los artículos guardados + el precio que está en el teclado.
          */
                 function calc() {
-            if (!sistemaEncendido || modoSalarioActivo) return;
+    if (!sistemaEncendido || modoSalarioActivo) return;
 
-            let numPplRaw = parseInt(sPpl);
-            let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
+    let numPplRaw = parseInt(sPpl);
+    let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
 
-            let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
-            let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
+    let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
 
-            let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
-            let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
-            let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
+    // Solo lo ya añadido con el botón +
+    let nSub = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
+    let rebajaTotal = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
+    let impuestoTotal = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
 
-            // Formatear el precio del teclado antes de sumarlo
-            let textoPrecioTeclado = sSub;
-            if (textoPrecioTeclado.includes('.')) {
-                let partes = textoPrecioTeclado.split('.');
-                if (partes[1].length === 1) {
-                    textoPrecioTeclado = partes[0] + '.0' + partes[1];
-                }
-            }
+    let subtotalDescontado = nSub - rebajaTotal;
+    let propinaTotal = subtotalDescontado * (tPct / 100);
+    let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
+    let porSerrucho = totalNetoGlobal / nSerrucho;
 
-            let precioEnTeclado = parseFloat(textoPrecioTeclado) || 0;
-            let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
-            let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
-            let impuestoEnTeclado = precioDescontadoTeclado * (ivu / 100);
+    document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
+    document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
+    document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
+    document.getElementById('outPer').innerText = totalNetoGlobal.toFixed(2);
 
-            let nSub = sumaPreciosGuardados + precioEnTeclado;
-            let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
-            let impuestoTotal = impuestoTotalAcumulado + impuestoEnTeclado;
+    document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
+    document.getElementById('rowTip').style.opacity = incluirPropina ? "1" : "0.3";
+    document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
 
-            let subtotalDescontado = nSub - rebajaTotal;
-            let propinaTotal = subtotalDescontado * (tPct / 100);
-            let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
-            let porSerrucho = totalNetoGlobal / nSerrucho;
+    if (modoSerruchoActivo) {
+        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
+        document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
+        document.getElementById('rowPersonaCuota').style.opacity = "1";
+    } else {
+        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
+        document.getElementById('outPerPersonaLine').innerText = ``;
+        document.getElementById('rowPersonaCuota').style.opacity = "0.3";
+    }
 
-            document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
-            document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
-            document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
-            document.getElementById('outPer').innerText = totalNetoGlobal.toFixed(2);
-
-            document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
-            document.getElementById('rowTip').style.opacity = incluirPropina ? "1" : "0.3";
-            document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
-
-            if (modoSerruchoActivo) {
-                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
-                document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
-                document.getElementById('rowPersonaCuota').style.opacity = "1";
-            } else {
-                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
-                document.getElementById('outPerPersonaLine').innerText = ``;
-                document.getElementById('rowPersonaCuota').style.opacity = "0.3";
-            }
-
-            actualizarHeaderIndicadores();
-        }
+    actualizarHeaderIndicadores();
+}
 
         /* ============================================================
            RECIBO HOLOGRÁFICO

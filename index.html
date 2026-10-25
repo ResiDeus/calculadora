@@ -391,9 +391,9 @@
             grid-auto-rows: 15px !important;
             gap: 2px !important;
             font-size: 11px;
-            height: 84px !important; /* Ajustamos un chispito para darle espacio al total arriba */
-            min-height: 84px !important; 
-            max-height: 84px !important;
+            height: 34px !important; /* Altura exacta optimizada para que quepan solo 2 filas fijas */
+            min-height: 34px !important; 
+            max-height: 34px !important;
             overflow-y: auto !important;
             text-align: left;
             padding-right: 4px;
@@ -402,24 +402,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        .lcd-historial {
-            display: grid !important;
-            grid-auto-rows: 15px !important;
-            gap: 2px !important;
-            font-size: 11px;
-            /* 🔒 ALTURA CORREGIDA: Ajustada exactamente para trancar en 3-4 renglones estables */
-            height: 52px !important; 
-            min-height: 52px !important; 
-            max-height: 52px !important;
-            overflow-y: auto !important;
-            text-align: left;
-            padding-right: 4px;
-            line-height: 15px !important;
-            box-sizing: border-box !important;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Contenedor del desglose: fija la ubicación exacta sin moverse un píxel hacia abajo */
+        /* Contenedor del desglose: mantiene la ubicación fija sin correrse hacia abajo */
         .lcd-body {
             text-align: left !important;
             font-size: 11px; 
@@ -431,7 +414,7 @@
             height: auto !important;
         }
 
-        /* 🔒 FILAS DEL DESGLOSE: Ubicación fija y color VERDE OPADO nítido legible de fábrica */
+        /* 🔒 FILAS DEL DESGLOSE: Ubicación fija y color VERDE OPACADO nítido de fábrica */
         #rowPersonaCuota, #rowDesc, #rowTip, #rowIvu {
             display: block !important;
             width: 100% !important;
@@ -440,41 +423,42 @@
             margin-top: 0 !important;
             padding: 0 !important;
             
-            /* ⚡ COLOR DESACTIVADO: Verde opaco sutil original perfectamente visible */
-            color: rgba(0, 45, 0, 0.45) !important; 
+            /* ⚡ COLOR DESACTIVADO: Verde opaco tenue original del LCD (Legible, no invisible) */
+            color: rgba(0, 50, 0, 0.35) !important; 
             text-shadow: none !important;
             transform: none !important;
             transition: color 0.1s ease !important;
         }
 
-        /* ⚡ COLOR ACTIVADO: Cambia a NEGRO sólido e impecable al encender el botón */
+        /* ⚡ COLOR ACTIVADO: Cambia a NEGRO sólido al encender el botón */
         #rowPersonaCuota.active, #rowDesc.active, #rowTip.active, #rowIvu.active {
             color: #000000 !important;
             text-shadow: none !important;
         }
 
-        /* 🚀 CONTENEDOR DEL TOTAL: Despegado del piso, alineado a la izquierda con el número al lado */
+        /* 🚀 CONTENEDOR DEL TOTAL: Siempre visible, despegado del piso y alineado a la izquierda */
         .lcd-total-container {
             display: flex !important;
             flex-direction: row !important;
-            justify-content: flex-start !important; /* Centraliza todo a la izquierda */
+            justify-content: flex-start !important; /* Alineado rígidamente a la izquierda */
             align-items: baseline !important;
-            gap: 6px !important; /* Espacio sutil para que el número quede pegadito al lado */
+            gap: 6px !important; /* Número pegadito al texto */
             width: 100% !important;
-            margin-top: 5px !important;
-            padding-top: 3px !important;
+            margin-top: 4px !important;
+            padding-top: 4px !important;
             border-top: 1px dashed #000000 !important; /* Línea entrecortada negra */
-            position: relative !important;
-            overflow: visible !important;
+            position: absolute !important;
+            bottom: 12px !important; /* ⚡ ¡SUBIDO! Espacio perfecto sin tocar el borde de plástico */
+            left: 0 !important;
             box-sizing: border-box !important;
         }
 
         .lcd-total {
-            font-size: 22px !important; /* Tamaño masivo estable */
+            font-size: 24px !important; /* Tamaño masivo estable */
             font-weight: 900;
             text-align: left !important;
             line-height: 1.1;
-            color: #000000 !important; /* Letras en negro sólido */
+            color: #000000 !important; /* Texto TOTAL en negro sólido */
             white-space: nowrap !important;
         }
 
@@ -2270,7 +2254,7 @@ body.theme-cyberpunk .btn-salario-bottom * {
             if (document.getElementById('rowIvu')) document.getElementById('rowIvu').style.opacity = "";
             if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').style.opacity = "";
 
-            // Corremos el cálculo final para dejar el sistema estable
+            // Corremos el cálculo final para dejar el sistema estable y marcando $0.00
             calc();
         } // <--- Cierre de tu función ejecutarResetTotal
 
@@ -2762,10 +2746,13 @@ function seleccionarMenu(f) {
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
             let tPct = (incluirPropina || modoTipActivo) ? (parseFloat(memoriaTipPct) || 0) : 0;
 
+            // ⚡ CLAVE DE LA OPERACIÓN: Sumamos puramente el acumulado real de los productos añadidos al carrito
             let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.precioBase || item.precio || 0), 0);
             let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.descuento || 0), 0);
             let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + (item.ivuCalculado || item.ivu || 0), 0);
 
+            // 🔒 AISLAMIENTO DEL INPUT: El precio suelto que el usuario está escribiendo se procesa 
+            // de forma independiente para el desglose en vivo, pero NO se inyecta en la cuenta general de preciosGuardados
             let precioEnTeclado = parseFloat(sSub) || 0;
             let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
             let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
@@ -2773,36 +2760,44 @@ function seleccionarMenu(f) {
             let tasaIvuActual = parseFloat(memoriaIvuPct) || 11.5;
             let impuestoEnTeclado = precioDescontadoTeclado * (tasaIvuActual / 100);
 
-            let nSub = sumaPreciosGuardados + precioEnTeclado;
-            let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
-            let impuestoTotal = impuestoTotalAcumulado + (modoIvuActivo ? impuestoEnTeclado : 0);
-
-            let subtotalDescontado = nSub - rebajaTotal;
-            let propinaTotal = subtotalDescontado * (tPct / 100);
+            // Si el carrito está vacío, el desglose evalúa el teclado; si hay artículos, evalúa el acumulado real
+            let rebajaTotal = preciosGuardados.length > 0 ? sumaDescuentosGuardados : descuentoEnTeclado;
+            let impuestoTotal = preciosGuardados.length > 0 ? impuestoTotalAcumulado : (modoIvuActivo ? impuestoEnTeclado : 0);
             
-            let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
+            // 🔒 EL TOTAL SE QUEDA CONGELADO: Si el carrito está vacío, marca $0.00 redondo esperando que des AÑADIR
+            let totalNetoGlobal = 0;
+            let propinaTotal = 0;
+
+            if (preciosGuardados.length > 0) {
+                let subtotalDescontado = sumaPreciosGuardados - sumaDescuentosGuardados;
+                propinaTotal = subtotalDescontado * (tPct / 100);
+                totalNetoGlobal = subtotalDescontado + impuestoTotalAcumulado + propinaTotal;
+            }
+
             let porSerrucho = totalNetoGlobal / nSerrucho;
 
+            // Imprimimos los montos en los desgloses del LCD
             document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
 
-            // ⚡ CONTROL DE VISIBILIDAD DEL TOTAL GENERAL DEL LCD
-            const divPadreTotal = document.getElementById('contenedorTotalGeneralCompras');
+            // Actualizamos el número del TOTAL grande al lado de la palabra en negro sólido
             const elementoNumeroTotal = document.getElementById('outPer');
-            
-            if (divPadreTotal && elementoNumeroTotal) {
-                // 🔒 EXCLUSIVIDAD: El total SOLO aparece si hay artículos reales guardados en el carrito
-                if (preciosGuardados.length > 0) {
-                    divPadreTotal.style.setProperty('display', 'flex', 'important');
-                    elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
+            if (elementoNumeroTotal) {
+                elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
+                let textoDigitos = elementoNumeroTotal.innerText;
+                
+                // Sensor de encogimiento para cifras masivas millonarias
+                if (textoDigitos.length >= 10) {
+                    elementoNumeroTotal.style.fontSize = "14px";
+                } else if (textoDigitos.length >= 7) {
+                    elementoNumeroTotal.style.fontSize = "18px";
                 } else {
-                    divPadreTotal.style.setProperty('display', 'none', 'important');
-                    elementoNumeroTotal.innerText = "0.00";
+                    elementoNumeroTotal.style.fontSize = "24px"; 
                 }
             }
 
-            // ⚡ CONTROL DE COLORES: Setea las clases active para mutar entre negro sólido y verde opaco
+            // Mapeo dinámico de clases: Muta entre Negro sólido (.active) y Verde opaco sutil
             document.getElementById('rowDesc').className = modoDescuentoActivo ? "active" : "";
             document.getElementById('rowTip').className = (incluirPropina || modoTipActivo) ? "active" : "";
             document.getElementById('rowIvu').className = modoIvuActivo ? "active" : "";
@@ -2820,6 +2815,13 @@ function seleccionarMenu(f) {
                 const containerLista = document.getElementById('listaPrecios');
                 if (containerLista) containerLista.style.setProperty('display', 'none', 'important');
                 return;
+            }
+
+            // Activación automática del letrero deslizar al pasar los 2 artículos límite
+            if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
+                document.getElementById('flechaGuia').style.display = "block";
+            } else if (document.getElementById('flechaGuia')) {
+                document.getElementById('flechaGuia').style.display = "none";
             }
 
             actualizarHeaderIndicadores();

@@ -1751,7 +1751,7 @@
             else if (destino === 'paga') {
                 precioHoraTrabajo += delta;
                 if (precioHoraTrabajo < 0) precioHoraTrabajo = 0;
-                if (precioHoraTrabajo > 500) precioHoraTrabajo = 500;
+                if (precioHoraTrabajo > 10000) precioHoraTrabajo = 10000;
                 document.getElementById('lblSalHoraLcd').innerText = "$" + precioHoraTrabajo.toFixed(2);
             }
             calcularSalarioSubPantalla();

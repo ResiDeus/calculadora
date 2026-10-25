@@ -317,14 +317,14 @@
            ============================================================ */
         .lcd {
             width: 100%;
-            height: 185px;
+            height: 230px; /* ⚡ Subimos la altura de 185px a 230px para que sea más larga */
             background: #92b043;
             border: 2px solid #000;
             border-radius: 14px;
             color: #000;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
             font-weight: bold;
-            padding: 6px 8px;
+            padding: 10px 12px; /* Más espacio interno para que respire */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -335,69 +335,34 @@
             overflow: hidden;
         }
 
-        /* ---------- Modo salario: LCD cambia a azul ciber ---------- */
+        /* Modo salario: LCD azul ciber */
         .lcd.modo-salario-activo {
             background: #051e36 !important;
             color: #00f0ff !important;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 0 10px rgba(0,240,255,0.2) !important;
         }
-        /* A. FLASH SÓLIDO: Exclusivo para teclas numéricas y botones de acción baja (TEMA, RECIBO, CLEAR) */
-        .btn-key:active,
-        .btn-back:active,
-        .btn-theme:active,
-        .btn-receipt:active,
-        .btn-clear-master:active {
-            background: #ffffff !important;
-            color: #000000 !important;
-            filter: brightness(2) contrast(1.5) !important;
-            box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
-            text-shadow: none !important;
-            transition: none !important;
+        .lcd.modo-salario-activo .lcd-header {
+            border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
 
-        /* B. DESTELLO NEÓN SUTIL: Para las cajas de menús y botones dentro del LCD */
-        .caja-data:active,
-        .btn-step:active,
-        .btn-add-embedded:active,
-        .btn-hrs-lcd:active,
-        .tab-btn-lcd:active {
-            filter: brightness(1.4) !important;
-            box-shadow: 0 0 15px var(--neon-secondary), inset 0 0 6px #ffffff !important;
-            border-color: #ffffff !important;
-            transition: none !important;
-        }
-
-        /* C. EL GLITCH DE LOS NÚMEROS: Destello sutil de brillo en el LCD que jamás encoge la pantalla */
-        .lcd.glitch-active {
-            animation: flashTeclasLcd 0.08s ease-out !important;
-        }
-
-        @keyframes flashTeclasLcd {
-            0%   { filter: brightness(1); }
-            50%  { filter: brightness(1.25) contrast(1.05); }
-            100% { filter: brightness(1); }
-        }
-
-        /* Cabecera del LCD (indicadores de estado) */
+        /* Cabecera del LCD */
         .lcd-header {
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 12px; /* ⚡ Agrandamos de 10px a 12px */
             border-bottom: 1px solid rgba(0,0,0,0.2);
             line-height: 1.2;
-        }
-        .blinking-header-text {
-            opacity: 1;
+            padding-bottom: 4px;
         }
 
-        /* Contenedores internos del LCD con alturas fijas para evitar desbordes */
+        /* Contenedores del wrapper */
         .lcd-wrapper {
             position: relative;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            margin: 0;
-            max-height: 78px;
+            margin: 6px 0;
+            max-height: 120px; /* ⚡ Aumentamos el espacio para la jaula de artículos */
             overflow: visible !important;
         }
         .listaPrecios-container {
@@ -408,32 +373,30 @@
             overflow: visible !important;
         }
 
-        /* ============================================================
-           HISTORIAL DE ARTÍCULOS (jaula de máximo ~4 líneas visibles)
-           ============================================================ */
+        /* Historial de artículos guardados */
         .lcd-historial {
             display: grid !important;
-            grid-auto-rows: 12px !important; /* Cada fila mide exactamente 12px */
-            gap: 0px !important;
-            font-size: 9px;
-            height: 48px !important;
-            max-height: 48px !important;
+            grid-auto-rows: 15px !important; /* ⚡ Cada fila sube de 12px a 15px */
+            gap: 2px !important;
+            font-size: 11px; /* ⚡ Agrandamos la letra de los artículos guardados de 9px a 11px */
+            height: 90px !important; /* ⚡ Jaula más alta para ver más artículos a la vez */
+            max-height: 90px !important;
             overflow-y: auto !important;
             text-align: left;
             padding-right: 4px;
-            line-height: 12px !important;
+            line-height: 15px !important;
             box-sizing: border-box !important;
-            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+            -webkit-overflow-scrolling: touch;
         }
 
         .lcd-body {
             text-align: left !important;
-            font-size: 9px;
-            line-height: 1.2;
+            font-size: 11px; /* ⚡ Subimos los textos del desglose (IVU, DTO, PROPINA) de 9px a 11px */
+            line-height: 1.3;
         }
 
         .lcd-total {
-            font-size: 22px;
+            font-size: 26px; /* ⚡ El TOTAL gigante sube de 22px a 26px para que impacte duro */
             font-weight: 900;
             text-align: left !important;
             line-height: 1.1;
@@ -584,7 +547,19 @@
             font-weight: 900 !important;
         }
 
-        /* Estrellitas pixel decorativas cuando la caja está activa */
+        /* 1. 💜 El circuito del botón encendido: violeta con su outline blanco brillante */
+        .caja-data.btn-on {
+            background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
+            background-size: 200% 200% !important;
+            animation: neonPulse 1.8s infinite ease-in-out, activeMenuMove 3s infinite ease-in-out !important;
+            color: #ffffff !important;
+            opacity: 1 !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
+            font-weight: 900 !important;
+        }
+
+        /* 2. Las estrellitas pixeladas flotando en el fondo */
         .caja-data.btn-on::before {
             content: "";
             position: absolute;
@@ -602,6 +577,7 @@
             animation: titileoLentoPixel 3.5s infinite ease-in-out !important;
             pointer-events: none;
         }
+
         .caja-data.btn-on * {
             position: relative;
             z-index: 2;

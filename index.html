@@ -2155,64 +2155,72 @@ body .btn-salario-bottom.btn-on::after {
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-                modoSalarioActivo = !modoSalarioActivo;
-                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+            modoSalarioActivo = !modoSalarioActivo;
+            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+            
+            // ⚡ REFERENCIAS PRECISAS A LA LISTA DE COMPRAS
+            const bloqueListaCompras = document.getElementById('listaPrecios');
+            const textoListaVacia = document.getElementById('lblArtText');
 
-                if (modoSalarioActivo) {
-                    lcd.classList.add('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+            if (modoSalarioActivo) {
+                lcd.classList.add('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                    bloqueListaCompras.style.display = "none";
-                    wrapperCompras.style.display = "none";
-                    document.getElementById('flechaGuia').style.display = "none";
-                    
-                    // Apagamos el texto de Lista Vacía para que no flote en la pantalla azul
-                    if (textoListaVacia) textoListaVacia.style.display = "none";
+                // 🔒 EXCLUSIVIDAD ABSOLUTA: Apagamos por completo el listado impreso de compras y su texto fantasma
+                if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
+                if (textoListaVacia) textoListaVacia.style.display = "none";
+                
+                // Mantenemos oculto el indicador de scroll
+                if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-                    bloqueSubPantallaSalario.style.display = "flex";
-                    wrapperSalario.style.display = "block";
+                // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
+                bloqueSubPantallaSalario.style.display = "flex";
+                wrapperSalario.style.display = "block";
+                wrapperCompras.style.display = "none"; // Apaga el total de compras verde
 
-                    // Se enciende abajo manteniendo su forma física intacta
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
-                    calcularSalarioSubPantalla();
+                // Se enciende el botón de abajo con su glitch eléctrico global
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                calcularSalarioSubPantalla();
+            } else {
+                lcd.classList.remove('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+
+                // Apagamos la pantalla de nómina azul por completo
+                bloqueSubPantallaSalario.style.display = "none";
+                wrapperSalario.style.display = "none";
+                
+                // 🔄 REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
+                if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+                if (wrapperCompras) wrapperCompras.style.display = "block";
+
+                // Si no hay artículos, restauramos el texto de Lista Vacía estable
+                if (preciosGuardados.length === 0) {
+                    if (textoListaVacia) textoListaVacia.style.display = "block";
+                    if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {
-                    lcd.classList.remove('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
-
-                    bloqueSubPantallaSalario.style.display = "none";
-                    wrapperSalario.style.display = "none";
-                    bloqueListaCompras.style.display = "block";
-                    wrapperCompras.style.display = "block";
-
-                    // Devolvemos el texto a la vida si la lista de compras está vacía
-                    if (textoListaVacia && preciosGuardados.length === 0) {
-                        textoListaVacia.style.display = "block";
-                    }
-
-                    // Restaurar lista de artículos si hay guardados
-                    if (preciosGuardados.length === 0) {
-                        if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-                    } else {
-                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
-                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
-                            item.descuento.toFixed(2) + '/IVU:' +
-                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
-                        ).join('');
-                        let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                        bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
-                    }
-
-                    // Se apaga abajo manteniendo su forma de botón normal limpia
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom";
-                    if (preciosGuardados.length >= 3) {
+                    // Si hay artículos guardados, volvemos a pintar el carrito de compras limpio
+                    bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                        '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                        ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                        item.descuento.toFixed(2) + '/IVU:' +
+                        item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                    ).join('');
+                    
+                    let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+                    bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                    
+                    if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                         document.getElementById('flechaGuia').style.display = "block";
                     }
-                    calc();
                 }
-                actualizarHeaderIndicadores();
-                return;
+
+                // Apagamos el botón regresando a su silueta gris calada de show
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                calc();
             }
+            actualizarHeaderIndicadores();
+            return;
+        }
 
             // Si se elige otra opción de arriba mientras está en salario → apagar salario limpiamente primero
             if (modoSalarioActivo && f !== 'sal') {

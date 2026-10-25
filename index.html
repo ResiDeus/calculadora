@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><head>
     <!-- ============================================================
          CONFIGURACIÓN BÁSICA DEL DOCUMENTO
          Calculadora de Resi (Puerto Rico) - App tipo PWA
@@ -345,6 +343,18 @@
             border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
 
+        /* ============================================================
+           🚀 ¡ESTE ES EL BLOQUE QUE SE INYECTA AQUÍ EN EL MEDIO!
+           ============================================================ */
+        /* 🔒 Apagamos de forma estricta SOLO la lista de compras y su texto flotante viejo */
+        .lcd.modo-salario-activo #listaPrecios,
+        .lcd.modo-salario-activo #lblArtText {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
         /* Cabecera del LCD */
         .lcd-header {
             display: flex;
@@ -536,102 +546,129 @@
            SISTEMA MAESTRO DE HIPER-GLITCH GLOBAL (TODOS LOS TEMAS)
            ============================================================ */
 
-        /* Las dos animaciones de fading suave con ritmos diferentes */
-        @keyframes estrellasBrilloLentoA {
-            0%, 100% { opacity: 0.1; }
-            50%      { opacity: 0.9; }
-        }
+/* === Animaciones para que las estrellitas prendan y apaguen suave en tiempos distintos === */
+@keyframes estrellasBrilloLentoA {
+    0%, 100% { opacity: 0.1; }
+    50%      { opacity: 0.9; }
+}
 
-        @keyframes estrellasBrilloLentoB {
-            0%, 100% { opacity: 0.8; }
-            50%      { opacity: 0.1; }
-        }
+@keyframes estrellasBrilloLentoB {
+    0%, 100% { opacity: 0.8; }
+    50%      { opacity: 0.1; }
+}
 
-        /* El estado seleccionado para las celdas de arriba (Violeta Galáctico) */
-        .caja-data.btn-on {
-            background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
-            background-size: 200% 200% !important;
-            animation: activeMenuMove 3s infinite linear !important;
-            color: #ffffff !important;
-            opacity: 1 !important;
-            
-            /* Outline blanco brillante y pulso neón exterior restaurados */
-            border-color: #ffffff !important;
-            box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
-            font-weight: 900 !important;
-        }
+/* === Modificacion global para las cajas de arriba: forzamos mayusculas fijas desde el saque === */
+.caja-data, .caja-data * {
+    text-transform: uppercase !important;
+}
 
-        /* Limpias, estables y sin temblores glitch */
-        .caja-data.btn-on * {
-            position: relative;
-            z-index: 5;
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            animation: none !important; /* Barremos cualquier rastro del glitch de texto */
-            text-shadow: none !important;
-        }
+/* === REGLA MAESTRA UNIFICADA: Mismo font y tamaño exacto para ACTIVADO y DESACTIVADO === */
+.caja-data .lbl-title {
+    font-size: 9.5px !important; 
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 5px !important; 
+    animation: none !important;
+    text-shadow: none !important;
+}
 
-        /* LAS ESTRELLITAS con brillo intermedio */
-        .caja-data.btn-on::before {
-            content: "";
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #ffffff;
-            top: 12px;
-            left: 14px;
-            box-shadow:
-                15px 24px 0 #ffffff,
-                38px 6px 0 #ffffff;
-            z-index: 1;
-            animation: estrellasBrilloLentoA 2.8s infinite ease-in-out !important;
-            pointer-events: none;
-        }
+.caja-data .lbl-val {
+    font-size: 10.5px !important; 
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
 
-        /* Brillo cruzado y asíncrono para que no parpadeen al mismo tiempo */
-        .caja-data.btn-on::after {
-            content: "";
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #ffffff;
-            top: 8px;
-            left: 8px;
-            box-shadow:
-                42px 28px 0 #ffffff,
-                18px -2px 0 #ffffff;
-            z-index: 1;
-            animation: estrellasBrilloLentoB 3.4s infinite ease-in-out !important;
-            animation-delay: 0.7s !important; /* Desfase de tiempo clave */
-            pointer-events: none;
-        }
+/* === Estado de los botones de arriba cuando estan encendidos con el violeta galactico === */
+.caja-data.btn-on {
+    background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
+    background-size: 200% 200% !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
+}
 
-        /* 3. EL BOTÓN DE SALARIO DE ABAJO MANTIENE SU GLITCH */
-        .btn-salario-bottom.btn-on {
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border-color: #00f0ff !important;
-            color: #ffffff !important;
-            text-transform: uppercase !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
+/* Forzamos que el color blanco sólido se mantenga brillante en los textos al prenderse */
+.caja-data.btn-on * {
+    color: #ffffff !important;
+}
 
-        body .btn-salario-bottom.btn-on::after {
-            content: "SALARIO";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.1);
-            color: #00f0ff;
-            text-shadow: -2px 0 #ff0055;
-            clip-path: inset(0 0 0 0);
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none;
-            z-index: 1;
-        }
+/* === Primer corillo de estrellitas para el parpadeo cruzado === */
+.caja-data.btn-on::before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 12px;
+    left: 14px;
+    box-shadow:
+        15px 24px 0 #ffffff,
+        38px 6px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoA 2.8s infinite ease-in-out !important;
+    pointer-events: none;
+}
+
+/* === Segundo corillo de estrellitas con un aguaje de tiempo para que no prendan juntas === */
+.caja-data.btn-on::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 8px;
+    left: 8px;
+    box-shadow:
+        42px 28px 0 #ffffff,
+        18px -2px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoB 3.4s infinite ease-in-out !important;
+    animation-delay: 0.7s !important;
+    pointer-events: none;
+}
+
+/* === 🔒 EL BOTON DE SALARIO DE ABAJO CON GLITCH ABSOLUTO ULTRA-FORZADO === */
+/* El truco 'body .btn-salario-bottom.btn-on' aplasta cualquier estilo viejo de los otros temas */
+body .btn-salario-bottom.btn-on {
+    position: relative !important; 
+    overflow: hidden !important;
+    background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+    background-size: 200% auto !important;
+    border: 2px solid #00f0ff !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+    box-shadow: 0 0 18px #ff0055 !important;
+    animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+    opacity: 1 !important;
+    filter: none !important; /* Limpia cualquier filtro o brillo raro heredado */
+}
+
+/* === 🔒 El clon fantasma amarrado estrictamente sin filtros intrusos === */
+body .btn-salario-bottom.btn-on::after {
+    content: "SALARIO" !important;
+    position: absolute !important;
+    top: 0 !important; 
+    left: 0 !important; 
+    width: 100% !important; 
+    height: 100% !important;
+    display: flex !important; 
+    justify-content: center !important; 
+    align-items: center !important;
+    background: rgba(0,0,0,0.1) !important;
+    color: #00f0ff !important;
+    text-shadow: -2px 0 #ff0055 !important;
+    clip-path: inset(0 0 0 0) !important;
+    animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+    filter: none !important;
+}
 
         /* ============================================================
            CONTENEDOR UNIFICADO DE PRECIO (marcador + botón AÑADIR)
@@ -752,34 +789,47 @@
         }
 
         /* Base estructural y estética calada: Outline Gris Brillante y Fondo Oscuro Translúcido */
-        body.theme-cyberpunk .btn-theme, 
-        body.theme-cyberpunk .btn-receipt, 
-        body.theme-cyberpunk .btn-clear-master, 
-        body.theme-cyberpunk .btn-salario-bottom {
-            border-radius: 10px !important;
-            font-weight: 900 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            text-transform: uppercase !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            height: 38px !important;       
-            font-size: 11px !important;    
-            width: 100% !important;
-            z-index: 15 !important;
-            box-sizing: border-box !important;
-            
-            /* Color Gris Synthwave / Industrial calado */
-            background: rgba(20, 20, 25, 0.4) !important; 
-            border: 2px solid #8e8e93 !important; /* Outline en gris brillante sólido */
-            
-            /* Texto y sombras en perfecta armonía gris neón */
-            color: #d1d1d6 !important;
-            text-shadow: 0 0 4px rgba(142, 142, 147, 0.5) !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.15) !important;
-        }
+body.theme-cyberpunk .btn-theme, 
+body.theme-cyberpunk .btn-receipt, 
+body.theme-cyberpunk .btn-clear-master, 
+body.theme-cyberpunk .btn-salario-bottom {
+    border-radius: 10px !important;
+    font-weight: 900 !important; 
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-family: monospace !important;
+    height: 38px !important;       
+    font-size: 11px !important;    
+    width: 100% !important;
+    z-index: 15 !important;
+    box-sizing: border-box !important;
+    
+    /* Bajamos la opacidad para que el fluido gris claro sea mas sutil y transparente */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
+    background-size: 200% auto !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    
+    /* Outline en gris brillante solido de fabrica */
+    border: 2px solid #8e8e93 !important; 
+    
+    /* Texto en blanco solido mate limpio y sin nada de efectos glow */
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
+}
+
+/* Forzamos que las letras internas de estos botones se queden en blanco mate sin sombras */
+body.theme-cyberpunk .btn-theme *, 
+body.theme-cyberpunk .btn-receipt *, 
+body.theme-cyberpunk .btn-clear-master *, 
+body.theme-cyberpunk .btn-salario-bottom * {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
 
         /* El feedback táctil de Flash Blanco */
         body.theme-cyberpunk .btn-theme:active, 
@@ -1230,6 +1280,21 @@
                 box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
             }
         }
+
+        /* Forzamos a la lista a quedarse encerrada en su espacio con scroll independiente */
+        .listaPrecios-container, 
+        #listaPrecios {
+            max-height: 140px !important; /* Congela la altura de la lista para que no empuje a nadie hacia arriba */
+            overflow-y: auto !important;  /* Activa la barra de deslizamiento vertical para los artículos */
+            box-sizing: border-box !important;
+        }
+
+        #lblTotalGeneralLcd,
+        #lblTotalGeneral,
+        .total-grande-lcd {
+            white-space: nowrap !important;
+            display: inline-block !important;
+        }
         
     </style>
 </head>
@@ -1264,19 +1329,16 @@
                 <div class="listaPrecios-container" style="flex-grow: 1; position: relative; display: flex; flex-direction: column; overflow: visible;">
 
                     <!-- Lista de artículos guardados (modo compras) -->
-                    <div class="lcd-historial" id="listaPrecios" style="height: 48px !important; max-height: 48px !important; overflow-y: auto !important; box-sizing: border-box;">
-                        <span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>
-                    </div>
+                    <div class="lcd-historial" id="listaPrecios" style="box-sizing: border-box; height: 48px !important; max-height: 48px !important; overflow-y: auto !important; display: block;"><span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span></div>
 
-                    <!-- Indicador de scroll cuando hay muchos artículos -->
-                    <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 30px; right: 2px; font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1;">▼ deslizar</div>
+                  <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 35px !important; right: 4px; font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase;">▼ deslizar</div>
 
                     <!-- ====================================================
                          SUBPANTALLA DE SALARIO (solo visible en modo salario)
                          Columna izquierda: paga por hora + horas semana
                          Columna derecha: régimen, SS, Medicare, retención
                          ==================================================== -->
-                    <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; height: 75px !important; max-height: 75px !important; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0; overflow: visible; position: absolute !important; top: 6px !important; left: 6px !important; z-index: 95; box-sizing: border-box;">
+                    <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0px; overflow: visible; z-index: 95; box-sizing: border-box; height: 75px !important; max-height: 75px !important; position: absolute !important; top: 6px !important; left: 6px !important;">
 
                         <!-- Paga por hora y horas semanales -->
                         <div style="display: flex; flex-direction: column; gap: 5px; width: 46%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; margin-left: -6px; padding-left: 0px; align-items: flex-start; text-align: left;">
@@ -1287,7 +1349,7 @@
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
                                     <!-- Al tocar el número, el JavaScript le da el foco para poder escribir con el teclado de abajo si deseas -->
                                     <div style="text-align: left; display: inline-block; width: 58px; min-width: 58px; margin-right: auto; cursor: pointer;" onclick="seleccionarMenu('paga')">
-                                        <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); display: inline-block;">$10.50</span>
+                                        <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0, 0, 0, 0.25); padding: 2px 5px; border-radius: 4px; color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.15); line-height: 1; text-shadow: rgba(0, 240, 255, 0.3) 0px 0px 3px; display: inline-block;">$10.50</span>
                                     </div>
                                     <!-- Avanzan de 0.01 en 0.01 para agarrar centavos finos -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
@@ -1306,18 +1368,8 @@
                                     </div>
                                     <!-- 🔒 BOTONES INTEGRADOS: Se quedan fijos a la derecha, grandes y separados a 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
-                                            onmousedown="iniciarAccionLcdControles('horas', -1)"
-                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)"
-                                            onmouseup="detenerAccionLcdControles()"
-                                            onmouseleave="detenerAccionLcdControles()"
-                                            ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
-                                            onmousedown="iniciarAccionLcdControles('horas', 1)"
-                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)"
-                                            onmouseup="detenerAccionLcdControles()"
-                                            onmouseleave="detenerAccionLcdControles()"
-                                            ontouchend="detenerAccionLcdControles()">+</button>
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('horas', -1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('horas', 1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -1338,7 +1390,7 @@
                                 
                                 <!-- Toggles de Impuestos -->
                                 <table style="width: 100%; table-layout: fixed; border-collapse: collapse; height: 18px; margin-top: 0px;">
-                                    <tr>
+                                    <tbody><tr>
                                         <td style="padding: 0 2px 0 0; width: 50%;">
                                             <button id="toggleSS" class="toggle-label-lcd off" style="width: 100%; height: 18px; padding: 0; font-size: 9px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('SS')">S. SOCIAL</button>
                                         </td>
@@ -1346,7 +1398,7 @@
                                             <button id="toggleMED" class="toggle-label-lcd off" style="width: 100%; height: 18px; padding: 0; font-size: 9px; font-weight: 900; white-space: nowrap; text-align: center; display: block;" onclick="toggleImpuestoIndividual('MED')">MEDICARE</button>
                                         </td>
                                     </tr>
-                                </table>
+                                </tbody></table>
                             </div>
 
                             <!-- Retención Manual rescatada y perfectamente alineada con Horas Semana -->
@@ -1359,8 +1411,8 @@
                                     </div>
                                     <!-- Los botones se quedan fijos a la derecha con la separación idéntica de 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; padding-right: 2px;">
-                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px; opacity: 1; pointer-events: auto;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px; opacity: 1; pointer-events: auto;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
@@ -1377,42 +1429,50 @@
             <div class="lcd-body">
 
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
-                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
+                <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: block; flex-direction: column; width: 100%; font-size: 16px;">
                     
-                    <!-- SERRUCHO aparece primero -->
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
+                    <!-- SERRUCHO aparece primero (Letra pequeña de show) -->
+                    <div id="rowPersonaCuota" style="opacity: 0.3; margin-bottom: 2px; transition: opacity 0.15s; font-family: monospace; font-weight: 900; font-size: 10px !important;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
 
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">
+                    <!-- Desglose con tipografía de 10px para que no compitan con el Total -->
+                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 1px; font-size: 10px !important;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease;">
+                    <div id="rowTip" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 1px; font-size: 10px !important;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease;">
+                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 2px; font-size: 10px !important;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- Fila TOTAL + indicador de scroll -->
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
-                        <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
-                        <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
+                    <!-- Fila TOTAL: Línea entrecortada negra, texto masivo y números pegaditos a la palabra -->
+                    <div style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; width: 100% !important; margin-top: 4px !important; border-top: 1px dashed #000000 !important; padding-top: 5px !important; position: relative !important; flex-wrap: nowrap !important; box-sizing: border-box !important; gap: 4px !important;">
+                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 18px !important; text-transform: uppercase !important; color: inherit; white-space: nowrap !important;">TOTAL:</span>
+                        
+                        <!-- El número se amarra inmediatamente al lado de la palabra con un tamaño masivo de 24px -->
+                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: inherit; white-space: nowrap !important; display: inline-block !important;">
+                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important; font-size: 24px !important;">0.00</span>
+                        </div>
+
+                        <!-- Indicador de scroll flotando perfectamente calibrado arriba del total -->
+                        <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 32px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
                     </div>
                 </div>
                 <!-- ---------- Fin de modo COMPRAS ---------- -->
 
                 <!-- ---------- Datos de modo SALARIO ---------- -->
-                <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 4px; font-size: 11px; line-height: 1.3;">
+                <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0, 240, 255, 0.2); padding-top: 4px; font-size: 11px; line-height: 1.3;">
                     <div style="color: #ff3b30; font-weight: 900; font-size: 11px; text-transform: uppercase; margin-bottom: 2px;">
-                        RETENCIÓN TOTAL: <span id="outSalRetencion">-$0.00 (0%)</span>
+                        RETENCIÓN TOTAL: <span id="outSalRetencion">-$0.00 (0.0%)</span>
                     </div>
-                    <div style="margin-bottom: 2px;">TOTAL SEMANAL  : <span id="outSalSemanal" style="font-weight: 900; font-size: 12px;">$0.00</span></div>
-                    <div style="margin-bottom: 2px;">TOTAL BISEMANAL: <span id="outSalBisemanal" style="font-weight: 900; font-size: 12px;">$0.00</span></div>
-                    <div style="margin-bottom: 2px;">TOTAL MENSUAL  : <span id="outSalMensual" style="font-weight: 900; font-size: 12px;">$0.00</span></div>
+                    <div style="margin-bottom: 2px;">TOTAL SEMANAL  : <span id="outSalSemanal" style="font-weight: 900; font-size: 12px;">$420.00</span></div>
+                    <div style="margin-bottom: 2px;">TOTAL BISEMANAL: <span id="outSalBisemanal" style="font-weight: 900; font-size: 12px;">$840.00</span></div>
+                    <div style="margin-bottom: 2px;">TOTAL MENSUAL  : <span id="outSalMensual" style="font-weight: 900; font-size: 12px;">$1819.99</span></div>
                     <div style="border-top: 1px solid rgba(0,240,255,0.3); margin-top: 3px; padding-top: 3px;">
-                        TOTAL ANUAL    : <span id="outSalAnual" style="font-weight: 900; font-size: 14px; color: #00ff66; text-shadow: 0 0 4px rgba(0,255,102,0.3);">$0.00</span>
+                        TOTAL ANUAL    : <span id="outSalAnual" style="font-weight: 900; font-size: 14px; color: #00ff66; text-shadow: 0 0 4px rgba(0,255,102,0.3);">$21840.00</span>
                     </div>
                 </div>
             </div><!-- fin lcd-body -->
@@ -1434,9 +1494,7 @@
             </div>
 
             <!-- Botón para añadir el precio actual a la lista de artículos -->
-            <button id="btnAnadirGlobal" class="btn-add-embedded"
-                style="width: auto; padding: 0 12px; font-size: 11px; text-transform: uppercase;"
-                onclick="addProducto()">+</button>
+            <button id="btnAnadirGlobal" class="btn-add-embedded" style="width: auto; padding: 0 12px; font-size: 11px; text-transform: uppercase;" onclick="addProducto()">+</button>
         </div>
 
         <!-- ============================================================
@@ -1447,82 +1505,42 @@
 
             <!-- 1. SERRUCHO (dividir la cuenta entre N personas) -->
             <div class="wrapper-pasos">
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('ppl', 1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', 1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('ppl', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaPpl" class="caja-data btn-off" onclick="seleccionarMenu('ppl')">
                     <span class="lbl-title">Serrucho</span>
                     <span class="lbl-val"><span id="lblPpl">N/A</span></span>
                 </div>
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('ppl', -1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', -1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('ppl', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ppl', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
             <!-- 2. PROPINA (%) -->
             <div class="wrapper-pasos">
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('tip', 1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', 1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaTip" class="caja-data btn-off" onclick="seleccionarMenu('tip')">
                     <span class="lbl-title">Propina</span>
-                    <span class="lbl-val"><span id="lblTip">0</span>%</span>
+                    <span class="lbl-val"><span id="lblTip">15</span>%</span>
                 </div>
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('tip', -1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', -1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('tip', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'tip', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
             <!-- 3. DESCUENTO (%) -->
             <div class="wrapper-pasos">
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('desc', 1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', 1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('desc', 1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', 1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="cajaDesc" class="caja-data btn-off" onclick="seleccionarMenu('desc')">
                     <span class="lbl-title">Descuento</span>
                     <span class="lbl-val">-<span id="lblDesc">0</span>%</span>
                 </div>
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('desc', -1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', -1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('desc', -1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'desc', -1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
             <!-- 4. IVU (Impuesto sobre Ventas y Uso de Puerto Rico) -->
             <div class="wrapper-pasos">
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('ivu', 0.1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', 0.1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▲</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('ivu', 0.1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', 0.1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▲</button>
                 <div id="btnToggleIvu" class="caja-data btn-off" onclick="seleccionarMenu('ivu')">
                     <span class="lbl-title">IVU</span>
                     <span class="lbl-val"><span id="lblIvuBoton">0.0</span>%</span>
                 </div>
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('ivu', -0.1)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', -0.1)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
+                <button class="btn-step" onmousedown="iniciarAutoIncremento('ivu', -0.1)" ontouchstart="iniciarAutoIncrementoTouch(event, 'ivu', -0.1)" onmouseup="detenerAutoIncremento()" onmouseleave="detenerAutoIncremento()" ontouchend="detenerAutoIncremento()">▼</button>
             </div>
         </div><!-- fin row-opciones-pasos -->
 
@@ -2115,7 +2133,7 @@
          * Activa o desactiva una opción del menú.
          * f = 'sub' | 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal'
          */
-        function seleccionarMenu(f) {
+function seleccionarMenu(f) {
             if (!sistemaEncendido) return;
             reproducirSonido('menu');
 
@@ -2124,7 +2142,7 @@
             const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
             const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
-            const textoListaVacia = document.getElementById('lblArtText'); // 🚀 Referencia al texto fantasma
+            const textoListaVacia = document.getElementById('lblArtText'); 
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
@@ -2135,57 +2153,79 @@
                     lcd.classList.add('modo-salario-activo');
                     if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                    bloqueListaCompras.style.display = "none";
-                    wrapperCompras.style.display = "none";
-                    document.getElementById('flechaGuia').style.display = "none";
-                    
-                    // Apagamos el texto de Lista Vacía para que no flote en la pantalla azul
+                    // Apagamos por completo el listado impreso de compras y su texto fantasma
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
                     if (textoListaVacia) textoListaVacia.style.display = "none";
+                    
+                    // Mantenemos oculto el indicador de scroll
+                    if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
+                    // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
                     bloqueSubPantallaSalario.style.display = "flex";
                     wrapperSalario.style.display = "block";
+                    wrapperCompras.style.display = "none"; 
 
-                    // Se enciende abajo manteniendo su forma física intacta
+                    // Se enciende el botón de abajo con su glitch eléctrico global
                     document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
                     calcularSalarioSubPantalla();
                 } else {
                     lcd.classList.remove('modo-salario-activo');
                     if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
+                    // Apagamos la pantalla de nómina azul por completo
                     bloqueSubPantallaSalario.style.display = "none";
                     wrapperSalario.style.display = "none";
-                    bloqueListaCompras.style.display = "block";
-                    wrapperCompras.style.display = "block";
+                    
+                    // REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+                    if (wrapperCompras) wrapperCompras.style.display = "block";
 
-                    // Devolvemos el texto a la vida si la lista de compras está vacía
-                    if (textoListaVacia && preciosGuardados.length === 0) {
-                        textoListaVacia.style.display = "block";
+                    // 🚀 SENSOR ELÁSTICO PARA EL TOTAL GRANDE DE ABAJO
+                    if (wrapperCompras) {
+                        let textoTotalGrande = wrapperCompras.innerText || "";
+                        
+                        // Si el número es gigante (ej: $1,250.75), encoge la letra para que no suba
+                        if (textoTotalGrande.length >= 8) {
+                            wrapperCompras.style.fontSize = "16px";
+                        } 
+                        // Si es mediano (ej: $150.25), lo ajusta estable en 20px
+                        else if (textoTotalGrande.length === 7) {
+                            wrapperCompras.style.fontSize = "20px";
+                        } 
+                        // Si es un número corto, mantiene la letra masiva original de fábrica
+                        else {
+                            wrapperCompras.style.fontSize = "26px"; 
+                        }
                     }
 
-                    // Restaurar lista de artículos si hay guardados
+                    // Si no hay artículos, restauramos el texto de Lista Vacía estable
                     if (preciosGuardados.length === 0) {
-                        if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-                    } else {
-                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
-                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
-                            item.descuento.toFixed(2) + '/IVU:' +
-                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
-                        ).join('');
-                        let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                        bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
-                    }
-
-                    // Se apaga abajo manteniendo su forma de botón normal limpia
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom";
-                    if (preciosGuardados.length >= 3) {
+                    if (textoListaVacia) textoListaVacia.style.display = "block";
+                    if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                } else {
+                    // Si hay artículos guardados, volvemos a pintar el carrito de compras limpio
+                    bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                        '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                        ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                        item.descuento.toFixed(2) + '/IVU:' +
+                        item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                    ).join('');
+                    
+                    let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+                    bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                    
+                    if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                         document.getElementById('flechaGuia').style.display = "block";
                     }
-                    calc();
                 }
-                actualizarHeaderIndicadores();
-                return;
+
+                // Apagamos el botón regresando a su silueta gris calada de show
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                calc();
             }
+            actualizarHeaderIndicadores();
+            return;
+        }
 
             // Si se elige otra opción de arriba mientras está en salario → apagar salario limpiamente primero
             if (modoSalarioActivo && f !== 'sal') {
@@ -2751,5 +2791,6 @@
         actualizarHeaderIndicadores();
         calc();
     </script>
-</body>
-</html>
+
+
+</body></html>

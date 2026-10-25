@@ -348,10 +348,9 @@
         /* ============================================================
            🚀 ¡ESTE ES EL BLOQUE QUE SE INYECTA AQUÍ EN EL MEDIO!
            ============================================================ */
-        /* 🔒 Si la pantalla azul esta activa, barremos por completo la lista de compras del fondo */
+        /* 🔒 Apagamos de forma estricta SOLO la lista de compras y su texto flotante viejo */
         .lcd.modo-salario-activo #listaPrecios,
-        .lcd.modo-salario-activo #lblArtText,
-        .lcd.modo-salario-activo .listaPrecios-container div {
+        .lcd.modo-salario-activo #lblArtText {
             display: none !important;
             opacity: 0 !important;
             visibility: hidden !important;

@@ -453,12 +453,12 @@
         }
 
         /* ============================================================
-           FILA DE OPCIONES (5 columnas): Serrucho, Propina, Salario,
+           FILA DE OPCIONES (4 columnas): Serrucho, Propina,
            Descuento e IVU. Cada una tiene flechas ▲ ▼ y caja de datos
            ============================================================ */
         .row-opciones-pasos {
             display: grid;
-            grid-template-columns: repeat(5, 1fr) !important;
+            grid-template-columns: repeat(4, 1fr) !important;
             gap: 3px;
             width: 100%;
         }
@@ -884,11 +884,11 @@
         }
 
         /* ============================================================
-           FILA INFERIOR: TEMA | RECIBO | ENCENDIDO/APAGADO
+           FILA INFERIOR: TEMA | RECIBO | SALARIO | CLEAR
            ============================================================ */
-        .btn-theme, .btn-receipt, .btn-clear-master {
+        .btn-theme, .btn-receipt, .btn-clear-master, .btn-salario-bottom {
             border-radius: 10px;
-            font-weight: 900; /* Le metemos más grosor a las letras */
+            font-weight: 900; 
             cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
@@ -896,22 +896,32 @@
             justify-content: center;
             align-items: center;
             font-family: monospace;
-            height: 38px;       /* Subimos la altura de 28px a 38px pa' que quepa el texto grande */
-            font-size: 11px;    /* Agrandamos la letra de 8px a 11px para que resalte nítido */
-            
+            height: 38px;       
+            font-size: 11px;    
             background: var(--num-bg-theme) !important;
             border: 2px solid var(--neon-primary) !important;
-            color: #ffffff !important; /* Texto en blanco sólido brillante */
+            color: #ffffff !important; 
             width: 100%;
             z-index: 15;
         }
 
+        /* La rejilla mapeada a 4 columnas perfectas */
         .row-acciones-inferior {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr) !important;
             gap: 4px;
             margin-top: 2px;
             width: 100%;
+        }
+
+        /* Feedback visual activo al presionar el botón de salario */
+        .btn-salario-bottom:active {
+            background: #ffffff !important;
+            color: #000000 !important;
+            filter: brightness(2) contrast(1.5) !important;
+            box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
+            text-shadow: none !important;
+            transition: none !important;
         }
 
         /* ============================================================
@@ -1099,24 +1109,44 @@
 
                         <!-- COLUMNA IZQUIERDA: Paga por hora y horas semanales -->
                         <div style="display: flex; flex-direction: column; gap: 4px; width: 44%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 8px;">
+                            <!-- NUEVO INPUT DE SALARIO CON SU PROPIO JUEGO DE BOTONES +/- -->
                             <div style="display: flex; flex-direction: column; gap: 2px;">
                                 <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">PAGA POR HORA:</span>
-                                <span id="lblSalHoraLcd" style="font-size: 13px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; width: max-content; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3);">$10.50/h</span>
+                                <div style="display: flex; align-items: center; justify-content: flex-start; line-height: 1; height: 18px; width: 100%;">
+                                    <div style="width: 58px; min-width: 58px; display: inline-block; text-align: left;">
+                                        <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 4px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3);">$10.50</span>
+                                    </div>
+                                    <div style="margin-left: 4px; display: flex; gap: 6px; position: relative; z-index: 100;">
+                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                            onmousedown="iniciarAccionLcdControles('paga', -0.25)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.25)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
+                                            onmousedown="iniciarAccionLcdControles('paga', 0.25)"
+                                            ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.25)"
+                                            onmouseup="detenerAccionLcdControles()"
+                                            onmouseleave="detenerAccionLcdControles()"
+                                            ontouchend="detenerAccionLcdControles()">+</button>
+                                    </div>
+                                </div>
                             </div>
+                            <!-- HORAS SEMANALES (Mantenemos tu bloque intacto pero optimizado) -->
                             <div style="display: flex; flex-direction: column; gap: 2px; margin-top: 2px;">
                                 <span style="opacity: 0.9; font-size: 9.5px; font-weight: bold; line-height: 1;">HORAS SEMANA:</span>
                                 <div style="display: flex; align-items: center; justify-content: flex-start; line-height: 1; height: 18px; width: 100%;">
-                                    <div style="width: 26px; min-width: 26px; display: inline-block; text-align: left;">
-                                        <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span>
+                                    <div style="width: 58px; min-width: 58px; display: inline-block; text-align: left;">
+                                        <span id="lblHorasSemanaLcd" style="font-size: 11px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 4px; border-radius: 3px;">40</span>
                                     </div>
-                                    <div style="margin-left: 6px; display: flex; gap: 12px; position: relative; z-index: 100;">
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                    <div style="margin-left: 4px; display: flex; gap: 6px; position: relative; z-index: 100;">
+                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
                                             onmousedown="iniciarAccionLcdControles('horas', -1)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)"
                                             onmouseup="detenerAccionLcdControles()"
                                             onmouseleave="detenerAccionLcdControles()"
                                             ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
+                                        <button class="btn-hrs-lcd" style="width: 16px; height: 16px; font-size: 11px;"
                                             onmousedown="iniciarAccionLcdControles('horas', 1)"
                                             ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)"
                                             onmouseup="detenerAccionLcdControles()"
@@ -1381,7 +1411,7 @@
         <div class="row-acciones-inferior">
             <button id="btnTheme" class="btn-theme" onclick="rotarTema()">TEMA</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
-            <!-- Botón de Clear Máster limpio de estilos en línea molestosos -->
+            <button id="btnModoSalario" class="btn-salario-bottom" onclick="seleccionarMenu('sal')">SALARIO</button>
             <button id="btnClearMaster" class="btn-clear-master" onclick="ejecutarClearDirecto()">CLEAR</button>
         </div>
 
@@ -1722,8 +1752,14 @@
                 porcientoManualRetencion += delta;
                 if (porcientoManualRetencion < 0) porcientoManualRetencion = 0;
                 if (porcientoManualRetencion > 100) porcientoManualRetencion = 100;
-                document.getElementById('lblManualPctLcd').innerText =
-                    porcientoManualRetencion.toFixed(1) + "%";
+                document.getElementById('lblManualPctLcd').innerText = porcientoManualRetencion.toFixed(1) + "%";
+            } 
+            // Procesa los clics de + y - para la paga por hora directo en el LCD
+            else if (destino === 'paga') {
+                precioHoraTrabajo += delta;
+                if (precioHoraTrabajo < 0) precioHoraTrabajo = 0;
+                if (precioHoraTrabajo > 500) precioHoraTrabajo = 500;
+                document.getElementById('lblSalHoraLcd').innerText = "$" + precioHoraTrabajo.toFixed(2);
             }
             calcularSalarioSubPantalla();
         }
@@ -1921,65 +1957,39 @@
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-                modoSalarioActivo = !modoSalarioActivo;
-                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+            modoSalarioActivo = !modoSalarioActivo;
+            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
-                if (modoSalarioActivo) {
-                    // Entrar en modo salario
-                    lcd.classList.add('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+            if (modoSalarioActivo) {
+                lcd.classList.add('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                    bloqueListaCompras.style.display = "none";
-                    wrapperCompras.style.display = "none";
-                    document.getElementById('flechaGuia').style.display = "none";
-                    bloqueListaCompras.innerHTML = ''; // Purga visual
+                bloqueListaCompras.style.display = "none";
+                wrapperCompras.style.display = "none";
+                document.getElementById('flechaGuia').style.display = "none";
 
-                    bloqueSubPantallaSalario.style.display = "flex";
-                    wrapperSalario.style.display = "block";
+                bloqueSubPantallaSalario.style.display = "flex";
+                wrapperSalario.style.display = "block";
 
-                    document.getElementById('btnModoSalario').className = "caja-data btn-on";
-                    document.getElementById('lblSalarioBoton').innerText =
-                        "$" + precioHoraTrabajo.toFixed(2) + "/h";
+                // Prende el botón de abajo
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                calcularSalarioSubPantalla();
+            } else {
+                lcd.classList.remove('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
-                    actualizarEstilosPestañasLcd(regimenContributivo);
-                    calcularSalarioSubPantalla();
-                } else {
-                    // Salir de modo salario → volver a compras
-                    lcd.classList.remove('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+                bloqueSubPantallaSalario.style.display = "none";
+                wrapperSalario.style.display = "none";
+                bloqueListaCompras.style.display = "block";
+                wrapperCompras.style.display = "block";
 
-                    bloqueSubPantallaSalario.style.display = "none";
-                    wrapperSalario.style.display = "none";
-                    bloqueListaCompras.style.display = "block";
-                    wrapperCompras.style.display = "block";
-
-                    // Restaurar lista de artículos
-                    if (preciosGuardados.length === 0) {
-                        bloqueListaCompras.innerHTML =
-                            '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-                    } else {
-                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
-                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
-                            item.descuento.toFixed(2) + '/IVU:' +
-                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
-                        ).join('');
-                        let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                        bloqueListaCompras.innerHTML +=
-                            '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' +
-                            totalConTaxAcumulado.toFixed(2) + '</div>';
-                    }
-
-                    document.getElementById('btnModoSalario').className = "caja-data btn-off";
-                    document.getElementById('lblSalarioBoton').innerText = "N/A";
-                    if (preciosGuardados.length >= 3) {
-                        document.getElementById('flechaGuia').style.display = "block";
-                    }
-                    calc();
-                }
-                actualizarHeaderIndicadores();
-                return;
+                // Apaga el botón de abajo
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-off";
+                calc();
             }
+            actualizarHeaderIndicadores();
+            return;
+        }
 
             // Si se elige otra opción mientras está en salario → salir de salario primero
             if (modoSalarioActivo && f !== 'sal') {

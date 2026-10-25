@@ -532,56 +532,86 @@
             overflow: hidden;
         }
 
-        /* El título de arriba (ej. "Serrucho", "IVU") */
-        .caja-data .lbl-title {
-            font-size: 10px !important; /* Subimos de 8px a 10px para que se lea claro */
-            font-weight: 900 !important;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+        /* ============================================================
+           🚀 ¡REEMPLAZA ESTE BLOQUE COMPLETO DESDE AQUÍ! 
+           SISTEMA MAESTRO DE HIPER-GLITCH GLOBAL (TODOS LOS TEMAS)
+           ============================================================ */
+
+        /* A. Animaciones ciber-eléctricas unificadas */
+        @keyframes glitchMovimiento {
+            0%   { clip-path: inset(10% 0 30% 0); transform: skew(-3deg); }
+            20%  { clip-path: inset(40% 0 15% 0); transform: skew(2deg); }
+            40%  { clip-path: inset(5% 0 75% 0);  transform: skew(-1deg); }
+            60%  { clip-path: inset(65% 0 5% 0);  transform: skew(3deg); }
+            80%  { clip-path: inset(25% 0 50% 0); transform: skew(-2deg); }
+            100% { clip-path: inset(15% 0 35% 0); transform: skew(0deg); }
         }
 
-        /* El valor numérico de abajo (ej. "11.5%", "N/A") */
-        .caja-data .lbl-val {
-            font-size: 11px !important; /* Subimos de 8px a 11px para que los números resalten */
-            font-weight: 900 !important;
+        @keyframes pulsoFlasheoLcd {
+            0%, 100% { opacity: 0.9; filter: hue-rotate(0deg) saturate(1.5); }
+            50%      { opacity: 1;   filter: hue-rotate(15deg) saturate(2); box-shadow: 0 0 20px #ff0055 !important; }
         }
 
-        /* 1. 💜 El circuito del botón encendido: violeta con su outline blanco brillante */
+        /* B. 💥 EL ESTADO SELECCIONEADO GLITCHEADO PARA LOS MENÚS DE ARRIBA (TODOS LOS TEMAS) */
         .caja-data.btn-on {
-            background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
-            background-size: 200% 200% !important;
-            animation: neonPulse 1.8s infinite ease-in-out, activeMenuMove 3s infinite ease-in-out !important;
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-size: 200% auto !important;
+            border-color: #00f0ff !important;
             color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055 !important;
+            
+            /* Activamos el motor de flujo rápido y el pulso LCD mutante */
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
             opacity: 1 !important;
-            border-color: #ffffff !important;
-            box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
-            font-weight: 900 !important;
         }
 
-        /* 2. Las estrellitas pixeladas flotando en el fondo */
+        /* Generador de la doble sombra fantasma glitcheada en las opciones de arriba */
         .caja-data.btn-on::before {
             content: "";
             position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #ffffff;
-            top: 10px;
-            left: 12px;
-            box-shadow:
-                10px 22px 0 #ffffff,
-                35px 5px 0 #ffffff,
-                45px 28px 0 #ffffff,
-                20px -4px 0 #ffffff;
-            z-index: 1;
-            animation: titileoLentoPixel 3.5s infinite ease-in-out !important;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.05);
+            border: 2px solid #00f0ff;
+            box-sizing: border-box;
+            clip-path: inset(0 0 0 0);
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
             pointer-events: none;
+            z-index: 1;
         }
 
+        /* Aseguramos que los textos grandes de arriba se queden por encima de la sombra glitch */
         .caja-data.btn-on * {
             position: relative;
-            z-index: 2;
+            z-index: 5;
             font-weight: 900 !important;
+        }
+
+        /* C. 💥 EL ESTADO SELECCIONADO GLITCHEADO PARA EL BOTÓN DE SALARIO (Mantenido intacto para todos los temas) */
+        .btn-salario-bottom.btn-on {
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-size: 200% auto !important;
+            border-color: #00f0ff !important;
+            color: #ffffff !important;
+            text-transform: uppercase !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055 !important;
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+            opacity: 1 !important;
+        }
+
+        body .btn-salario-bottom.btn-on::after {
+            content: "SALARIO";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.1);
+            color: #00f0ff;
+            text-shadow: -2px 0 #ff0055;
+            clip-path: inset(0 0 0 0);
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+            pointer-events: none;
+            z-index: 1;
         }
 
         /* ============================================================

@@ -702,7 +702,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Base estructural y estética unificada: Fondo degradado Naranja Synthwave Animado */
+        /* Base estructural y estética unificada */
         body.theme-cyberpunk .btn-theme, 
         body.theme-cyberpunk .btn-receipt, 
         body.theme-cyberpunk .btn-clear-master, 
@@ -722,17 +722,17 @@
             z-index: 15 !important;
             box-sizing: border-box !important;
             
-            /* Fondos y bordes Naranja Neon Synthwave */
-            background: linear-gradient(90deg, #ff5e00, #ff9e00, #ff5e00) !important;
-            background-size: 200% auto !important;
-            animation: flujoSynthwaveBotones 3s infinite linear !important;
-            border: 2px solid #ff9e00 !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 6px rgba(255, 158, 0, 0.8) !important;
-            box-shadow: 0 0 8px rgba(255, 94, 0, 0.4) !important;
+            /* Quitamos el relleno amarillo y dejamos fondo oscuro sutil */
+            background: rgba(11, 2, 20, 0.4) !important; 
+            border: 2px solid #ff9e00 !important; /* El outline naranja se mantiene firme */
+            
+            /* Texto e iluminaciones neón equilibradas */
+            color: #ff9e00 !important;
+            text-shadow: 0 0 6px rgba(255, 158, 0, 0.6) !important;
+            box-shadow: 0 0 6px rgba(255, 94, 0, 0.2) !important;
         }
 
-        /* EL FLASH BLANCO: Torna blanco sólido por dentro (Igual a los números) */
+        /* El feedback táctil de Flash Blanco */
         body.theme-cyberpunk .btn-theme:active, 
         body.theme-cyberpunk .btn-receipt:active, 
         body.theme-cyberpunk .btn-clear-master:active, 
@@ -746,7 +746,7 @@
             transition: none !important;
         }
 
-        /* ANIMACIONES EXCLUSIVAS PARA EL MODO GLITCH (Salario seleccionado) */
+        /* El estado seleccionado GLITCHEADO */
         @keyframes glitchMovimiento {
             0%   { clip-path: inset(10% 0 30% 0); transform: skew(-3deg); }
             20%  { clip-path: inset(40% 0 15% 0); transform: skew(2deg); }
@@ -761,7 +761,6 @@
             50%      { opacity: 1;   filter: hue-rotate(15deg) saturate(2); box-shadow: 0 0 20px #ff007f !important; }
         }
 
-        /* ESTADO SELECCIONADO GLITCHEADO: Cuando la pantalla azul está abierta */
         body.theme-cyberpunk .btn-salario-bottom.btn-on {
             background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
             background-size: 200% auto !important;
@@ -769,13 +768,10 @@
             color: #ffffff !important;
             text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
             box-shadow: 0 0 18px #ff0055 !important;
-            
-            /* Dos animaciones corriendo a la vez para simular error eléctrico cyberpunk */
             animation: flujoSynthwaveBotones 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
             opacity: 1 !important;
         }
 
-        /* Efecto fantasma simulado para el Glitch eléctrico */
         body.theme-cyberpunk .btn-salario-bottom.btn-on::after {
             content: "SALARIO";
             position: absolute;

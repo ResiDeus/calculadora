@@ -1178,7 +1178,7 @@
             </div><!-- fin lcd-wrapper -->
 
             <!-- ========================================================
-                 CUERPO INFERIOR DEL LCD
+                 CUERPO INFERIOR DEL LCD (Agrandado y Alineado)
                  Muestra totales de compras O totales de salario
                  ======================================================== -->
             <div class="lcd-body">
@@ -1186,44 +1186,49 @@
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible;">
                     
-                    <!-- 🚀 ¡EL SERRUCHO MUDADO PARA ARRIBA! Ahora aparece primero -->
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
-                        <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
-                        <span id="outPerPersonaLine"></span>
+                    <!-- 🚀 SERRUCHO CORREGIDO: Ahora usa Flexbox para alinearse perfecto en los bordes como las demás -->
+                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 3px; display: flex; justify-content: space-between; width: 100%; transition: opacity 0.15s ease;">
+                        <span id="txtSerruchoLabelType">SERRUCHO (C/U):</span>
+                        <span id="outPerPersonaLine">N/A</span>
                     </div>
 
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">
-                        DESCUENTO: <span id="outDesc">-$0.00</span>
+                    <div id="rowDesc" style="opacity: 0.3; display: flex; justify-content: space-between; width: 100%; transition: opacity 0.15s ease;">
+                        <span>DESCUENTO:</span> <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease;">
-                        PROPINA: <span id="outTip">$0.00</span>
+                    <div id="rowTip" style="opacity: 0.2; display: flex; justify-content: space-between; width: 100%; transition: opacity 0.15s ease;">
+                        <span>PROPINA:</span> <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease;">
-                        IVU: <span id="outIvu">$0.00</span>
+                    <div id="rowIvu" style="opacity: 0.3; display: flex; justify-content: space-between; width: 100%; transition: opacity 0.15s ease;">
+                        <span>IVU:</span> <span id="outIvu">$0.00</span>
                     </div>
 
                     <!-- Fila TOTAL + indicador de scroll -->
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-bottom: 1px; overflow: visible; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; width: 100%; margin-top: 3px; overflow: visible; position: relative;">
                         <div class="lcd-total">TOTAL: $<span id="outPer">0.00</span></div>
                         <div class="scroll-hint" id="flechaGuia" style="font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; position: relative; z-index: 110; display: none; margin-bottom: 2px;">▼ deslizar</div>
                     </div>
                 </div>
-                <!-- ---------- Fin de modo COMPRAS ---------- -->
 
-                <!-- ---------- Datos de modo SALARIO ---------- -->
-                <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 2px; font-size: 8.5px; line-height: 1.1;">
-                    <div style="color: #ff3b30; font-weight: 900; font-size: 8px; text-transform: uppercase;">
-                        RETENCIÓN TOTAL: <span id="outSalRetencion">-$0.00 (0%)</span>
+                <!-- ---------- 🚀 MODO SALARIO (PANTALLA AZUL CON TEXTOS GRANDES) ---------- -->
+                <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 4px; font-size: 11px; line-height: 1.3;">
+                    <div style="color: #ff3b30; font-weight: 900; font-size: 11px; text-transform: uppercase; display: flex; justify-content: space-between; width: 100%; margin-bottom: 3px;">
+                        <span>RETENCIÓN TOTAL:</span> <span id="outSalRetencion">-$0.00 (0%)</span>
                     </div>
-                    <div>TOTAL SEMANAL  : <span id="outSalSemanal" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
-                    <div>TOTAL BISEMANAL: <span id="outSalBisemanal" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
-                    <div>TOTAL MENSUAL  : <span id="outSalMensual" style="font-weight: 900; font-size: 9.5px;">$0.00</span></div>
-                    <div style="border-top: 1px solid rgba(0,240,255,0.2); margin-top: 1px; padding-top: 1px;">
-                        TOTAL ANUAL    : <span id="outSalAnual" style="font-weight: 900; font-size: 11px; color: #00ff66;">$0.00</span>
+                    <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 2px;">
+                        <span>TOTAL SEMANAL:</span> <span id="outSalSemanal" style="font-weight: 900; font-size: 12px;">$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 2px;">
+                        <span>TOTAL BISEMANAL:</span> <span id="outSalBisemanal" style="font-weight: 900; font-size: 12px;">$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 2px;">
+                        <span>TOTAL MENSUAL:</span> <span id="outSalMensual" style="font-weight: 900; font-size: 12px;">$0.00</span>
+                    </div>
+                    <div style="border-top: 1px solid rgba(0,240,255,0.3); margin-top: 3px; padding-top: 3px; display: flex; justify-content: space-between; width: 100%;">
+                        <span>TOTAL ANUAL:</span> <span id="outSalAnual" style="font-weight: 900; font-size: 14px; color: #00ff66; text-shadow: 0 0 4px rgba(0,255,102,0.3);">$0.00</span>
                     </div>
                 </div>
             </div><!-- fin lcd-body -->
-        </div><!-- fin pantallaVerde (LCD) -->
+
 
         <!-- ============================================================
              MARCADOR DE PRECIO + BOTÓN AÑADIR
@@ -2377,12 +2382,12 @@
             document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
 
             if (modoSerruchoActivo) {
-                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
+                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U):`;
                 document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
                 document.getElementById('rowPersonaCuota').style.opacity = "1";
             } else {
-                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
-                document.getElementById('outPerPersonaLine').innerText = ``;
+                document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U):`;
+                document.getElementById('outPerPersonaLine').innerText = `N/A`;
                 document.getElementById('rowPersonaCuota').style.opacity = "0.3";
             }
 

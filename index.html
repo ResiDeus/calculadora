@@ -1322,27 +1322,7 @@
                     ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 3. SALARIO (activa el modo de cálculo de sueldo) -->
-            <div class="wrapper-pasos">
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('sal', 0.01)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', 0.01)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▲</button>
-                <div id="btnModoSalario" class="caja-data btn-off" onclick="seleccionarMenu('sal')">
-                    <span class="lbl-title">Salario</span>
-                    <span class="lbl-val"><span id="lblSalarioBoton">N/A</span></span>
-                </div>
-                <button class="btn-step"
-                    onmousedown="iniciarAutoIncremento('sal', -0.01)"
-                    ontouchstart="iniciarAutoIncrementoTouch(event, 'sal', -0.01)"
-                    onmouseup="detenerAutoIncremento()"
-                    onmouseleave="detenerAutoIncremento()"
-                    ontouchend="detenerAutoIncremento()">▼</button>
-            </div>
-
-            <!-- 4. DESCUENTO (%) -->
+            <!-- 3. DESCUENTO (%) -->
             <div class="wrapper-pasos">
                 <button class="btn-step"
                     onmousedown="iniciarAutoIncremento('desc', 1)"
@@ -1362,7 +1342,7 @@
                     ontouchend="detenerAutoIncremento()">▼</button>
             </div>
 
-            <!-- 5. IVU (Impuesto sobre Ventas y Uso de Puerto Rico) -->
+            <!-- 4. IVU (Impuesto sobre Ventas y Uso de Puerto Rico) -->
             <div class="wrapper-pasos">
                 <button class="btn-step"
                     onmousedown="iniciarAutoIncremento('ivu', 0.1)"

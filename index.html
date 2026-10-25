@@ -2657,11 +2657,8 @@ function seleccionarMenu(f) {
             let nSerrucho = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
 
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
-            
-            // 🔒 PROPINA PURA: Si el botón de propina no está activo, el porcentaje es estrictamente CERO
             let tPct = (incluirPropina || modoTipActivo) ? (parseFloat(memoriaTipPct) || 0) : 0;
 
-            // Sumamos puramente el precio bruto base de los artículos guardados (Sin impuestos ni propinas arrastradas)
             let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.precioBase || item.precio || 0), 0);
             let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.descuento || 0), 0);
             let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + (item.ivuCalculado || item.ivu || 0), 0);
@@ -2670,30 +2667,23 @@ function seleccionarMenu(f) {
             let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
             let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
             
-            // Leemos la tasa real de la memoria del botón del IVU
             let tasaIvuActual = parseFloat(memoriaIvuPct) || 11.5;
             let impuestoEnTeclado = precioDescontadoTeclado * (tasaIvuActual / 100);
 
             let nSub = sumaPreciosGuardados + precioEnTeclado;
             let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
-            
-            // 🔒 AISLAMIENTO DEL IVU: El impuesto del teclado SOLO se suma si el botón de IVU está activo arriba
             let impuestoTotal = impuestoTotalAcumulado + (modoIvuActivo ? impuestoEnTeclado : 0);
 
             let subtotalDescontado = nSub - rebajaTotal;
-            
-            // 🔒 LA SOLUCIÓN MAESTRA DE PROPINA: Se calcula estrictamente UNA SOLA VEZ sobre el subtotal acumulado neto actual
             let propinaTotal = subtotalDescontado * (tPct / 100);
             
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
             let porSerrucho = totalNetoGlobal / nSerrucho;
 
-            // Volcamos los textos limpios en el LCD verde
             document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
 
-            // Estabilizador dinámico para evitar el meneo o brincos visuales de los textos
             const elementoNumeroTotal = document.getElementById('outPer');
             if (elementoNumeroTotal) {
                 elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
@@ -2708,19 +2698,19 @@ function seleccionarMenu(f) {
                 }
             }
 
-            // 🔒 REINICIO DE OPACIDADES: La propina apagada ahora usa exactamente el mismo 0.3 que el IVU
-            document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
-            document.getElementById('rowTip').style.opacity = (incluirPropina || modoTipActivo) ? "1" : "0.3";
-            document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
+            // ⚡ REPARACIÓN INTERNA: Modificamos las clases CSS en vez de forzar opacidades sueltas por JS
+            // Esto evita que los textos se desalineen o cambien a tonos de grises extraños
+            document.getElementById('rowDesc').className = modoDescuentoActivo ? "row-desglose active" : "row-desglose";
+            document.getElementById('rowTip').className = (incluirPropina || modoTipActivo) ? "row-desglose active" : "row-desglose";
+            document.getElementById('rowIvu').className = modoIvuActivo ? "row-desglose active" : "row-desglose";
+            document.getElementById('rowPersonaCuota').className = modoSerruchoActivo ? "row-desglose active" : "row-desglose";
 
             if (modoSerruchoActivo) {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
                 document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
-                document.getElementById('rowPersonaCuota').style.opacity = "1";
             } else {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
                 document.getElementById('outPerPersonaLine').innerText = ``;
-                document.getElementById('rowPersonaCuota').style.opacity = "0.3";
             }
 
             if (modoSalarioActivo) {

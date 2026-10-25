@@ -345,6 +345,19 @@
             border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
 
+        /* ============================================================
+           🚀 ¡ESTE ES EL BLOQUE QUE SE INYECTA AQUÍ EN EL MEDIO!
+           ============================================================ */
+        /* 🔒 Si la pantalla azul esta activa, barremos por completo la lista de compras del fondo */
+        .lcd.modo-salario-activo #listaPrecios,
+        .lcd.modo-salario-activo #lblArtText,
+        .lcd.modo-salario-activo .listaPrecios-container div {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
         /* Cabecera del LCD */
         .lcd-header {
             display: flex;

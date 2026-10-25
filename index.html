@@ -345,6 +345,18 @@
             border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
 
+        /* ============================================================
+           🚀 ¡ESTE ES EL BLOQUE QUE SE INYECTA AQUÍ EN EL MEDIO!
+           ============================================================ */
+        /* 🔒 Apagamos de forma estricta SOLO la lista de compras y su texto flotante viejo */
+        .lcd.modo-salario-activo #listaPrecios,
+        .lcd.modo-salario-activo #lblArtText {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
         /* Cabecera del LCD */
         .lcd-header {
             display: flex;
@@ -533,86 +545,132 @@
         }
 
         /* ============================================================
-           🚀 ¡REEMPLAZA ESTE BLOQUE COMPLETO DESDE AQUÍ! 
            SISTEMA MAESTRO DE HIPER-GLITCH GLOBAL (TODOS LOS TEMAS)
            ============================================================ */
 
-        /* A. Animaciones ciber-eléctricas unificadas */
-        @keyframes glitchMovimiento {
-            0%   { clip-path: inset(10% 0 30% 0); transform: skew(-3deg); }
-            20%  { clip-path: inset(40% 0 15% 0); transform: skew(2deg); }
-            40%  { clip-path: inset(5% 0 75% 0);  transform: skew(-1deg); }
-            60%  { clip-path: inset(65% 0 5% 0);  transform: skew(3deg); }
-            80%  { clip-path: inset(25% 0 50% 0); transform: skew(-2deg); }
-            100% { clip-path: inset(15% 0 35% 0); transform: skew(0deg); }
-        }
+/* === Animaciones para que las estrellitas prendan y apaguen suave en tiempos distintos === */
+@keyframes estrellasBrilloLentoA {
+    0%, 100% { opacity: 0.1; }
+    50%      { opacity: 0.9; }
+}
 
-        @keyframes pulsoFlasheoLcd {
-            0%, 100% { opacity: 0.9; filter: hue-rotate(0deg) saturate(1.5); }
-            50%      { opacity: 1;   filter: hue-rotate(15deg) saturate(2); box-shadow: 0 0 20px #ff0055 !important; }
-        }
+@keyframes estrellasBrilloLentoB {
+    0%, 100% { opacity: 0.8; }
+    50%      { opacity: 0.1; }
+}
 
-        /* B. 💥 EL ESTADO SELECCIONEADO GLITCHEADO PARA LOS MENÚS DE ARRIBA (TODOS LOS TEMAS) */
-        .caja-data.btn-on {
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border-color: #00f0ff !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            
-            /* Activamos el motor de flujo rápido y el pulso LCD mutante */
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
+/* === Modificacion global para las cajas de arriba: forzamos mayusculas fijas desde el saque === */
+.caja-data, .caja-data * {
+    text-transform: uppercase !important;
+}
 
-        /* Generador de la doble sombra fantasma glitcheada en las opciones de arriba */
-        .caja-data.btn-on::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.05);
-            border: 2px solid #00f0ff;
-            box-sizing: border-box;
-            clip-path: inset(0 0 0 0);
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none;
-            z-index: 1;
-        }
+/* === REGLA MAESTRA UNIFICADA: Mismo font y tamaño exacto para ACTIVADO y DESACTIVADO === */
+.caja-data .lbl-title {
+    font-size: 9.5px !important; 
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 5px !important; 
+    animation: none !important;
+    text-shadow: none !important;
+}
 
-        /* Aseguramos que los textos grandes de arriba se queden por encima de la sombra glitch */
-        .caja-data.btn-on * {
-            position: relative;
-            z-index: 5;
-            font-weight: 900 !important;
-        }
+.caja-data .lbl-val {
+    font-size: 10.5px !important; 
+    font-family: monospace !important;
+    font-weight: 900 !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
 
-        /* C. 💥 EL ESTADO SELECCIONADO GLITCHEADO PARA EL BOTÓN DE SALARIO (Mantenido intacto para todos los temas) */
-        .btn-salario-bottom.btn-on {
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border-color: #00f0ff !important;
-            color: #ffffff !important;
-            text-transform: uppercase !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
+/* === Estado de los botones de arriba cuando estan encendidos con el violeta galactico === */
+.caja-data.btn-on {
+    background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
+    background-size: 200% 200% !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
+}
 
-        body .btn-salario-bottom.btn-on::after {
-            content: "SALARIO";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.1);
-            color: #00f0ff;
-            text-shadow: -2px 0 #ff0055;
-            clip-path: inset(0 0 0 0);
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none;
-            z-index: 1;
-        }
+/* Forzamos que el color blanco sólido se mantenga brillante en los textos al prenderse */
+.caja-data.btn-on * {
+    color: #ffffff !important;
+}
+
+/* === Primer corillo de estrellitas para el parpadeo cruzado === */
+.caja-data.btn-on::before {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 12px;
+    left: 14px;
+    box-shadow:
+        15px 24px 0 #ffffff,
+        38px 6px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoA 2.8s infinite ease-in-out !important;
+    pointer-events: none;
+}
+
+/* === Segundo corillo de estrellitas con un aguaje de tiempo para que no prendan juntas === */
+.caja-data.btn-on::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: #ffffff;
+    top: 8px;
+    left: 8px;
+    box-shadow:
+        42px 28px 0 #ffffff,
+        18px -2px 0 #ffffff;
+    z-index: 1;
+    animation: estrellasBrilloLentoB 3.4s infinite ease-in-out !important;
+    animation-delay: 0.7s !important;
+    pointer-events: none;
+}
+
+/* === 🔒 EL BOTON DE SALARIO DE ABAJO CON GLITCH ABSOLUTO ULTRA-FORZADO === */
+/* El truco 'body .btn-salario-bottom.btn-on' aplasta cualquier estilo viejo de los otros temas */
+body .btn-salario-bottom.btn-on {
+    position: relative !important; 
+    overflow: hidden !important;
+    background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+    background-size: 200% auto !important;
+    border: 2px solid #00f0ff !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+    box-shadow: 0 0 18px #ff0055 !important;
+    animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+    opacity: 1 !important;
+    filter: none !important; /* Limpia cualquier filtro o brillo raro heredado */
+}
+
+/* === 🔒 El clon fantasma amarrado estrictamente sin filtros intrusos === */
+body .btn-salario-bottom.btn-on::after {
+    content: "SALARIO" !important;
+    position: absolute !important;
+    top: 0 !important; 
+    left: 0 !important; 
+    width: 100% !important; 
+    height: 100% !important;
+    display: flex !important; 
+    justify-content: center !important; 
+    align-items: center !important;
+    background: rgba(0,0,0,0.1) !important;
+    color: #00f0ff !important;
+    text-shadow: -2px 0 #ff0055 !important;
+    clip-path: inset(0 0 0 0) !important;
+    animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+    filter: none !important;
+}
 
         /* ============================================================
            CONTENEDOR UNIFICADO DE PRECIO (marcador + botón AÑADIR)
@@ -733,34 +791,38 @@
         }
 
         /* Base estructural y estética calada: Outline Gris Brillante y Fondo Oscuro Translúcido */
-        body.theme-cyberpunk .btn-theme, 
-        body.theme-cyberpunk .btn-receipt, 
-        body.theme-cyberpunk .btn-clear-master, 
-        body.theme-cyberpunk .btn-salario-bottom {
-            border-radius: 10px !important;
-            font-weight: 900 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            text-transform: uppercase !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            height: 38px !important;       
-            font-size: 11px !important;    
-            width: 100% !important;
-            z-index: 15 !important;
-            box-sizing: border-box !important;
-            
-            /* Color Gris Synthwave / Industrial calado */
-            background: rgba(20, 20, 25, 0.4) !important; 
-            border: 2px solid #8e8e93 !important; /* Outline en gris brillante sólido */
-            
-            /* Texto y sombras en perfecta armonía gris neón */
-            color: #d1d1d6 !important;
-            text-shadow: 0 0 4px rgba(142, 142, 147, 0.5) !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.15) !important;
-        }
+body.theme-cyberpunk .btn-theme, 
+body.theme-cyberpunk .btn-receipt, 
+body.theme-cyberpunk .btn-clear-master, 
+body.theme-cyberpunk .btn-salario-bottom {
+    border-radius: 10px !important;
+    font-weight: 900 !important; 
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-family: monospace !important;
+    height: 38px !important;       
+    font-size: 11px !important;    
+    width: 100% !important;
+    z-index: 15 !important;
+    box-sizing: border-box !important;
+    
+    /* Subimos la opacidad para que el fluido gris claro transparente sea bien notable */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.18), rgba(220, 220, 230, 0.32), rgba(220, 220, 230, 0.18)) !important;
+    background-size: 200% auto !important;
+    animation: activeMenuMove 3s infinite linear !important; /* Movimiento fluido mas vivo */
+    
+    /* Outline en gris brillante solido de fabrica */
+    border: 2px solid #8e8e93 !important; 
+    
+    /* Modificacion: Texto en blanco limpio y brillante para maxima legibilidad */
+    color: #ffffff !important;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.2) !important;
+}
 
         /* El feedback táctil de Flash Blanco */
         body.theme-cyberpunk .btn-theme:active, 
@@ -2109,64 +2171,72 @@
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-                modoSalarioActivo = !modoSalarioActivo;
-                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+            modoSalarioActivo = !modoSalarioActivo;
+            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+            
+            // ⚡ REFERENCIAS PRECISAS A LA LISTA DE COMPRAS
+            const bloqueListaCompras = document.getElementById('listaPrecios');
+            const textoListaVacia = document.getElementById('lblArtText');
 
-                if (modoSalarioActivo) {
-                    lcd.classList.add('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+            if (modoSalarioActivo) {
+                lcd.classList.add('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                    bloqueListaCompras.style.display = "none";
-                    wrapperCompras.style.display = "none";
-                    document.getElementById('flechaGuia').style.display = "none";
-                    
-                    // Apagamos el texto de Lista Vacía para que no flote en la pantalla azul
-                    if (textoListaVacia) textoListaVacia.style.display = "none";
+                // 🔒 EXCLUSIVIDAD ABSOLUTA: Apagamos por completo el listado impreso de compras y su texto fantasma
+                if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
+                if (textoListaVacia) textoListaVacia.style.display = "none";
+                
+                // Mantenemos oculto el indicador de scroll
+                if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-                    bloqueSubPantallaSalario.style.display = "flex";
-                    wrapperSalario.style.display = "block";
+                // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
+                bloqueSubPantallaSalario.style.display = "flex";
+                wrapperSalario.style.display = "block";
+                wrapperCompras.style.display = "none"; // Apaga el total de compras verde
 
-                    // Se enciende abajo manteniendo su forma física intacta
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
-                    calcularSalarioSubPantalla();
+                // Se enciende el botón de abajo con su glitch eléctrico global
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                calcularSalarioSubPantalla();
+            } else {
+                lcd.classList.remove('modo-salario-activo');
+                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+
+                // Apagamos la pantalla de nómina azul por completo
+                bloqueSubPantallaSalario.style.display = "none";
+                wrapperSalario.style.display = "none";
+                
+                // 🔄 REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
+                if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+                if (wrapperCompras) wrapperCompras.style.display = "block";
+
+                // Si no hay artículos, restauramos el texto de Lista Vacía estable
+                if (preciosGuardados.length === 0) {
+                    if (textoListaVacia) textoListaVacia.style.display = "block";
+                    if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {
-                    lcd.classList.remove('modo-salario-activo');
-                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
-
-                    bloqueSubPantallaSalario.style.display = "none";
-                    wrapperSalario.style.display = "none";
-                    bloqueListaCompras.style.display = "block";
-                    wrapperCompras.style.display = "block";
-
-                    // Devolvemos el texto a la vida si la lista de compras está vacía
-                    if (textoListaVacia && preciosGuardados.length === 0) {
-                        textoListaVacia.style.display = "block";
-                    }
-
-                    // Restaurar lista de artículos si hay guardados
-                    if (preciosGuardados.length === 0) {
-                        if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-                    } else {
-                        bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
-                            '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                            ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
-                            item.descuento.toFixed(2) + '/IVU:' +
-                            item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
-                        ).join('');
-                        let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
-                        bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
-                    }
-
-                    // Se apaga abajo manteniendo su forma de botón normal limpia
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom";
-                    if (preciosGuardados.length >= 3) {
+                    // Si hay artículos guardados, volvemos a pintar el carrito de compras limpio
+                    bloqueListaCompras.innerHTML = preciosGuardados.map((item, i) =>
+                        '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
+                        ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                        item.descuento.toFixed(2) + '/IVU:' +
+                        item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                    ).join('');
+                    
+                    let totalConTaxAcumulado = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+                    bloqueListaCompras.innerHTML += '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">TOTAL: $' + totalConTaxAcumulado.toFixed(2) + '</div>';
+                    
+                    if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                         document.getElementById('flechaGuia').style.display = "block";
                     }
-                    calc();
                 }
-                actualizarHeaderIndicadores();
-                return;
+
+                // Apagamos el botón regresando a su silueta gris calada de show
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                calc();
             }
+            actualizarHeaderIndicadores();
+            return;
+        }
 
             // Si se elige otra opción de arriba mientras está en salario → apagar salario limpiamente primero
             if (modoSalarioActivo && f !== 'sal') {

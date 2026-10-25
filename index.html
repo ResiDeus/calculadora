@@ -813,15 +813,23 @@ body.theme-cyberpunk .btn-salario-bottom {
     /* Subimos la opacidad para que el fluido gris claro transparente sea bien notable */
     background: linear-gradient(90deg, rgba(220, 220, 230, 0.18), rgba(220, 220, 230, 0.32), rgba(220, 220, 230, 0.18)) !important;
     background-size: 200% auto !important;
-    animation: activeMenuMove 3s infinite linear !important; /* Movimiento fluido mas vivo */
+    animation: activeMenuMove 3s infinite linear !important;
     
     /* Outline en gris brillante solido de fabrica */
     border: 2px solid #8e8e93 !important; 
     
-    /* Modificacion: Texto en blanco limpio y brillante para maxima legibilidad */
+    /* Texto forzado en blanco solido para que rompa en la pantalla */
     color: #ffffff !important;
-    text-shadow: 0 0 4px rgba(255, 255, 255, 0.4) !important;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.6) !important;
     box-shadow: 0 0 6px rgba(142, 142, 147, 0.2) !important;
+}
+
+/* Forzamos que las letras internas de estos botones se queden en blanco solido pase lo que pase */
+body.theme-cyberpunk .btn-theme *, 
+body.theme-cyberpunk .btn-receipt *, 
+body.theme-cyberpunk .btn-clear-master *, 
+body.theme-cyberpunk .btn-salario-bottom * {
+    color: #ffffff !important;
 }
 
         /* El feedback táctil de Flash Blanco */

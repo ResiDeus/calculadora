@@ -308,8 +308,7 @@
         .lcd.modo-salario-activo .lcd-header {
             border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
-
-        /* LCD en modo conversión (rojo) */
+        /* LCD modo conversión (rojo) */
         .lcd.modo-conversion-activo {
             background: #3b0a0a !important;
             color: #ffb4b4 !important;
@@ -318,6 +317,37 @@
         .lcd.modo-conversion-activo .lcd-header {
             border-bottom: 1px solid rgba(255, 100, 100, 0.4) !important;
             color: #ff6b6b !important;
+        }
+        
+        /* Tabs conversión — rojos, no azules */
+        .tab-conv {
+            flex: 1;
+            background: rgba(255, 80, 80, 0.15) !important;
+            border: 1px solid rgba(255, 120, 120, 0.45) !important;
+            color: #ffb4b4 !important;
+            font-size: 8px !important;
+            font-weight: 900 !important;
+            padding: 3px 2px !important;
+            border-radius: 4px !important;
+            cursor: pointer;
+            font-family: monospace;
+            text-align: center;
+        }
+        .tab-conv.active {
+            background: #ff3b30 !important;
+            color: #1a0505 !important;
+            border-color: #fff !important;
+            box-shadow: 0 0 8px rgba(255, 59, 48, 0.6) !important;
+        }
+        
+        /* En pantalla roja no se ve lista vacía ni lista de compras */
+        .lcd.modo-conversion-activo #listaPrecios,
+        .lcd.modo-conversion-activo #lblArtText,
+        .lcd.modo-conversion-activo .lbl-lista-vacia-texto,
+        .lcd.modo-conversion-activo #flechaGuia {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
         }
         
         .btn-conv.btn-on {
@@ -1374,17 +1404,17 @@
                         </div>
                     </div><!-- fin subpantalla salario -->
                             <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                            <div id="vistaConversion" style="display:none; flex-direction:column; gap:4px; width:96%; font-family:monospace; font-size:10px; position:absolute; top:4px; left:6px; z-index:96; height:78px;">
-                                <div style="display:flex; gap:2px; width:100%;">
-                                    <button class="tab-btn-lcd tab-conv active" data-cat="peso" onclick="setCatConversion('peso')" style="font-size:8px; padding:2px;">PESO</button>
-                                    <button class="tab-btn-lcd tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')" style="font-size:8px; padding:2px;">COCINA</button>
-                                    <button class="tab-btn-lcd tab-conv" data-cat="largo" onclick="setCatConversion('largo')" style="font-size:8px; padding:2px;">LARGO</button>
-                                    <button class="tab-btn-lcd tab-conv" data-cat="temp" onclick="setCatConversion('temp')" style="font-size:8px; padding:2px;">TEMP</button>
-                                    <button class="tab-btn-lcd tab-conv" data-cat="data" onclick="setCatConversion('data')" style="font-size:8px; padding:2px;">DATA</button>
+                            <div id="vistaConversion" style="display:none; flex-direction:column; gap:3px; width:96%; font-family:monospace; font-size:10px; position:absolute; top:0; left:4px; right:4px; z-index:96; height:85px; box-sizing:border-box;">
+                                <div style="display:flex; gap:2px; width:100%; margin-top:0;">
+                                    <button type="button" class="tab-conv active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
+                                    <button type="button" class="tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
+                                    <button type="button" class="tab-conv" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
+                                    <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
+                                    <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
                                 </div>
-                                <div style="font-weight:900; font-size:11px; color:#ffb4b4;" id="lblConvNombre">kg → lb</div>
-                                <div style="font-size:10px; opacity:0.85;" id="lblConvFormula">× 2.2046</div>
-                                <div style="font-size:16px; font-weight:900; color:#fff; margin-top:2px;" id="lblConvResultado">= 0.00 lb</div>
+                                <div style="font-weight:900; font-size:11px; color:#ffb4b4; cursor:pointer;" id="lblConvNombre" onclick="cambiarConversion(1)">kg → lb</div>
+                                <div style="font-size:9px; opacity:0.85; color:#ff9999;" id="lblConvFormula">× 2.2046 · toca nombre o ▲▼</div>
+                                <div style="font-size:15px; font-weight:900; color:#fff; margin-top:1px;" id="lblConvResultado">= 0.00 lb</div>
                             </div>
                             <!-- fin subpantalla conversión -->
                 </div><!-- fin listaPrecios-container -->
@@ -1450,7 +1480,7 @@
             <div id="cajaSub" class="caja-data" onclick="seleccionarMenu('sub')">
                 <span class="lbl-title">Precio</span>
                 <span class="lbl-val" style="display: flex; align-items: center; gap: 2px; font-size: 24px !important; font-weight: bold;">
-                    <span>$</span><span id="lblSub" class="blink-num">0</span>
+                    <span id="signoDinero">$</span><span id="lblSub" class="blink-num">0</span>
                 </span>
             </div>
 
@@ -1794,12 +1824,12 @@
          */
         function ejecutarModificacionPaso(tipo, delta) {
             if (!sistemaEncendido) return;
-            
+
             if (modoConversionActivo) {
                 cambiarConversion(delta > 0 ? 1 : -1);
                 return;
             }
-            
+
             reproducirSonido('paso');
 
             // --- Ajuste de salario por hora ---
@@ -2534,6 +2564,12 @@
                 if (btnConv) btnConv.classList.add('btn-on');
                 if (tituloPrecio) tituloPrecio.innerText = 'Valor';
 
+                // Quitar $ y esconder "Lista vacía"
+                const signo = document.getElementById('signoDinero');
+                if (signo) signo.style.display = 'none';
+                const lblArt = document.getElementById('lblArtText');
+                if (lblArt) lblArt.style.display = 'none';
+
                 // Empieza con 0 o con lo que hubiera en el teclado
                 sConv = (sSub && sSub !== '0') ? sSub : '0';
                 mode = 'conv';
@@ -2545,15 +2581,26 @@
                 });
 
                 actualizarPantallaConversion();
-                reproducirSonido('menu');
             } else {
-                // Salir a compras (pantalla verde)
                 if (lcd) lcd.classList.remove('modo-conversion-activo');
                 if (vistaConv) vistaConv.style.display = 'none';
                 if (lista) lista.style.display = 'block';
                 if (wrapCompras) wrapCompras.style.display = 'block';
                 if (btnConv) btnConv.classList.remove('btn-on');
                 if (tituloPrecio) tituloPrecio.innerText = 'Precio';
+
+                // Devolver el $
+                const signo = document.getElementById('signoDinero');
+                if (signo) signo.style.display = '';
+
+                // Restaurar lista o "Lista vacía"
+                if (lista) {
+                    if (preciosGuardados.length === 0) {
+                        lista.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                    } else if (typeof pintarListaCompras === 'function') {
+                        pintarListaCompras(lista);
+                    }
+                }
 
                 mode = 'sub';
                 if (document.getElementById('lblSub')) {
@@ -2564,7 +2611,6 @@
                 reproducirSonido('menu');
             }
         }
-
         
         /* ============================================================
            ENTRADA DE NÚMEROS (teclado)

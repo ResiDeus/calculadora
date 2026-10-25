@@ -1283,20 +1283,11 @@ body.theme-cyberpunk .btn-salario-bottom * {
             }
         }
 
-                /* 🔒 Forzamos al total a quedarse sembrado en el piso del LCD sin subirse nunca */
-        #wrapperDataComprasLcd,
-        .wrapperDataComprasLcd,
-        [id*="DataCompras"] {
-            position: absolute !important;
-            bottom: 4px !important;    /* Lo clava al piso del LCD verde */
-            right: 6px !important;     /* Lo alinea a la derecha */
-            left: 6px !important;      /* Le da el ancho completo de lado a lado */
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            background: transparent !important;
-            z-index: 100 !important;
-            margin: 0 !important;
+        /* 🔒 Forzamos a la lista a quedarse encerrada en su espacio con scroll independiente */
+        .listaPrecios-container, 
+        #listaPrecios {
+            max-height: 140px !important; /* Congela la altura de la lista para que no empuje a nadie hacia arriba */
+            overflow-y: auto !important;  /* Activa la barra de deslizamiento vertical para los artículos */
             box-sizing: border-box !important;
         }
         

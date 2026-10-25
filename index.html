@@ -1136,12 +1136,19 @@
                             </div>
 
                             <!-- HORAS SEMANA (Mantiene la alineación e integridad visual) -->
-                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 3px;">
-                                <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">HORAS SEMANA:</span>
+                            <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
+                                <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">PAGA POR HORA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
-                                    <div style="text-align: left; display: inline-block; margin-right: auto;">
-                                        <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 5px; border-radius: 3px; text-align: left;">40</span>
+                                    <!-- ⚡ Forzamos ancho fijo de 58px y centramos el contenido para proteger los botones -->
+                                    <div style="text-align: left; display: inline-block; width: 58px; min-width: 58px; margin-right: auto; overflow: visible;">
+                                        <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: center; display: inline-block; width: 100%; box-sizing: border-box;">$10.50</span>
                                     </div>
+                                    <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('paga', -0.25)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.25)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('paga', 0.25)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.25)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                    </div>
+                                </div>
+                            </div>
                                     <!-- 🔒 BOTONES INTEGRADOS: Se quedan fijos a la derecha, grandes y separados a 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
                                         <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"

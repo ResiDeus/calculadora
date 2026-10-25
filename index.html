@@ -622,9 +622,10 @@
     pointer-events: none;
 }
 
-/* === 🔒 EL BOTON DE SALARIO DE ABAJO CON GLITCH ABSOLUTO (Obliga a TODOS los temas) === */
-.btn-salario-bottom.btn-on {
-    position: relative !important; /* Fuerza al clon a quedarse dentro de la tecla en cualquier tema */
+/* === 🔒 EL BOTON DE SALARIO DE ABAJO CON GLITCH ABSOLUTO ULTRA-FORZADO === */
+/* El truco 'body .btn-salario-bottom.btn-on' aplasta cualquier estilo viejo de los otros temas */
+body .btn-salario-bottom.btn-on {
+    position: relative !important; 
     overflow: hidden !important;
     background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
     background-size: 200% auto !important;
@@ -635,10 +636,11 @@
     box-shadow: 0 0 18px #ff0055 !important;
     animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
     opacity: 1 !important;
+    filter: none !important; /* Limpia cualquier filtro o brillo raro heredado */
 }
 
-/* === 🔒 El clon fantasma amarrado estrictamente al chasis del boton abajo en cualquier tema === */
-.btn-salario-bottom.btn-on::after {
+/* === 🔒 El clon fantasma amarrado estrictamente sin filtros intrusos === */
+body .btn-salario-bottom.btn-on::after {
     content: "SALARIO" !important;
     position: absolute !important;
     top: 0 !important; 
@@ -655,6 +657,7 @@
     animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
     pointer-events: none !important;
     z-index: 10 !important;
+    filter: none !important;
 }
 
         /* ============================================================

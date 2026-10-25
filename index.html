@@ -1621,7 +1621,7 @@
                 let val = parseInt(memoriaSerruchoCortes) || 2;
                 val += delta;
                 if (val < 2) { val = 2; modoSerruchoActivo = false; }
-                if (val > 99) val = 99;
+                if (val > 1000) val = 1000;
                 memoriaSerruchoCortes = val.toString();
                 sPpl = memoriaSerruchoCortes;
                 document.getElementById('lblPpl').innerText =

@@ -1710,10 +1710,10 @@
                     let factorTurbo = 1;
                     
                     // multiplicador que reacciona mucho antes y con pasos más grandes
-                    if (ticks > 12) {
-                        factorTurbo = destino === 'horas' ? 10 : 3; // Brinca de 10 en 10 si lo dejas pegado
-                    } else if (ticks > 5) {
-                        factorTurbo = destino === 'horas' ? 5 : 2;  // Brinca de 5 en 5 casi de cantazo
+                    if (ticks > 6) {
+                        factorTurbo = destino === 'horas' ? 20 : 5; // Cambia de 10 a 20 (¡Brinca de 20 en 20!
+                    } else if (ticks > 2) {
+                        factorTurbo = destino === 'horas' ? 10 : 3; // Cambia de 5 a 10 y baja el tick de 5 a 2
                     }
                     
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);

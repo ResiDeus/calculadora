@@ -667,61 +667,11 @@
         /* ============================================================
            TECLADO NUMÉRICO (pad de 3 columnas)
            ============================================================ */
-        /* A. El contenedor del teclado: Forzamos la cuadrícula estricta de 3 columnas */
         .pad-num {
-            display: grid !important;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 4px !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-        }
-
-        /* B. Las teclas numéricas individuales: Mantenemos su tamaño original de fábrica */
-        .btn-key {
-            height: 38px !important;
-            font-size: 14px !important;
-            font-weight: 900 !important;
-            border-radius: 8px !important;
-            cursor: pointer !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            box-sizing: border-box !important;
-        }
-
-        /* C. La fila inferior de acciones: Mapeada a 4 columnas perfectas para que no se salgan */
-        .row-acciones-inferior {
-            display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 4px !important;
-            margin-top: 4px !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-        }
-
-        /* D. Los 4 botones maestros de abajo agrupados de forma limpia e idéntica */
-        .btn-theme, 
-        .btn-receipt, 
-        .btn-clear-master, 
-        .btn-salario-bottom {
-            border-radius: 10px !important;
-            font-weight: 900 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            text-transform: uppercase !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            height: 38px !important;       
-            font-size: 11px !important;    
-            background: var(--num-bg-theme) !important;
-            border: 2px solid var(--neon-primary) !important;
-            color: #ffffff !important; 
-            width: 100% !important;
-            z-index: 15 !important;
-            box-sizing: border-box !important;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            width: 100%;
         }
 
         /* Animación lenta de estrellas en los botones del teclado */
@@ -1164,16 +1114,9 @@
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
                                 <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">PAGA POR HORA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
-                                    <!-- Forzamos ancho fijo de 58px y centramos el contenido para proteger los botones -->
-                                    <div style="text-align: left; display: inline-block; width: 58px; min-width: 58px; margin-right: auto; overflow: visible;">
-                                        <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: center; display: inline-block; width: 100%; box-sizing: border-box;">$10.50</span>
+                                    <div style="text-align: left; display: inline-block; margin-right: auto;">
+                                        <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: left;">$10.50/h</span>
                                     </div>
-                                    <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('paga', -0.25)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.25)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;" onmousedown="iniciarAccionLcdControles('paga', 0.25)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.25)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
-                                    </div>
-                                </div>
-                            </div>
                                     <!-- Se quedan fijos a la derecha, grandes y separados a 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
                                         <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
@@ -2278,38 +2221,21 @@
             let retencionMensual = brutoMensual * porcientoTotalDeduccion;
             let retencionAnual = brutoAnual * porcientoTotalDeduccion;
 
-            // Formateamos el texto del precio por hora
-            let textoMontoPaga = "$" + precioHoraTrabajo.toFixed(2);
-            const elementoLabelPaga = document.getElementById('lblSalHoraLcd');
-            
-            if (elementoLabelPaga) {
-                elementoLabelPaga.innerText = textoMontoPaga;
-                
-                // Si el sueldo mide 7 caracteres o más (ej: $100.00), encoge la letra a 9.5px
-                if (textoMontoPaga.length >= 7) {
-                    elementoLabelPaga.style.fontSize = "9.5px";
-                    elementoLabelPaga.style.padding = "2px 3px"; 
-                } 
-                // Si mide 6 caracteres (ej: $10.50), lo deja estable en 11px
-                else if (textoMontoPaga.length === 6) {
-                    elementoLabelPaga.style.fontSize = "11px";
-                    elementoLabelPaga.style.padding = "2px 4px";
-                } 
-                // Para números más pequeños, mantiene la letra en 12px
-                else {
-                    elementoLabelPaga.style.fontSize = "12px";
-                    elementoLabelPaga.style.padding = "2px 5px";
-                }
-            }
-
-            // Actualizamos el resto de los desgloses en las etiquetas del LCD azul
+            // Actualizar etiquetas del LCD
+            document.getElementById('lblSalHoraLcd').innerText =
+                "$" + precioHoraTrabajo.toFixed(2) + "/h";
             document.getElementById('outSalRetencion').innerText =
-                "-$" + retencionSemanal.toFixed(2) + " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
+                "-$" + retencionSemanal.toFixed(2) +
+                " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
 
-            document.getElementById('outSalSemanal').innerText = "$" + (brutoSemanal - retencionSemanal).toFixed(2);
-            document.getElementById('outSalBisemanal').innerText = "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
-            document.getElementById('outSalMensual').innerText = "$" + (brutoMensual - retencionMensual).toFixed(2);
-            document.getElementById('outSalAnual').innerText = "$" + (brutoAnual - retencionAnual).toFixed(2);
+            document.getElementById('outSalSemanal').innerText =
+                "$" + (brutoSemanal - retencionSemanal).toFixed(2);
+            document.getElementById('outSalBisemanal').innerText =
+                "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
+            document.getElementById('outSalMensual').innerText =
+                "$" + (brutoMensual - retencionMensual).toFixed(2);
+            document.getElementById('outSalAnual').innerText =
+                "$" + (brutoAnual - retencionAnual).toFixed(2);
         }
 
         /* ============================================================

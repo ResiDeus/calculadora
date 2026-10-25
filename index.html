@@ -1832,18 +1832,13 @@
          * Se llama al encender y también se puede invocar manualmente.
          */
         function ejecutarResetTotal() {
+            // 1. Reseteamos todas las variables de control interno al estado base
             sSub = "0";
             cuentaAcumulada = 0;
             preciosGuardados = [];
-            modoSalarioActivo = false;
+            modoSalarioActivo = false; // ⚡ Forzamos el apagado del modo salario en la memoria
 
-            document.getElementById('btnModoSalario').className = "caja-data btn-off";
-            document.getElementById('listaPrecios').style.display = "block";
-            document.getElementById('vistaSubPantallaSalario').style.display = "none";
-            document.getElementById('wrapperDataComprasLcd').style.display = "block";
-            document.getElementById('wrapperDataSalarioLcd').style.display = "none";
-
-            // Valores por defecto de salario
+            // Devolvemos los valores de fábrica de la nómina
             precioHoraTrabajo = 10.50;
             horasSemanalesTrabajo = 40;
             porcientoManualRetencion = 0.0;
@@ -1851,29 +1846,48 @@
             ssActivo = false;
             medActivo = false;
 
-            document.getElementById('lblSalarioBoton').innerText = "N/A";
-            document.getElementById('lblHorasSemanaLcd').innerText = "40";
-            document.getElementById('lblManualPctLcd').innerText = "0.0%";
-            document.getElementById('toggleSS').className = "toggle-label-lcd off";
-            document.getElementById('toggleMED').className = "toggle-label-lcd off";
-            document.getElementById('lblTextoManual').innerText = "RETENCIÓN MANUAL:";
+            // MUDANZA DE PANTALLA EXPRESO: Obligamos al LCD a salir de azul y montar la verde
+            const lcd = document.getElementById('pantallaVerde');
+            const bloqueListaCompras = document.getElementById('listaPrecios');
+            const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
+            const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
+            const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
+            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
+
+            if (lcd) lcd.classList.remove('modo-salario-activo'); // Quita el azul ciber
+            if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+
+            // Apagamos los bloques de la subpantalla azul y encendemos los de la compra verde
+            if (bloqueSubPantallaSalario) bloqueSubPantallaSalario.style.display = "none";
+            if (wrapperSalario) wrapperSalario.style.display = "none";
+            if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+            if (wrapperCompras) wrapperCompras.style.display = "block";
+
+            // Limpiamos las etiquetas internas de nómina dentro del LCD
+            if (document.getElementById('lblSalHoraLcd')) document.getElementById('lblSalHoraLcd').innerText = "$10.50";
+            if (document.getElementById('lblHorasSemanaLcd')) document.getElementById('lblHorasSemanaLcd').innerText = "40";
+            if (document.getElementById('lblManualPctLcd')) document.getElementById('lblManualPctLcd').innerText = "0.0%";
+            if (document.getElementById('toggleSS')) document.getElementById('toggleSS').className = "toggle-label-lcd off";
+            if (document.getElementById('toggleMED')) document.getElementById('toggleMED').className = "toggle-label-lcd off";
+            if (document.getElementById('lblTextoManual')) document.getElementById('lblTextoManual').innerText = "RETENCIÓN MANUAL:";
             actualizarEstilosPestañasLcd('EXENTO');
 
-            // Limpiar lista de artículos
-            document.getElementById('listaPrecios').innerHTML =
-                '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-            document.getElementById('flechaGuia').style.display = "none";
+            // Devolvemos el letrero animado de Lista Vacía al historial de la pantalla verde
+            if (bloqueListaCompras) {
+                bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+            }
+            if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-            // Reset de opciones de compras
+            // Reset completo de las variables de opciones de compras
             sPpl = "0";
             modoSerruchoActivo = false;
             memoriaSerruchoCortes = "2";
-            document.getElementById('lblPpl').innerText = "N/A";
+            if (document.getElementById('lblPpl')) document.getElementById('lblPpl').innerText = "N/A";
 
             sDesc = "0";
             memoriaDescuentoPct = "0";
             modoDescuentoActivo = false;
-            document.getElementById('lblDesc').innerText = "0";
+            if (document.getElementById('lblDesc')) document.getElementById('lblDesc').innerText = "0";
 
             sTip = "15";
             memoriaTipPct = "15";
@@ -1883,25 +1897,28 @@
             sIvuModificado = "11.5";
             memoriaIvuPct = "11.5";
             modoIvuActivo = false;
-            document.getElementById('lblIvuBoton').innerText = "0.0";
+            if (document.getElementById('lblIvuBoton')) document.getElementById('lblIvuBoton').innerText = "0.0";
 
-            // Le removemos el btn-off viejo y lo dejamos en su clase de botón maestro limpia
-            document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+            // Apagamos las luces neón de los botones de arriba de cantazo
+            if (document.getElementById('cajaPpl')) document.getElementById('cajaPpl').className = "caja-data btn-off";
+            if (document.getElementById('cajaDesc')) document.getElementById('cajaDesc').className = "caja-data btn-off";
+            if (document.getElementById('cajaTip')) document.getElementById('cajaTip').className = "caja-data btn-off";
+            if (document.getElementById('btnToggleIvu')) document.getElementById('btnToggleIvu').className = "caja-data btn-off";
 
-            // Aseguramos que el texto de Lista vacía aparezca limpio y visible en la pantalla verde de fábrica
-            const txtVac = document.getElementById('lblArtText');
-            if (txtVac) {
-                txtVac.style.display = "block";
-                txtVac.innerHTML = 'Lista vacía';
+            // Forzamos al botón de abajo a retener únicamente su clase de botón maestro
+            // (Barremos cualquier rastro que le inyectara "caja-data" o "btn-off" viejo)
+            if (document.getElementById('btnModoSalario')) {
+                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
             }
-            document.getElementById('flechaGuia').style.display = "none";
 
-            // Reset manual del precio
+            // Inicialización limpia del input de precio a cero con su enfoque parpadeante
             mode = 'sub';
-            document.getElementById('lblSub').innerText = "0";
-            document.querySelectorAll('.lbl-val span').forEach(el => el.classList.remove('blink-num'));
-            document.getElementById('lblSub').classList.add('blink-num');
-            document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+            if (document.getElementById('lblSub')) document.getElementById('lblSub').innerText = "0";
+            document.querySelectorAll('.lbl-val span').forEach(el => { if (el) el.classList.remove('blink-num'); });
+            if (document.getElementById('lblSub')) document.getElementById('lblSub').classList.add('blink-num');
+            if (document.getElementById('marcadorPrecioUnificado')) {
+                document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+            }
             
             actualizarHeaderIndicadores();
             calc();

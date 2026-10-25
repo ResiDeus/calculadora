@@ -2221,21 +2221,36 @@
             let retencionMensual = brutoMensual * porcientoTotalDeduccion;
             let retencionAnual = brutoAnual * porcientoTotalDeduccion;
 
-            // Actualizar etiquetas del LCD
-            document.getElementById('lblSalHoraLcd').innerText =
-                "$" + precioHoraTrabajo.toFixed(2) + "/h";
-            document.getElementById('outSalRetencion').innerText =
-                "-$" + retencionSemanal.toFixed(2) +
-                " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
+            // Armamos el texto visual del sueldo por hora
+            let textoMontoPaga = "$" + precioHoraTrabajo.toFixed(2);
+            const elementoLabelPaga = document.getElementById('lblSalHoraLcd');
+            
+            if (elementoLabelPaga) {
+                elementoLabelPaga.innerText = textoMontoPaga;
+                
+                // EL SENSOR DE CARACTERES:
+                // Si el sueldo tiene 7 caracteres o más (ej: $100.00), encoge la letra a 9px
+                if (textoMontoPaga.length >= 7) {
+                    elementoLabelPaga.style.fontSize = "9px";
+                } 
+                // Si tiene 6 caracteres (ej: $10.50), mantiene la fuente estable en 11px
+                else if (textoMontoPaga.length === 6) {
+                    elementoLabelPaga.style.fontSize = "11px";
+                } 
+                // Si es más pequeño (ej: $5.00), se queda en su tamaño original de 12px
+                else {
+                    elementoLabelPaga.style.fontSize = "12px";
+                }
+            }
 
-            document.getElementById('outSalSemanal').innerText =
-                "$" + (brutoSemanal - retencionSemanal).toFixed(2);
-            document.getElementById('outSalBisemanal').innerText =
-                "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
-            document.getElementById('outSalMensual').innerText =
-                "$" + (brutoMensual - retencionMensual).toFixed(2);
-            document.getElementById('outSalAnual').innerText =
-                "$" + (brutoAnual - retencionAnual).toFixed(2);
+            // 2. Actualizamos el resto de las etiquetas del LCD azul sin alterar nada más
+            document.getElementById('outSalRetencion').innerText =
+                "-$" + retencionSemanal.toFixed(2) + " (" + (porcientoTotalDeduccion * 100).toFixed(1) + "%)";
+
+            document.getElementById('outSalSemanal').innerText = "$" + (brutoSemanal - retencionSemanal).toFixed(2);
+            document.getElementById('outSalBisemanal').innerText = "$" + (brutoBisemanal - retencionBisemanal).toFixed(2);
+            document.getElementById('outSalMensual').innerText = "$" + (brutoMensual - retencionMensual).toFixed(2);
+            document.getElementById('outSalAnual').innerText = "$" + (brutoAnual - retencionAnual).toFixed(2);
         }
 
         /* ============================================================

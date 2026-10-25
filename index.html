@@ -1705,13 +1705,13 @@
                     ticks++;
                     let factorTurbo = 1;
                     
-                    // CALIBRACIÓN DE VELOCIDAD INVERTIDA
-                    if (ticks > 6) {
-                        // La paga por hora vuela de 40 en 40 ticks, las horas se frenan a paso de 3
-                        factorTurbo = destino === 'paga' ? 40 : (destino === 'horas' ? 3 : 5);
+                    // 🚀 HIPER-NITRO DESATADO: Multiplicadores masivos para cruzar los miles al instante
+                    if (ticks > 5) {
+                        // Al dejarlo pegado por más de 5 ticks, la paga vuela sumando de $200.00 en $200.00
+                        factorTurbo = destino === 'paga' ? 20000 : (destino === 'horas' ? 3 : 5);
                     } else if (ticks > 2) {
-                        // Al dejarlo pegado, la paga arranca a brincar de 15 en 15, las horas de 2 en 2
-                        factorTurbo = destino === 'paga' ? 15 : (destino === 'horas' ? 2 : 3);
+                        // En la segunda marcha (a los 30ms), la paga arranca sumando de $100.00 en $100.00
+                        factorTurbo = destino === 'paga' ? 10000 : (destino === 'horas' ? 2 : 3);
                     }
                     
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);

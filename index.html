@@ -1708,10 +1708,10 @@
                     // 🚀 HIPER-NITRO DESATADO: Multiplicadores masivos para cruzar los miles al instante
                     if (ticks > 5) {
                         // Al dejarlo pegado por más de 5 ticks, la paga vuela sumando de $200.00 en $200.00
-                        factorTurbo = destino === 'paga' ? 20000 : (destino === 'horas' ? 3 : 5);
+                        factorTurbo = destino === 'paga' ? 500 : (destino === 'horas' ? 3 : 5);
                     } else if (ticks > 2) {
                         // En la segunda marcha (a los 30ms), la paga arranca sumando de $100.00 en $100.00
-                        factorTurbo = destino === 'paga' ? 10000 : (destino === 'horas' ? 2 : 3);
+                        factorTurbo = destino === 'paga' ? 100 : (destino === 'horas' ? 2 : 3);
                     }
                     
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);

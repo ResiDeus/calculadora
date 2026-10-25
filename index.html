@@ -1709,7 +1709,7 @@
                     ticks++;
                     let factorTurbo = 1;
                     
-                    // ⚡ NUEVA CALIBRACIÓN DE VELOCIDAD INVERTIDA
+                    // CALIBRACIÓN DE VELOCIDAD INVERTIDA
                     if (ticks > 6) {
                         // La paga por hora vuela de 40 en 40 ticks, las horas se frenan a paso de 3
                         factorTurbo = destino === 'paga' ? 40 : (destino === 'horas' ? 3 : 5);
@@ -1720,6 +1720,8 @@
                     
                     ejecutarPasoFiltroLcd(destino, delta * factorTurbo);
                 }, 15);
+            }, 300); // <-- Cierra el setTimeout de 300ms de forma segura
+        } // <--- Cierra la función iniciarAccionLcdControles
 
         function detenerAccionLcdControles() {
             clearTimeout(timerLcdControlesTimeout);

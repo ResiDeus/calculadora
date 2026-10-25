@@ -667,11 +667,61 @@
         /* ============================================================
            TECLADO NUMÉRICO (pad de 3 columnas)
            ============================================================ */
+        /* A. El contenedor del teclado: Forzamos la cuadrícula estricta de 3 columnas */
         .pad-num {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            width: 100%;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 4px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* B. Las teclas numéricas individuales: Mantenemos su tamaño original de fábrica */
+        .btn-key {
+            height: 38px !important;
+            font-size: 14px !important;
+            font-weight: 900 !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-family: monospace !important;
+            box-sizing: border-box !important;
+        }
+
+        /* C. La fila inferior de acciones: Mapeada a 4 columnas perfectas para que no se salgan */
+        .row-acciones-inferior {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 4px !important;
+            margin-top: 4px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* D. Los 4 botones maestros de abajo agrupados de forma limpia e idéntica */
+        .btn-theme, 
+        .btn-receipt, 
+        .btn-clear-master, 
+        .btn-salario-bottom {
+            border-radius: 10px !important;
+            font-weight: 900 !important; 
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-family: monospace !important;
+            height: 38px !important;       
+            font-size: 11px !important;    
+            background: var(--num-bg-theme) !important;
+            border: 2px solid var(--neon-primary) !important;
+            color: #ffffff !important; 
+            width: 100% !important;
+            z-index: 15 !important;
+            box-sizing: border-box !important;
         }
 
         /* Animación lenta de estrellas en los botones del teclado */

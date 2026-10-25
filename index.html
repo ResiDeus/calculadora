@@ -1111,13 +1111,16 @@
                         <div style="display: flex; flex-direction: column; gap: 5px; width: 46%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; padding-left: 0px; align-items: flex-start; text-align: left;">
                             
                             <!-- PAGA POR HORA (Agrandado y alineado en la M de MODO) -->
+                            <div style="display: flex; flex-direction: column; gap: 5px; width: 46%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; margin-left: -6px; padding-left: 0px; align-items: flex-start; text-align: left;">
+                            
+                            <!-- PAGA POR HORA (Jalado hacia la izquierda en el borde exacto) -->
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
                                 <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left;">PAGA POR HORA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
                                     <div style="text-align: left; display: inline-block; margin-right: auto;">
                                         <span id="lblSalHoraLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.25); padding: 2px 5px; border-radius: 4px; color: #fff; border: 1px solid rgba(255,255,255,0.15); line-height: 1; text-shadow: 0 0 3px rgba(0,240,255,0.3); text-align: left;">$10.50/h</span>
                                     </div>
-                                    <!-- Mismo tamaño y separación que los de Retención Manual -->
+                                    <!-- Se quedan quietos en su posición de la derecha, grandes y con la separación de 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
                                         <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('paga', -0.25)"
@@ -1135,14 +1138,14 @@
                                 </div>
                             </div>
 
-                            <!-- HORAS SEMANA (Agrandado y alineado en la M de MODO) -->
+                            <!-- HORAS SEMANA (Jalado hacia la izquierda en el borde exacto) -->
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 3px;">
                                 <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left;">HORAS SEMANA:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
                                     <div style="text-align: left; display: inline-block; margin-right: auto;">
                                         <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 5px; border-radius: 3px; text-align: left;">40</span>
                                     </div>
-                                    <!-- Mismo tamaño y separación que los de Retención Manual -->
+                                    <!-- Se quedan quietos en su posición de la derecha, grandes y con la separación de 12px -->
                                     <div style="display: flex; gap: 12px; position: relative; z-index: 100; margin-right: 2px;">
                                         <button class="btn-hrs-lcd" style="width: 18px; height: 18px; font-size: 12px;"
                                             onmousedown="iniciarAccionLcdControles('horas', -1)"

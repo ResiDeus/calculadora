@@ -1290,6 +1290,26 @@ body.theme-cyberpunk .btn-salario-bottom * {
             overflow-y: auto !important;  /* Activa la barra de deslizamiento vertical para los artículos */
             box-sizing: border-box !important;
         }
+        /* Fuerza al total de compras y sus dígitos a quedarse en un solo renglón horizontal */
+        #wrapperDataComprasLcd,
+        .listaPrecios-container + div,
+        [id*="DataCompras"] {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important; /* Prohibe rotundamente que el número brinque de línea */
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Asegura que el número grande del total general no use márgenes extraños */
+        #lblTotalGeneralLcd,
+        #lblTotalGeneral,
+        .total-grande-lcd {
+            white-space: nowrap !important;
+            display: inline-block !important;
+        }
         
     </style>
 </head>

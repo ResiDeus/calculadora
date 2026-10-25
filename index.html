@@ -2074,11 +2074,13 @@ body.theme-cyberpunk .btn-salario-bottom * {
          * Se llama al encender y también se puede invocar manualmente.
          */
         function ejecutarResetTotal() {
+            reproducirSonido('clear');
+
             // 1. Reseteamos todas las variables de control interno al estado base
             sSub = "0";
             cuentaAcumulada = 0;
             preciosGuardados = [];
-            modoSalarioActivo = false; // ⚡ Forzamos el apagado del modo salario en la memoria
+            modoSalarioActivo = false; 
 
             // Devolvemos los valores de fábrica de la nómina
             precioHoraTrabajo = 10.50;
@@ -2096,7 +2098,7 @@ body.theme-cyberpunk .btn-salario-bottom * {
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
             const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
-            if (lcd) lcd.classList.remove('modo-salario-activo'); // Quita el azul ciber
+            if (lcd) lcd.classList.remove('modo-salario-activo'); 
             if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
             // Apagamos los bloques de la subpantalla azul y encendemos los de la compra verde
@@ -2120,49 +2122,50 @@ body.theme-cyberpunk .btn-salario-bottom * {
             }
             if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-            // Reset completo de las variables de opciones de compras
+            // ============================================================
+            // 🔒 ¡LA LIMPIEZA BRUTAL DE COMPRAS QUE TE ARREGLA TODO EL DESMADRE!
+            // ============================================================
             sPpl = "0";
-            modoSerruchoActivo = false;
-            memoriaSerruchoCortes = "2";
-            if (document.getElementById('lblPpl')) document.getElementById('lblPpl').innerText = "N/A";
-
+            sTip = "0";
             sDesc = "0";
+            memoriaActualMarcador = "0";
+
+            // Volvemos los porcentajes y estados a cero estricto de fábrica
+            memoriaTipPct = "0";
             memoriaDescuentoPct = "0";
-            modoDescuentoActivo = false;
-            if (document.getElementById('lblDesc')) document.getElementById('lblDesc').innerText = "0";
+            memoriaSerruchoCortes = "0";
 
-            sTip = "15";
-            memoriaTipPct = "15";
             incluirPropina = false;
+            modoTipActivo = false;
+            modoDescuentoActivo = false;
+            modoSerruchoActivo = false;
 
-            ivu = 0.0;
-            sIvuModificado = "11.5";
-            memoriaIvuPct = "11.5";
-            modoIvuActivo = false;
-            if (document.getElementById('lblIvuBoton')) document.getElementById('lblIvuBoton').innerText = "0.0";
+            // Limpiamos los letreros de los botones neón superiores de la carcasa
+            if (document.getElementById('lblTip')) document.getElementById('lblTip').innerText = "0";
+            if (document.getElementById('lblDesc')) document.getElementById('lblDesc').innerText = "0";
+            if (document.getElementById('lblPpl')) document.getElementById('lblPpl').innerText = "0";
 
-            // Apagamos las luces neón de los botones de arriba de cantazo
-            if (document.getElementById('cajaPpl')) document.getElementById('cajaPpl').className = "caja-data btn-off";
-            if (document.getElementById('cajaDesc')) document.getElementById('cajaDesc').className = "caja-data btn-off";
-            if (document.getElementById('cajaTip')) document.getElementById('cajaTip').className = "caja-data btn-off";
-            if (document.getElementById('btnToggleIvu')) document.getElementById('btnToggleIvu').className = "caja-data btn-off";
+            // ⚡ APAGÓN DE BOTONES ENNEGRECIDOS: Tumba la clase activa de todas las celdas superiores
+            const cajasSuperiores = document.querySelectorAll('.caja-data');
+            cajasSuperiores.forEach(caja => {
+                caja.classList.remove('btn-on');
+            });
 
-            // Forzamos al botón de abajo a retener únicamente su clase de botón maestro
-            // (Barremos cualquier rastro que le inyectara "caja-data" o "btn-off" viejo)
-            if (document.getElementById('btnModoSalario')) {
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
-            }
+            // Apagamos el glitch del botón de salario abajo regresando a su gris calado
+            const btnSalario = document.getElementById('btnModoSalario');
+            if (btnSalario) btnSalario.className = "btn-salario-bottom";
 
-            // Inicialización limpia del input de precio a cero con su enfoque parpadeante
-            mode = 'sub';
-            if (document.getElementById('lblSub')) document.getElementById('lblSub').innerText = "0";
-            document.querySelectorAll('.lbl-val span').forEach(el => { if (el) el.classList.remove('blink-num'); });
-            if (document.getElementById('lblSub')) document.getElementById('lblSub').classList.add('blink-num');
-            if (document.getElementById('marcadorPrecioUnificado')) {
-                document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
-            }
-            
-            actualizarHeaderIndicadores();
+            // Borramos los números fantasmas que se quedaban pegados en el marcador principal
+            const txtMain = document.getElementById('txtMain');
+            if (txtMain) txtMain.innerText = "0";
+
+            // ⚡ REINICIO UNIFORME DE GRISES: Clava las opacidades deshabilitadas exactamente en 0.3
+            if (document.getElementById('rowDesc')) document.getElementById('rowDesc').style.opacity = "0.3";
+            if (document.getElementById('rowTip')) document.getElementById('rowTip').style.opacity = "0.3";
+            if (document.getElementById('rowIvu')) document.getElementById('rowIvu').style.opacity = "0.3";
+            if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').style.opacity = "0.3";
+
+            // Forzamos el recálculo final para sembrar el $0.00 simétrico y rígido en su sitio
             calc();
         }
 
@@ -2647,10 +2650,9 @@ function seleccionarMenu(f) {
 
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
             
-            // ⚡ CONTROL DE PROPINA: Si está apagada la opción, el porciento es estrictamente CERO
+            // ⚡ Si el botón de propina no está activo, el porcentaje es estrictamente CERO
             let tPct = (incluirPropina || modoTipActivo) ? (parseFloat(memoriaTipPct) || 0) : 0;
 
-            // Limpiamos los arrastres: leemos puramente el precio base real de los artículos guardados
             let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.precioBase || item.precio || 0), 0);
             let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.descuento || 0), 0);
             let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + (item.ivuCalculado || item.ivu || 0), 0);
@@ -2662,24 +2664,21 @@ function seleccionarMenu(f) {
 
             let nSub = sumaPreciosGuardados + precioEnTeclado;
             let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
-            
-            // Si el IVU no está activo en los botones de arriba, el impuesto en el teclado es cero
             let impuestoTotal = impuestoTotalAcumulado + (modoIvuActivo ? impuestoEnTeclado : 0);
 
             let subtotalDescontado = nSub - rebajaTotal;
             
-            // ⚡ PROPINA GLOBAL PURA: Se calcula estrictamente sobre el subtotal neto acumulado actual
+            // ⚡ FÓRMULA CORREGIDA: Multiplica puramente por el porciento (Ej: 100 * 0.20 = $20.00 de propina)
             let propinaTotal = subtotalDescontado * (tPct / 100);
             
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
             let porSerrucho = totalNetoGlobal / nSerrucho;
 
-            // Inyectamos los textos limpios en las filas correspondientes
             document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
 
-            // ⚡ SENSOR EQUILIBRADO: Evita el brinco visual al dar CLEAR manteniendo altura fija
+            // ⚡ ALTURA Y TAMAÑO FIJO: Clava la fuente para que el texto NUNCA se mueva de lugar al dar CLEAR
             const elementoNumeroTotal = document.getElementById('outPer');
             if (elementoNumeroTotal) {
                 elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
@@ -2694,7 +2693,7 @@ function seleccionarMenu(f) {
                 }
             }
 
-            // ⚡ ARMONÍA DE COLORES: Todas las opacidades deshabilitadas quedan exactamente en 0.3
+            // ⚡ ALINEACIÓN DE GRISES: La propina apagada ahora usa exactamente el mismo 0.3 que el IVU
             document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
             document.getElementById('rowTip').style.opacity = (incluirPropina || modoTipActivo) ? "1" : "0.3";
             document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";

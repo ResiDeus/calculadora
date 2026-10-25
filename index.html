@@ -2647,61 +2647,54 @@ function seleccionarMenu(f) {
 
             let dPct = modoDescuentoActivo ? (parseFloat(memoriaDescuentoPct) || 0) : 0;
             
-            // ⚡ SINTONIZACIÓN GLOBAL: Si el menú de propina está activo arriba, leemos su porciento real
+            // ⚡ CONTROL DE PROPINA: Si está apagada la opción, el porciento es estrictamente CERO
             let tPct = (incluirPropina || modoTipActivo) ? (parseFloat(memoriaTipPct) || 0) : 0;
 
+            // Limpiamos los arrastres: leemos puramente el precio base real de los artículos guardados
             let sumaPreciosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.precioBase || item.precio || 0), 0);
             let sumaDescuentosGuardados = preciosGuardados.reduce((sum, item) => sum + (item.descuento || 0), 0);
             let impuestoTotalAcumulado = preciosGuardados.reduce((sum, item) => sum + (item.ivuCalculado || item.ivu || 0), 0);
 
-            // FILTRO MAESTRO EN VIVO: Formatea el precio del teclado antes de calcular el total
-            let textoPrecioTeclado = sSub;
-            if (textoPrecioTeclado.includes('.')) {
-                let partes = textoPrecioTeclado.split('.');
-                if (partes[1].length === 1) {
-                    textoPrecioTeclado = partes[0] + '.0' + partes[1];
-                }
-            }
-
-            let precioEnTeclado = parseFloat(textoPrecioTeclado) || 0;
+            let precioEnTeclado = parseFloat(sSub) || 0;
             let descuentoEnTeclado = precioEnTeclado * (dPct / 100);
             let precioDescontadoTeclado = precioEnTeclado - descuentoEnTeclado;
             let impuestoEnTeclado = precioDescontadoTeclado * ((parseFloat(memoriaIvuPct) || ivu || 11.5) / 100);
 
             let nSub = sumaPreciosGuardados + precioEnTeclado;
             let rebajaTotal = sumaDescuentosGuardados + descuentoEnTeclado;
-            let impuestoTotal = impuestoTotalAcumulado + impuestoEnTeclado;
+            
+            // Si el IVU no está activo en los botones de arriba, el impuesto en el teclado es cero
+            let impuestoTotal = impuestoTotalAcumulado + (modoIvuActivo ? impuestoEnTeclado : 0);
 
             let subtotalDescontado = nSub - rebajaTotal;
             
-            // ⚡ CÓMPUTO DE PROPINA GLOBAL: Se calcula una sola vez sobre el subtotal neto de la cuenta
+            // ⚡ PROPINA GLOBAL PURA: Se calcula estrictamente sobre el subtotal neto acumulado actual
             let propinaTotal = subtotalDescontado * (tPct / 100);
             
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
             let porSerrucho = totalNetoGlobal / nSerrucho;
 
+            // Inyectamos los textos limpios en las filas correspondientes
             document.getElementById('outDesc').innerText = '-$' + rebajaTotal.toFixed(2);
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
 
-            // ⚡ IMPRESIÓN SINCRO-ELÁSTICA: Inyecta el gran total y auto-ajusta su tamaño al centavo
+            // ⚡ SENSOR EQUILIBRADO: Evita el brinco visual al dar CLEAR manteniendo altura fija
             const elementoNumeroTotal = document.getElementById('outPer');
             if (elementoNumeroTotal) {
                 elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
                 let textoDigitos = elementoNumeroTotal.innerText;
                 
-                // Si la cifra es kilométrica (ej: 1000084.00), encoge la tipografía para que se quede al lado de TOTAL:
                 if (textoDigitos.length >= 10) {
                     elementoNumeroTotal.style.fontSize = "15px";
-                }
-                else if (textoDigitos.length >= 7) {
+                } else if (textoDigitos.length >= 7) {
                     elementoNumeroTotal.style.fontSize = "19px";
-                } 
-                else {
+                } else {
                     elementoNumeroTotal.style.fontSize = "24px"; 
                 }
             }
 
+            // ⚡ ARMONÍA DE COLORES: Todas las opacidades deshabilitadas quedan exactamente en 0.3
             document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
             document.getElementById('rowTip').style.opacity = (incluirPropina || modoTipActivo) ? "1" : "0.3";
             document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
@@ -2716,7 +2709,6 @@ function seleccionarMenu(f) {
                 document.getElementById('rowPersonaCuota').style.opacity = "0.3";
             }
 
-            // Candado de seguridad para que la lista de la tienda no estorbe en la subpantalla azul
             if (modoSalarioActivo) {
                 const containerLista = document.getElementById('listaPrecios');
                 if (containerLista) containerLista.style.setProperty('display', 'none', 'important');

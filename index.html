@@ -1612,7 +1612,7 @@
             if (tipo === 'sal') {
                 precioHoraTrabajo += delta;
                 if (precioHoraTrabajo < 0) precioHoraTrabajo = 0;
-                if (precioHoraTrabajo > 500) precioHoraTrabajo = 500;
+                if (precioHoraTrabajo > 10000) precioHoraTrabajo = 10000;
                 document.getElementById('lblSalarioBoton').innerText =
                     "$" + precioHoraTrabajo.toFixed(2) + "/h";
                 calcularSalarioSubPantalla();

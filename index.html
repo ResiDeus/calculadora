@@ -1445,34 +1445,33 @@ body.theme-cyberpunk .btn-salario-bottom * {
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%;">
                     
-                    <!-- SERRUCHO aparece primero (Letra pequeña de show) -->
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 10px !important; margin-bottom: 2px; transition: opacity 0.15s ease; font-family: monospace; font-weight: 900;">
+                    <!-- SERRUCHO aparece primero -->
+                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 11px; margin-bottom: 2px; transition: opacity 0.15s ease;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
 
-                    <!-- Desglose con tipografía de 10px para que no compitan con el Total -->
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px;">
+                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px;">
+                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 2px;">
+                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- Fila TOTAL: Línea entrecortada negra, texto masivo y números pegaditos a la palabra -->
-                    <div style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; width: 100% !important; margin-top: 4px !important; border-top: 1px dashed #000000 !important; padding-top: 5px !important; position: relative !important; flex-wrap: nowrap !important; box-sizing: border-box !important; gap: 4px !important;">
-                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 18px !important; text-transform: uppercase !important; color: inherit; white-space: nowrap !important;">TOTAL:</span>
+                    <!-- Fila TOTAL: Separación horizontal estricta con guiones divisores -->
+                    <div style="display: flex !important; flex-direction: row !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; margin-top: 5px !important; border-top: 1px dashed rgba(255,255,255,0.2) !important; padding-top: 3px !important; position: relative !important; flex-wrap: nowrap !important; box-sizing: border-box !important;">
+                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 13px !important; text-transform: uppercase !important; color: inherit; white-space: nowrap !important;">TOTAL:</span>
                         
-                        <!-- El número se amarra inmediatamente al lado de la palabra con un tamaño masivo de 24px -->
-                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: inherit; white-space: nowrap !important; display: inline-block !important;">
-                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important; font-size: 24px !important;">0.00</span>
+                        <!-- El número se recuesta firmemente a la derecha en la misma línea sin romperse -->
+                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: inherit; white-space: nowrap !important; text-align: right !important; display: inline-block !important;">
+                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important;">0.00</span>
                         </div>
 
                         <!-- Indicador de scroll flotando perfectamente calibrado arriba del total -->
-                        <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 32px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
+                        <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 30px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
                     </div>
                 </div>
                 <!-- ---------- Fin de modo COMPRAS ---------- -->

@@ -309,6 +309,23 @@
             border-bottom: 1px solid rgba(0, 240, 255, 0.3) !important;
         }
 
+        /* LCD en modo conversión (rojo) */
+        .lcd.modo-conversion-activo {
+            background: #3b0a0a !important;
+            color: #ffb4b4 !important;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(255, 60, 60, 0.35) !important;
+        }
+        .lcd.modo-conversion-activo .lcd-header {
+            border-bottom: 1px solid rgba(255, 100, 100, 0.4) !important;
+            color: #ff6b6b !important;
+        }
+        
+        .btn-conv.btn-on {
+            border-color: #ff3b30 !important;
+            color: #ff6b6b !important;
+            box-shadow: 0 0 12px rgba(255, 59, 48, 0.5) !important;
+        }
+
         /* En modo salario escondemos la lista de compras */
         .lcd.modo-salario-activo #listaPrecios,
         .lcd.modo-salario-activo #lblArtText {
@@ -780,10 +797,13 @@
 
         .row-acciones-inferior {
             display: grid;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 4px;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 3px;
             margin-top: 2px;
             width: 100%;
+        }
+        .row-acciones-inferior button {
+            font-size: 9px !important;
         }
 
         .btn-salario-bottom:active {
@@ -1353,6 +1373,20 @@
                             </div>
                         </div>
                     </div><!-- fin subpantalla salario -->
+                            <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
+                            <div id="vistaConversion" style="display:none; flex-direction:column; gap:4px; width:96%; font-family:monospace; font-size:10px; position:absolute; top:4px; left:6px; z-index:96; height:78px;">
+                                <div style="display:flex; gap:2px; width:100%;">
+                                    <button class="tab-btn-lcd tab-conv active" data-cat="peso" onclick="setCatConversion('peso')" style="font-size:8px; padding:2px;">PESO</button>
+                                    <button class="tab-btn-lcd tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')" style="font-size:8px; padding:2px;">COCINA</button>
+                                    <button class="tab-btn-lcd tab-conv" data-cat="largo" onclick="setCatConversion('largo')" style="font-size:8px; padding:2px;">LARGO</button>
+                                    <button class="tab-btn-lcd tab-conv" data-cat="temp" onclick="setCatConversion('temp')" style="font-size:8px; padding:2px;">TEMP</button>
+                                    <button class="tab-btn-lcd tab-conv" data-cat="data" onclick="setCatConversion('data')" style="font-size:8px; padding:2px;">DATA</button>
+                                </div>
+                                <div style="font-weight:900; font-size:11px; color:#ffb4b4;" id="lblConvNombre">kg → lb</div>
+                                <div style="font-size:10px; opacity:0.85;" id="lblConvFormula">× 2.2046</div>
+                                <div style="font-size:16px; font-weight:900; color:#fff; margin-top:2px;" id="lblConvResultado">= 0.00 lb</div>
+                            </div>
+                            <!-- fin subpantalla conversión -->
                 </div><!-- fin listaPrecios-container -->
             </div><!-- fin lcd-wrapper -->
 
@@ -1499,6 +1533,7 @@
              ============================================================ -->
         <div class="row-acciones-inferior">
             <button id="btnTheme" class="btn-theme" onclick="rotarTema()">TEMA</button>
+            <button id="btnConv" class="btn-theme btn-conv" onclick="toggleModoConversion()">CONV.</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
             <button id="btnModoSalario" class="btn-salario-bottom" onclick="seleccionarMenu('sal')">SALARIO</button>
             <button id="btnClearMaster" class="btn-clear-master" onclick="ejecutarClearDirecto()">CLEAR</button>
@@ -1581,6 +1616,44 @@
         let medActivo = false;                   // Medicare
         let porcientoManualRetencion = 0.0;      // % retención manual / Hacienda
 
+        // --- Modo conversión ---
+        let modoConversionActivo = false;
+        let catConversion = 'peso';
+        let idxConversion = 0;
+        let sConv = "0";
+
+        const CONVERSIONES = {
+            peso: [
+                { id: 'kg_lb', nombre: 'kg → lb',  formula: '× 2.2046', fn: v => v * 2.2046, unidad: 'lb' },
+                { id: 'lb_kg', nombre: 'lb → kg',  formula: '× 0.4536', fn: v => v * 0.4536, unidad: 'kg' },
+                { id: 'g_oz',  nombre: 'g → oz',   formula: '× 0.0352', fn: v => v * 0.0352, unidad: 'oz' },
+                { id: 'oz_g',  nombre: 'oz → g',   formula: '× 28.35',  fn: v => v * 28.35,  unidad: 'g'  }
+            ],
+            cocina: [
+                { id: 'cup_ml',   nombre: 'cup → ml',   formula: '× 240',   fn: v => v * 240,   unidad: 'ml' },
+                { id: 'tbsp_ml',  nombre: 'tbsp → ml',  formula: '× 15',    fn: v => v * 15,    unidad: 'ml' },
+                { id: 'tsp_ml',   nombre: 'tsp → ml',   formula: '× 5',     fn: v => v * 5,     unidad: 'ml' },
+                { id: 'floz_ml',  nombre: 'fl oz → ml', formula: '× 29.57', fn: v => v * 29.57, unidad: 'ml' },
+                { id: 'cup_tbsp', nombre: 'cup → tbsp', formula: '× 16',    fn: v => v * 16,    unidad: 'tbsp' },
+                { id: 'tbsp_tsp', nombre: 'tbsp → tsp', formula: '× 3',     fn: v => v * 3,     unidad: 'tsp' }
+            ],
+            largo: [
+                { id: 'm_ft',  nombre: 'm → ft',  formula: '× 3.2808', fn: v => v * 3.2808, unidad: 'ft' },
+                { id: 'in_cm', nombre: 'in → cm', formula: '× 2.54',   fn: v => v * 2.54,   unidad: 'cm' },
+                { id: 'km_mi', nombre: 'km → mi', formula: '× 0.6213', fn: v => v * 0.6213, unidad: 'mi' }
+            ],
+            temp: [
+                { id: 'c_f', nombre: '°C → °F', formula: '×1.8 + 32', fn: v => v * 1.8 + 32, unidad: '°F' },
+                { id: 'f_c', nombre: '°F → °C', formula: '(−32)/1.8', fn: v => (v - 32) / 1.8, unidad: '°C' }
+            ],
+            data: [
+                { id: 'gb_mb', nombre: 'GB → MB', formula: '× 1024', fn: v => v * 1024, unidad: 'MB' },
+                { id: 'mb_gb', nombre: 'MB → GB', formula: '÷ 1024', fn: v => v / 1024, unidad: 'GB' },
+                { id: 'b_kb',  nombre: 'B → KB',  formula: '÷ 1024', fn: v => v / 1024, unidad: 'KB' },
+                { id: 'kb_b',  nombre: 'KB → B',  formula: '× 1024', fn: v => v * 1024, unidad: 'B'  }
+            ]
+        };
+              
         // Timers pa' cuando mantienes pulsado ▲ / ▼
         let intervaloAutoIncremento = null;
         let timeoutAutoIncremento = null;
@@ -1721,6 +1794,12 @@
          */
         function ejecutarModificacionPaso(tipo, delta) {
             if (!sistemaEncendido) return;
+            
+            if (modoConversionActivo) {
+                cambiarConversion(delta > 0 ? 1 : -1);
+                return;
+            }
+            
             reproducirSonido('paso');
 
             // --- Ajuste de salario por hora ---
@@ -1871,6 +1950,11 @@
            ============================================================ */
         function ejecutarClearDirecto() {
             reproducirSonido('menu');
+            if (modoConversionActivo) {
+                sConv = '0';
+                actualizarPantallaConversion();
+                return;
+            }
             ejecutarResetTotal();
         }
 
@@ -1934,6 +2018,16 @@
          * Se llama al encender y también con CLEAR.
          */
         function ejecutarResetTotal() {
+            // Salir de conversión si estaba activa
+            modoConversionActivo = false;
+            sConv = '0';
+            const lcdReset = document.getElementById('pantallaVerde');
+            if (lcdReset) lcdReset.classList.remove('modo-conversion-activo');
+            const vistaConvReset = document.getElementById('vistaConversion');
+            if (vistaConvReset) vistaConvReset.style.display = 'none';
+            const btnConvReset = document.getElementById('btnConv');
+            if (btnConvReset) btnConvReset.classList.remove('btn-on');
+            
             sSub = "0";
             cuentaAcumulada = 0;
             preciosGuardados = [];
@@ -2348,12 +2442,149 @@
         }
 
         /* ============================================================
+           MODO CONVERSIÓN (pantalla roja)
+           Peso, cocina, largo, temp y data digital
+           ============================================================ */
+
+        /** Devuelve la conversión activa de la categoría actual */
+        function convActual() {
+            const lista = CONVERSIONES[catConversion] || CONVERSIONES.peso;
+            if (idxConversion >= lista.length) idxConversion = 0;
+            if (idxConversion < 0) idxConversion = 0;
+            return lista[idxConversion];
+        }
+
+        /** Cambia de categoría (PESO / COCINA / LARGO / TEMP / DATA) */
+        function setCatConversion(cat) {
+            if (!modoConversionActivo) return;
+            catConversion = cat;
+            idxConversion = 0;
+            document.querySelectorAll('.tab-conv').forEach(t => {
+                t.classList.toggle('active', t.dataset.cat === cat);
+            });
+            actualizarPantallaConversion();
+            reproducirSonido('menu');
+        }
+
+        /** Cambia de fórmula dentro de la categoría (con las flechas ▲ ▼) */
+        function cambiarConversion(delta) {
+            if (!modoConversionActivo) return;
+            const lista = CONVERSIONES[catConversion] || CONVERSIONES.peso;
+            idxConversion = (idxConversion + delta + lista.length) % lista.length;
+            actualizarPantallaConversion();
+            reproducirSonido('paso');
+        }
+
+        /** Refresca nombre, fórmula y resultado en el LCD rojo */
+        function actualizarPantallaConversion() {
+            const c = convActual();
+            const val = parseFloat(sConv) || 0;
+            const res = c.fn(val);
+
+            const lblNombre = document.getElementById('lblConvNombre');
+            const lblFormula = document.getElementById('lblConvFormula');
+            const lblResultado = document.getElementById('lblConvResultado');
+            const lblSub = document.getElementById('lblSub');
+            const header = document.getElementById('txtHeaderIndicadores');
+
+            if (lblNombre) lblNombre.innerText = c.nombre;
+            if (lblFormula) lblFormula.innerText = c.formula;
+            if (lblResultado) {
+                const textoRes = (Math.abs(res) >= 1000) ? res.toFixed(2) : res.toFixed(4);
+                lblResultado.innerText = '= ' + textoRes + ' ' + c.unidad;
+            }
+            if (lblSub) lblSub.innerText = sConv;
+            if (header) header.innerText = 'MODO: CONVERSIÓN';
+        }
+
+        /**
+         * Prende / apaga el modo conversión.
+         * LCD rojo al entrar; al salir vuelve a la pantalla verde de compras.
+         */
+        function toggleModoConversion() {
+            if (!sistemaEncendido) return;
+
+            // Si estás en salario, sal primero
+            if (modoSalarioActivo) {
+                seleccionarMenu('sal');
+            }
+
+            modoConversionActivo = !modoConversionActivo;
+
+            const lcd = document.getElementById('pantallaVerde');
+            const vistaConv = document.getElementById('vistaConversion');
+            const lista = document.getElementById('listaPrecios');
+            const wrapCompras = document.getElementById('wrapperDataComprasLcd');
+            const wrapSal = document.getElementById('wrapperDataSalarioLcd');
+            const vistaSal = document.getElementById('vistaSubPantallaSalario');
+            const btnConv = document.getElementById('btnConv');
+            const tituloPrecio = document.querySelector('#cajaSub .lbl-title');
+
+            if (modoConversionActivo) {
+                // Entrar a conversión
+                if (lcd) {
+                    lcd.classList.add('modo-conversion-activo');
+                    lcd.classList.remove('modo-salario-activo');
+                }
+                if (vistaConv) vistaConv.style.display = 'flex';
+                if (lista) lista.style.display = 'none';
+                if (wrapCompras) wrapCompras.style.display = 'none';
+                if (wrapSal) wrapSal.style.display = 'none';
+                if (vistaSal) vistaSal.style.display = 'none';
+                if (btnConv) btnConv.classList.add('btn-on');
+                if (tituloPrecio) tituloPrecio.innerText = 'Valor';
+
+                // Empieza con 0 o con lo que hubiera en el teclado
+                sConv = (sSub && sSub !== '0') ? sSub : '0';
+                mode = 'conv';
+                catConversion = 'peso';
+                idxConversion = 0;
+
+                document.querySelectorAll('.tab-conv').forEach(t => {
+                    t.classList.toggle('active', t.dataset.cat === 'peso');
+                });
+
+                actualizarPantallaConversion();
+                reproducirSonido('menu');
+            } else {
+                // Salir a compras (pantalla verde)
+                if (lcd) lcd.classList.remove('modo-conversion-activo');
+                if (vistaConv) vistaConv.style.display = 'none';
+                if (lista) lista.style.display = 'block';
+                if (wrapCompras) wrapCompras.style.display = 'block';
+                if (btnConv) btnConv.classList.remove('btn-on');
+                if (tituloPrecio) tituloPrecio.innerText = 'Precio';
+
+                mode = 'sub';
+                if (document.getElementById('lblSub')) {
+                    document.getElementById('lblSub').innerText = sSub;
+                }
+                actualizarHeaderIndicadores();
+                calc();
+                reproducirSonido('menu');
+            }
+        }
+
+        
+        /* ============================================================
            ENTRADA DE NÚMEROS (teclado)
            ============================================================ */
 
         /** Añade un dígito o punto al precio actual */
         function num(c) {
-            if (!sistemaEncendido || modoSalarioActivo) return;
+            if (!sistemaEncendido) return;
+            if (modoSalarioActivo) return;
+
+            if (modoConversionActivo) {
+                reproducirSonido('tecla');
+                if (sConv === '0' && c !== '.') sConv = '';
+                if (c === '.' && sConv.includes('.')) return;
+                sConv += c;
+                if (parseFloat(sConv) > 1e12) sConv = '1000000000000';
+                actualizarPantallaConversion();
+                return;
+            }
+
             if (mode !== 'sub') mode = 'sub';
             reproducirSonido('tecla');
 
@@ -2369,7 +2600,17 @@
 
         /** Borra el último carácter del precio (backspace) */
         function bksp() {
-            if (!sistemaEncendido || modoSalarioActivo) return;
+            if (!sistemaEncendido) return;
+            if (modoSalarioActivo) return;
+
+            if (modoConversionActivo) {
+                reproducirSonido('tecla');
+                sConv = sConv.slice(0, -1);
+                if (!sConv) sConv = '0';
+                actualizarPantallaConversion();
+                return;
+            }
+
             if (mode !== 'sub') mode = 'sub';
             reproducirSonido('tecla');
 

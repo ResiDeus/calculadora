@@ -587,6 +587,33 @@
         /* ============================================================
            CONTENEDOR UNIFICADO DE PRECIO (marcador + botón AÑADIR)
            ============================================================ */
+        /* Animación que hace que el borde flasheé (parpadee) con luz neón amarilla */
+        @keyframes flasheoBordeAmarillo {
+            0%, 100% {
+                border-color: #ffb703 !important;
+                box-shadow: 0 0 4px #ffb703, inset 0 0 2px #ffb703 !important;
+            }
+            50% {
+                border-color: #ffffff !important;
+                box-shadow: 0 0 16px #ffb703, inset 0 0 6px #ffb703 !important;
+            }
+        }
+
+        /* El estado activo exclusivo para el botón de salario abajo */
+        .btn-salario-bottom.btn-on {
+            /* Amarillo sutil de fondo (estilo cyberpunk opaco militar) */
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.15), rgba(251, 133, 0, 0.1)) !important;
+            
+            /* Cambiamos el color del texto a un amarillo neón brillante sólido */
+            color: #ffb703 !important;
+            text-shadow: 0 0 6px rgba(255, 183, 3, 0.6) !important;
+            font-weight: 900 !important;
+            
+            /* Activamos el flasheo continuo en el borde */
+            animation: flasheoBordeAmarillo 1.2s infinite ease-in-out !important;
+            opacity: 1 !important;
+        }
+
         @keyframes synthwaveShift {
             0%   { background-position: 0% 0%; }
             100% { background-position: 40px 40px; }

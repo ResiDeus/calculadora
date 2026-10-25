@@ -2166,7 +2166,7 @@ body.theme-cyberpunk .btn-salario-bottom * {
          * Activa o desactiva una opción del menú.
          * f = 'sub' | 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal'
          */
-        function seleccionarMenu(f) {
+function seleccionarMenu(f) {
             if (!sistemaEncendido) return;
             reproducirSonido('menu');
 
@@ -2175,50 +2175,64 @@ body.theme-cyberpunk .btn-salario-bottom * {
             const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
             const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
             const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
-            const textoListaVacia = document.getElementById('lblArtText'); // 🚀 Referencia al texto fantasma
+            const textoListaVacia = document.getElementById('lblArtText'); 
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
-            modoSalarioActivo = !modoSalarioActivo;
-            const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
-            
-            // ⚡ REFERENCIAS PRECISAS A LA LISTA DE COMPRAS
-            const bloqueListaCompras = document.getElementById('listaPrecios');
-            const textoListaVacia = document.getElementById('lblArtText');
+                modoSalarioActivo = !modoSalarioActivo;
+                const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
-            if (modoSalarioActivo) {
-                lcd.classList.add('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
+                if (modoSalarioActivo) {
+                    lcd.classList.add('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = 'flex-start';
 
-                // 🔒 EXCLUSIVIDAD ABSOLUTA: Apagamos por completo el listado impreso de compras y su texto fantasma
-                if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
-                if (textoListaVacia) textoListaVacia.style.display = "none";
-                
-                // Mantenemos oculto el indicador de scroll
-                if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
+                    // Apagamos por completo el listado impreso de compras y su texto fantasma
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "none";
+                    if (textoListaVacia) textoListaVacia.style.display = "none";
+                    
+                    // Mantenemos oculto el indicador de scroll
+                    if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
-                // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
-                bloqueSubPantallaSalario.style.display = "flex";
-                wrapperSalario.style.display = "block";
-                wrapperCompras.style.display = "none"; // Apaga el total de compras verde
+                    // Encendemos la subpantalla de configuraciones y el desglose de sueldos azul
+                    bloqueSubPantallaSalario.style.display = "flex";
+                    wrapperSalario.style.display = "block";
+                    wrapperCompras.style.display = "none"; 
 
-                // Se enciende el botón de abajo con su glitch eléctrico global
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
-                calcularSalarioSubPantalla();
-            } else {
-                lcd.classList.remove('modo-salario-activo');
-                if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
+                    // Se enciende el botón de abajo con su glitch eléctrico global
+                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                    calcularSalarioSubPantalla();
+                } else {
+                    lcd.classList.remove('modo-salario-activo');
+                    if (contenedorPadreLcd) contenedorPadreLcd.style.justifyContent = '';
 
-                // Apagamos la pantalla de nómina azul por completo
-                bloqueSubPantallaSalario.style.display = "none";
-                wrapperSalario.style.display = "none";
-                
-                // 🔄 REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
-                if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
-                if (wrapperCompras) wrapperCompras.style.display = "block";
+                    // Apagamos la pantalla de nómina azul por completo
+                    bloqueSubPantallaSalario.style.display = "none";
+                    wrapperSalario.style.display = "none";
+                    
+                    // REGRESO A LA NORMALIDAD: Revivimos la lista de compras y sus totales en la pantalla verde
+                    if (bloqueListaCompras) bloqueListaCompras.style.display = "block";
+                    if (wrapperCompras) wrapperCompras.style.display = "block";
 
-                // Si no hay artículos, restauramos el texto de Lista Vacía estable
-                if (preciosGuardados.length === 0) {
+                    // 🚀 SENSOR ELÁSTICO PARA EL TOTAL GRANDE DE ABAJO
+                    if (wrapperCompras) {
+                        let textoTotalGrande = wrapperCompras.innerText || "";
+                        
+                        // Si el número es gigante (ej: $1,250.75), encoge la letra para que no suba
+                        if (textoTotalGrande.length >= 8) {
+                            wrapperCompras.style.fontSize = "16px";
+                        } 
+                        // Si es mediano (ej: $150.25), lo ajusta estable en 20px
+                        else if (textoTotalGrande.length === 7) {
+                            wrapperCompras.style.fontSize = "20px";
+                        } 
+                        // Si es un número corto, mantiene la letra masiva original de fábrica
+                        else {
+                            wrapperCompras.style.fontSize = "26px"; 
+                        }
+                    }
+
+                    // Si no hay artículos, restauramos el texto de Lista Vacía estable
+                    if (preciosGuardados.length === 0) {
                     if (textoListaVacia) textoListaVacia.style.display = "block";
                     if (bloqueListaCompras) bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {

@@ -1608,13 +1608,18 @@
             if (!sistemaEncendido) return;
             reproducirSonido('paso');
 
-            // --- Ajuste de salario por hora ---
-            if (tipo === 'sal') {
+                        // --- Ajuste de salario por hora 
+            if (tipo === 'sal' || tipo === 'paga') {
                 precioHoraTrabajo += delta;
                 if (precioHoraTrabajo < 0) precioHoraTrabajo = 0;
                 if (precioHoraTrabajo > 10000) precioHoraTrabajo = 10000;
-                document.getElementById('lblSalarioBoton').innerText =
-                    "$" + precioHoraTrabajo.toFixed(2) + "/h";
+                
+                // Redirige el fluido eléctrico para que actualice la nueva etiqueta dentro del LCD
+                const lblSalHora = document.getElementById('lblSalHoraLcd');
+                if (lblSalHora) {
+                    lblSalHora.innerText = "$" + precioHoraTrabajo.toFixed(2);
+                }
+                
                 calcularSalarioSubPantalla();
                 return;
             }

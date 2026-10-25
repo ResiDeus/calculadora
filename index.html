@@ -696,7 +696,17 @@
            ============================================================ */
 
         /* Base estructural unificada para los 4 botones inferiores */
-        .btn-theme, .btn-receipt, .btn-clear-master, .btn-salario-bottom {
+        @keyframes flujoSynthwaveBotones {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Base estructural y estética unificada: Fondo degradado Naranja Synthwave Animado */
+        body.theme-cyberpunk .btn-theme, 
+        body.theme-cyberpunk .btn-receipt, 
+        body.theme-cyberpunk .btn-clear-master, 
+        body.theme-cyberpunk .btn-salario-bottom {
             border-radius: 10px !important;
             font-weight: 900 !important; 
             cursor: pointer !important;
@@ -711,52 +721,72 @@
             width: 100% !important;
             z-index: 15 !important;
             box-sizing: border-box !important;
+            
+            /* Fondos y bordes Naranja Neon Synthwave */
+            background: linear-gradient(90deg, #ff5e00, #ff9e00, #ff5e00) !important;
+            background-size: 200% auto !important;
+            animation: flujoSynthwaveBotones 3s infinite linear !important;
+            border: 2px solid #ff9e00 !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 6px rgba(255, 158, 0, 0.8) !important;
+            box-shadow: 0 0 8px rgba(255, 94, 0, 0.4) !important;
         }
 
-        /* Colores exclusivos para cada botón SOLO en el tema principal (Cyberpunk) */
-        body.theme-cyberpunk .btn-theme {
-            background: rgba(0, 240, 255, 0.05) !important;
-            border: 2px solid #00f0ff !important;
-            color: #00f0ff !important;
-        }
-        body.theme-cyberpunk .btn-receipt {
-            background: rgba(0, 255, 102, 0.05) !important;
-            border: 2px solid #00ff66 !important;
-            color: #00ff66 !important;
-        }
-        body.theme-cyberpunk .btn-salario-bottom {
-            background: rgba(251, 133, 0, 0.05) !important;
-            border: 2px solid #fb8500 !important;
-            color: #fb8500 !important;
-        }
-        body.theme-cyberpunk .btn-clear-master {
-            background: rgba(255, 59, 48, 0.05) !important;
-            border: 2px solid #ff3b30 !important;
-            color: #ff3b30 !important;
-        }
-
-        /* El feedback táctil de Flash de Alta Intensidad (Active) al presionarlos */
-        .btn-theme:active, 
-        .btn-receipt:active, 
-        .btn-salario-bottom:active, 
-        .btn-clear-master:active { 
+        /* EL FLASH BLANCO: Torna blanco sólido por dentro (Igual a los números) */
+        body.theme-cyberpunk .btn-theme:active, 
+        body.theme-cyberpunk .btn-receipt:active, 
+        body.theme-cyberpunk .btn-clear-master:active, 
+        body.theme-cyberpunk .btn-salario-bottom:active { 
             background: #ffffff !important;
             color: #000000 !important;
+            border-color: #ffffff !important;
             filter: brightness(2) contrast(1.5) !important;
-            box-shadow: 0 0 20px #ffffff, inset 0 0 10px #ffffff !important;
+            box-shadow: 0 0 25px #ffffff, inset 0 0 12px #ffffff !important;
             text-shadow: none !important;
             transition: none !important;
         }
 
-        /* Cuando la pantalla azul está ABIERTA, Salario se torna GRIS */
+        /* ANIMACIONES EXCLUSIVAS PARA EL MODO GLITCH (Salario seleccionado) */
+        @keyframes glitchMovimiento {
+            0%   { clip-path: inset(10% 0 30% 0); transform: skew(-3deg); }
+            20%  { clip-path: inset(40% 0 15% 0); transform: skew(2deg); }
+            40%  { clip-path: inset(5% 0 75% 0);  transform: skew(-1deg); }
+            60%  { clip-path: inset(65% 0 5% 0);  transform: skew(3deg); }
+            80%  { clip-path: inset(25% 0 50% 0); transform: skew(-2deg); }
+            100% { clip-path: inset(15% 0 35% 0); transform: skew(0deg); }
+        }
+
+        @keyframes pulsoFlasheoLcd {
+            0%, 100% { opacity: 0.9; filter: hue-rotate(0deg) saturate(1.5); }
+            50%      { opacity: 1;   filter: hue-rotate(15deg) saturate(2); box-shadow: 0 0 20px #ff007f !important; }
+        }
+
+        /* ESTADO SELECCIONADO GLITCHEADO: Cuando la pantalla azul está abierta */
         body.theme-cyberpunk .btn-salario-bottom.btn-on {
-            background: rgba(150, 150, 150, 0.15) !important;
-            border: 2px solid #8e8e93 !important;
-            color: #8e8e93 !important;
-            text-shadow: 0 0 4px rgba(142, 142, 147, 0.4) !important;
-            animation: none !important; 
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.4) !important;
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-size: 200% auto !important;
+            border-color: #00f0ff !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055 !important;
+            
+            /* Dos animaciones corriendo a la vez para simular error eléctrico cyberpunk */
+            animation: flujoSynthwaveBotones 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
             opacity: 1 !important;
+        }
+
+        /* Efecto fantasma simulado para el Glitch eléctrico */
+        body.theme-cyberpunk .btn-salario-bottom.btn-on::after {
+            content: "SALARIO";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.1);
+            color: #00f0ff;
+            text-shadow: -2px 0 #ff0055;
+            clip-path: inset(0 0 0 0);
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+            pointer-events: none;
         }
 
         /* ============================================================

@@ -391,10 +391,9 @@
             grid-auto-rows: 15px !important;
             gap: 2px !important;
             font-size: 11px;
-            /* 🔒 ALTURA ESTABLE: Forzamos a que la lista mida EXACTAMENTE 90px siempre, esté vacía o llena */
-            height: 90px !important; 
-            min-height: 90px !important; /* Evita que colapse hacia arriba al dar CLEAR */
-            max-height: 90px !important;
+            height: 84px !important; /* Ajustamos un chispito para darle espacio al total arriba */
+            min-height: 84px !important; 
+            max-height: 84px !important;
             overflow-y: auto !important;
             text-align: left;
             padding-right: 4px;
@@ -407,13 +406,12 @@
             text-align: left !important;
             font-size: 11px; 
             line-height: 1.3;
-            /* 🔒 BLOQUEO DE POSICIÓN: Mantiene el desglose anclado en su mismo sitio original */
             display: block !important; 
             height: auto !important;
             margin-top: 4px !important;
         }
 
-        /* 🔒 UBICACIÓN FIJA COMPRAS: Hereda el color verde original de fábrica y congela el lugar */
+        /* 🔒 FILAS DEL DESGLOSE: Ubicación fija y color VERDE OPACADO por defecto cuando están deshabilitados */
         #rowPersonaCuota, #rowDesc, #rowTip, #rowIvu {
             display: block !important;
             width: 100% !important;
@@ -422,17 +420,43 @@
             margin-top: 0 !important;
             padding: 0 !important;
             
-            /* ⚡ REGRESAN LOS COLORES ORIGINALES: Cero blanco, hereda el verde neón de tu LCD */
-            color: inherit !important; 
+            /* ⚡ COLOR DESACTIVADO: Verde opaco sutil original */
+            color: rgba(0, 60, 0, 0.3) !important; 
             text-shadow: none !important;
             transform: none !important;
+            transition: color 0.15s ease !important;
+        }
+
+        /* ⚡ COLOR ACTIVADO: Cambia a NEGRO sólido al encender el botón */
+        #rowPersonaCuota.active, #rowDesc.active, #rowTip.active, #rowIvu.active {
+            color: #000000 !important;
+            text-shadow: none !important;
+        }
+
+        /* 🚀 CONTENEDOR DEL TOTAL: Despegado del piso, alineado a la izquierda con el número al lado */
+        .lcd-total-container {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: flex-start !important; /* Centraliza todo a la izquierda */
+            align-items: baseline !important;
+            gap: 6px !important; /* Espacio sutil para que el número quede pegadito al lado */
+            width: 100% !important;
+            margin-top: 6px !important;
+            padding-top: 4px !important;
+            border-top: 1px dashed #000000 !important; /* Línea entrecortada negra */
+            position: absolute !important;
+            bottom: 10px !important; /* ⚡ ¡SUBIDO! Ya no toca el borde inferior de la pantalla */
+            left: 0 !important;
+            box-sizing: border-box !important;
         }
 
         .lcd-total {
-            font-size: 26px;
+            font-size: 24px !important; /* Tamaño masivo estable */
             font-weight: 900;
             text-align: left !important;
             line-height: 1.1;
+            color: #000000 !important; /* Letras en negro sólido */
+            white-space: nowrap !important;
         }
 
         /* Indicador de scroll (flecha "▼ deslizar") */
@@ -1492,37 +1516,38 @@ body.theme-cyberpunk .btn-salario-bottom * {
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: flex; flex-direction: column; width: 100%;">
                     
+                    /* === Cambiadas las clases e inyectados los estilos en línea para el color nativo original === */
                     <!-- SERRUCHO aparece primero (Letra pequeña de show) -->
-                    <div id="rowPersonaCuota" style="opacity: 0.3; font-size: 10px !important; margin-bottom: 2px; transition: opacity 0.15s ease; font-family: monospace; font-weight: 900;">
+                    <div id="rowPersonaCuota" style="font-size: 10px !important; margin-bottom: 2px; transition: opacity 0.15s ease; font-family: monospace; font-weight: 900; color: rgba(0, 60, 0, 0.3) !important;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
 
                     <!-- Desglose con tipografía de 10px para que no compitan con el Total -->
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px;">
+                    <div id="rowDesc" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px; color: rgba(0, 60, 0, 0.3) !important;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 0.2; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px;">
+                    <div id="rowTip" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 1px; color: rgba(0, 60, 0, 0.3) !important;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 2px;">
+                    <div id="rowIvu" style="transition: opacity 0.15s ease; font-size: 10px !important; font-family: monospace; font-weight: 900; margin-bottom: 2px; color: rgba(0, 60, 0, 0.3) !important;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
-                    <!-- Fila TOTAL: Línea entrecortada negra, texto masivo y números pegaditos a la palabra -->
-                    <div style="display: flex !important; flex-direction: row !important; justify-content: flex-start !important; align-items: baseline !important; width: 100% !important; margin-top: 4px !important; border-top: 1px dashed #000000 !important; padding-top: 5px !important; position: relative !important; flex-wrap: nowrap !important; box-sizing: border-box !important; gap: 4px !important; height: 26px !important; line-height: 26px !important; overflow: visible !important;">
-                        <span style="font-family: monospace !important; font-weight: 900 !important; font-size: 18px !important; text-transform: uppercase !important; color: inherit; white-space: nowrap !important; line-height: 26px !important;">TOTAL:</span>
+                    <!-- ============================================================
+                       🚀 ¡REEMPLAZA ESTA FILA DEL TOTAL COMPLETA POR ESTA VERSIÓN!
+                       ============================================================ */
+                    <!-- Fila TOTAL: Nace oculta por defecto, despegada del piso y alineada a la izquierda con el número al lado -->
+                    <div id="contenedorTotalGeneralCompras" class="lcd-total-container" style="display: none !important;">
+                        <span class="lcd-total">TOTAL:</span>
+                        <span class="lcd-total">$<span id="outPer">0.00</span></span>
                         
-                        <!-- El número se queda amarrado firme al lado de la palabra sin alterar la altura del bloque -->
-                        <div style="font-family: monospace !important; font-weight: 900 !important; font-size: 24px !important; color: inherit; white-space: nowrap !important; display: inline-block !important; height: 26px !important; line-height: 26px !important;">
-                            $<span id="outPer" style="font-family: monospace !important; font-weight: 900 !important; white-space: nowrap !important; font-size: 24px !important; line-height: 26px !important;">0.00</span>
-                        </div>
-
                         <!-- Indicador de scroll flotando perfectamente calibrado arriba del total -->
                         <div class="scroll-hint" id="flechaGuia" style="font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; position: absolute !important; bottom: 32px !important; right: 0px !important; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase; color: #000 !important;">▼ deslizar</div>
                     </div>
                 </div>
                 <!-- ---------- Fin de modo COMPRAS ---------- -->
+
 
                 <!-- ---------- Datos de modo SALARIO ---------- -->
                 <div id="wrapperDataSalarioLcd" style="display: none; border-top: 1px solid rgba(0,240,255,0.2); padding-top: 4px; font-size: 11px; line-height: 1.3;">
@@ -2207,13 +2232,19 @@ body.theme-cyberpunk .btn-salario-bottom * {
             if (btnSalario) btnSalario.className = "btn-salario-bottom";
 
             /* ============================================================
-               🚀 ¡AQUÍ ESTÁ EL CAMBIO MAESTRO DE PRIORIDAD!
+               ¡AQUÍ ESTÁ EL CAMBIO MAESTRO DE PRIORIDAD!
                ============================================================ */
-            // 🔒 REPARACIÓN DE CLASES DEFAULT: Forzamos el estado de fábrica sin meneos en las celdas
-            if (document.getElementById('rowDesc')) document.getElementById('rowDesc').className = "row-desglose";
-            if (document.getElementById('rowTip')) document.getElementById('rowTip').className = "row-desglose";
-            if (document.getElementById('rowIvu')) document.getElementById('rowIvu').className = "row-desglose";
-            if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').className = "row-desglose";
+            // REPARACIÓN DE CLASES DEFAULT: Forzamos el estado de fábrica sin meneos en las celdas
+            const divPadreTotalReset = document.getElementById('contenedorTotalGeneralCompras');
+            if (divPadreTotalReset) {
+                divPadreTotalReset.style.setProperty('display', 'none', 'important');
+            }
+
+            // Reseteamos las clases de las filas para regresaras a verde opaco nativo de fábrica sin heredar texto viejo
+            if (document.getElementById('rowDesc')) document.getElementById('rowDesc').className = "";
+            if (document.getElementById('rowTip')) document.getElementById('rowTip').className = "";
+            if (document.getElementById('rowIvu')) document.getElementById('rowIvu').className = "";
+            if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').className = "";
 
             // Removemos los residuos de estilos manuales para que hereden puramente del CSS default
             if (document.getElementById('rowDesc')) document.getElementById('rowDesc').style.opacity = "";
@@ -2221,9 +2252,9 @@ body.theme-cyberpunk .btn-salario-bottom * {
             if (document.getElementById('rowIvu')) document.getElementById('rowIvu').style.opacity = "";
             if (document.getElementById('rowPersonaCuota')) document.getElementById('rowPersonaCuota').style.opacity = "";
 
-            // Corremos el cálculo final para sembrar el $0.00 simétrico en su sitio
+            // Corremos el cálculo final para dejar el sistema estable
             calc();
-        }
+        } // <--- Cierre de tu función ejecutarResetTotal
 
         /** Actualiza el texto de la cabecera del LCD según el estado actual */
         function actualizarHeaderIndicadores() {
@@ -2703,9 +2734,7 @@ function seleccionarMenu(f) {
 
         /**
          * Recalcula descuento, propina, IVU, total y cuota por persona
-         * a partir de los artículos guardados + el precio que está en el teclado.
-         */
-        /* 🚀 BORRA TU FUNCIÓN ANTERIOR Y PEGA ESTA COMPLETA AQUÍ: */
+         * a partir de los artículos guardados + el precio que está en el teclado.*/
         function calc() {
             if (!sistemaEncendido || modoSalarioActivo) return;
 
@@ -2740,26 +2769,26 @@ function seleccionarMenu(f) {
             document.getElementById('outTip').innerText = '$' + propinaTotal.toFixed(2);
             document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
 
+            // ⚡ CONTROL DE VISIBILIDAD DEL TOTAL GENERAL DEL LCD
+            const divPadreTotal = document.getElementById('contenedorTotalGeneralCompras');
             const elementoNumeroTotal = document.getElementById('outPer');
-            if (elementoNumeroTotal) {
-                elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
-                let textoDigitos = elementoNumeroTotal.innerText;
-                
-                if (textoDigitos.length >= 10) {
-                    elementoNumeroTotal.style.fontSize = "15px";
-                } else if (textoDigitos.length >= 7) {
-                    elementoNumeroTotal.style.fontSize = "19px";
+            
+            if (divPadreTotal && elementoNumeroTotal) {
+                // 🔒 EXCLUSIVIDAD: El total SOLO aparece si hay artículos reales guardados en el carrito
+                if (preciosGuardados.length > 0) {
+                    divPadreTotal.style.setProperty('display', 'flex', 'important');
+                    elementoNumeroTotal.innerText = totalNetoGlobal.toFixed(2);
                 } else {
-                    elementoNumeroTotal.style.fontSize = "24px"; 
+                    divPadreTotal.style.setProperty('display', 'none', 'important');
+                    elementoNumeroTotal.innerText = "0.00";
                 }
             }
 
-            // ⚡ REPARACIÓN INTERNA: Modificamos las clases CSS en vez de forzar opacidades sueltas por JS
-            // Esto evita que los textos se desalineen o cambien a tonos de grises extraños
-            document.getElementById('rowDesc').className = modoDescuentoActivo ? "row-desglose active" : "row-desglose";
-            document.getElementById('rowTip').className = (incluirPropina || modoTipActivo) ? "row-desglose active" : "row-desglose";
-            document.getElementById('rowIvu').className = modoIvuActivo ? "row-desglose active" : "row-desglose";
-            document.getElementById('rowPersonaCuota').className = modoSerruchoActivo ? "row-desglose active" : "row-desglose";
+            // ⚡ CONTROL DE COLORES: Setea las clases active para mutar entre negro sólido y verde opaco
+            document.getElementById('rowDesc').className = modoDescuentoActivo ? "active" : "";
+            document.getElementById('rowTip').className = (incluirPropina || modoTipActivo) ? "active" : "";
+            document.getElementById('rowIvu').className = modoIvuActivo ? "active" : "";
+            document.getElementById('rowPersonaCuota').className = modoSerruchoActivo ? "active" : "";
 
             if (modoSerruchoActivo) {
                 document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;

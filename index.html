@@ -402,16 +402,36 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        .lcd-historial {
+            display: grid !important;
+            grid-auto-rows: 15px !important;
+            gap: 2px !important;
+            font-size: 11px;
+            /* 🔒 ALTURA CORREGIDA: Ajustada exactamente para trancar en 3-4 renglones estables */
+            height: 52px !important; 
+            min-height: 52px !important; 
+            max-height: 52px !important;
+            overflow-y: auto !important;
+            text-align: left;
+            padding-right: 4px;
+            line-height: 15px !important;
+            box-sizing: border-box !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Contenedor del desglose: fija la ubicación exacta sin moverse un píxel hacia abajo */
         .lcd-body {
             text-align: left !important;
             font-size: 11px; 
-            line-height: 1.3;
-            display: block !important; 
+            line-height: 1.2 !important;
+            display: flex !important; 
+            flex-direction: column !important;
+            gap: 1px !important;
+            margin-top: 2px !important;
             height: auto !important;
-            margin-top: 4px !important;
         }
 
-        /* 🔒 FILAS DEL DESGLOSE: Ubicación fija y color VERDE OPACADO por defecto cuando están deshabilitados */
+        /* 🔒 FILAS DEL DESGLOSE: Ubicación fija y color VERDE OPADO nítido legible de fábrica */
         #rowPersonaCuota, #rowDesc, #rowTip, #rowIvu {
             display: block !important;
             width: 100% !important;
@@ -420,14 +440,14 @@
             margin-top: 0 !important;
             padding: 0 !important;
             
-            /* ⚡ COLOR DESACTIVADO: Verde opaco sutil original */
-            color: rgba(0, 60, 0, 0.3) !important; 
+            /* ⚡ COLOR DESACTIVADO: Verde opaco sutil original perfectamente visible */
+            color: rgba(0, 45, 0, 0.45) !important; 
             text-shadow: none !important;
             transform: none !important;
-            transition: color 0.15s ease !important;
+            transition: color 0.1s ease !important;
         }
 
-        /* ⚡ COLOR ACTIVADO: Cambia a NEGRO sólido al encender el botón */
+        /* ⚡ COLOR ACTIVADO: Cambia a NEGRO sólido e impecable al encender el botón */
         #rowPersonaCuota.active, #rowDesc.active, #rowTip.active, #rowIvu.active {
             color: #000000 !important;
             text-shadow: none !important;
@@ -441,17 +461,16 @@
             align-items: baseline !important;
             gap: 6px !important; /* Espacio sutil para que el número quede pegadito al lado */
             width: 100% !important;
-            margin-top: 6px !important;
-            padding-top: 4px !important;
+            margin-top: 5px !important;
+            padding-top: 3px !important;
             border-top: 1px dashed #000000 !important; /* Línea entrecortada negra */
-            position: absolute !important;
-            bottom: 10px !important; /* ⚡ ¡SUBIDO! Ya no toca el borde inferior de la pantalla */
-            left: 0 !important;
+            position: relative !important;
+            overflow: visible !important;
             box-sizing: border-box !important;
         }
 
         .lcd-total {
-            font-size: 24px !important; /* Tamaño masivo estable */
+            font-size: 22px !important; /* Tamaño masivo estable */
             font-weight: 900;
             text-align: left !important;
             line-height: 1.1;
@@ -465,24 +484,25 @@
             50%       { opacity: 0.2; }
         }
         .scroll-hint {
-            position: absolute;
-            bottom: 1px;
-            right: 2px;
-            font-size: 8px;
-            color: rgba(0,0,0,0.8);
+            position: absolute !important;
+            bottom: 28px !important; /* Ajustado perfectamente por encima de la línea negra */
+            right: 0px !important;
+            font-size: 10px !important;
+            color: #000000 !important;
             animation: blinkScrollHint 1s infinite ease-in-out;
             pointer-events: none;
             display: none;
-            background: rgba(146, 176, 67, 0.9);
-            padding: 0 4px;
-            border-radius: 3px;
+            background: rgba(146, 176, 67, 0.95);
+            padding: 2px 5px;
+            border-radius: 2px;
             font-weight: 900;
+            text-transform: uppercase;
+            z-index: 130;
         }
-                /* ============================================================
+
+        /* ============================================================
            EFECTO FLASH BLANCO AL PRESIONAR CUALQUIER BOTÓN
-           Feedback visual universal al tocar teclas
            ============================================================ */
-        /* A. FLASH SÓLIDO: Exclusivo para teclas numéricas y de control bajo */
         .btn-key:active,
         .btn-back:active,
         .btn-theme:active,
@@ -496,8 +516,6 @@
             transition: none !important;
         }
 
-        /* B. DESTELLO NEÓN LIMPIO: Para las cajas de menús y selectores de arriba */
-        /* Al tocarlos, brillan intensamente con su color neón sin dar el cantazo blanco */
         .caja-data:active,
         .btn-step:active,
         .btn-add-embedded:active,

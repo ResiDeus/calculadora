@@ -554,17 +554,17 @@
 
 /* === REGLA MAESTRA UNIFICADA: Mismo font y tamaño exacto para ACTIVADO y DESACTIVADO === */
 .caja-data .lbl-title {
-    font-size: 9.5px !important; /* Punto medio perfecto para que no sea ni gigante ni muy pequeño */
+    font-size: 9.5px !important; 
     font-family: monospace !important;
     font-weight: 900 !important;
     letter-spacing: 0.5px !important;
-    margin-bottom: 5px !important; /* Separación sutil y limpia para que el texto respire y no pegue con el número */
+    margin-bottom: 5px !important; 
     animation: none !important;
     text-shadow: none !important;
 }
 
 .caja-data .lbl-val {
-    font-size: 10.5px !important; /* Proporción idéntica y fija para los números de abajo en ambos estados */
+    font-size: 10.5px !important; 
     font-family: monospace !important;
     font-weight: 900 !important;
     animation: none !important;
@@ -622,7 +622,7 @@
     pointer-events: none;
 }
 
-/* === El boton de salario de abajo se queda con toda la grasa del glitch intacto === */
+/* === El boton de salario de abajo con toda la grasa del glitch global (Aplica a TODOS los temas) === */
 .btn-salario-bottom.btn-on {
     background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
     background-size: 200% auto !important;
@@ -635,8 +635,8 @@
     opacity: 1 !important;
 }
 
-/* === La sombra doble electrizante para el efecto de distorsion del boton de abajo === */
-body .btn-salario-bottom.btn-on::after {
+/* === La sombra doble electrizante global sin importar el tema seleccionado === */
+.btn-salario-bottom.btn-on::after {
     content: "SALARIO";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;

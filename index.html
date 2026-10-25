@@ -547,6 +547,11 @@
     50%      { opacity: 0.1; }
 }
 
+/* === Modificacion global para las cajas de arriba: forzamos mayusculas fijas desde el saque === */
+.caja-data, .caja-data * {
+    text-transform: uppercase !important;
+}
+
 /* === Estado de los botones de arriba cuando estan encendidos con el violeta galactico === */
 .caja-data.btn-on {
     background: linear-gradient(45deg, #2a0845, #6441a5, #2a0845) !important;
@@ -558,13 +563,20 @@
     box-shadow: 0 0 16px var(--neon-secondary), inset 0 0 6px var(--neon-secondary) !important;
 }
 
-/* === Se mantienden los textos de arriba quietos con su letra original de maquina de show === */
-.caja-data.btn-on * {
-    position: relative;
-    z-index: 5;
+/* === Ajuste para que las letras se vean un poquitito mas pequeñas cuando estan activas === */
+.caja-data.btn-on .lbl-title {
+    font-size: 9px !important; /* Bajamos un chispito de 10px a 9px para que respire mejor */
     font-family: monospace !important;
     font-weight: 900 !important;
-    text-transform: uppercase !important;
+    color: #ffffff !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
+
+.caja-data.btn-on .lbl-val {
+    font-size: 10px !important; /* Bajamos un chispito de 11px a 10px para mantener la proporcion */
+    font-family: monospace !important;
+    font-weight: 900 !important;
     color: #ffffff !important;
     animation: none !important;
     text-shadow: none !important;

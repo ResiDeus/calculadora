@@ -791,34 +791,47 @@ body .btn-salario-bottom.btn-on::after {
         }
 
         /* Base estructural y estética calada: Outline Gris Brillante y Fondo Oscuro Translúcido */
-        body.theme-cyberpunk .btn-theme, 
-        body.theme-cyberpunk .btn-receipt, 
-        body.theme-cyberpunk .btn-clear-master, 
-        body.theme-cyberpunk .btn-salario-bottom {
-            border-radius: 10px !important;
-            font-weight: 900 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            text-transform: uppercase !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-family: monospace !important;
-            height: 38px !important;       
-            font-size: 11px !important;    
-            width: 100% !important;
-            z-index: 15 !important;
-            box-sizing: border-box !important;
-            
-            /* Color Gris Synthwave / Industrial calado */
-            background: rgba(20, 20, 25, 0.4) !important; 
-            border: 2px solid #8e8e93 !important; /* Outline en gris brillante sólido */
-            
-            /* Texto y sombras en perfecta armonía gris neón */
-            color: #d1d1d6 !important;
-            text-shadow: 0 0 4px rgba(142, 142, 147, 0.5) !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.15) !important;
-        }
+body.theme-cyberpunk .btn-theme, 
+body.theme-cyberpunk .btn-receipt, 
+body.theme-cyberpunk .btn-clear-master, 
+body.theme-cyberpunk .btn-salario-bottom {
+    border-radius: 10px !important;
+    font-weight: 900 !important; 
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-family: monospace !important;
+    height: 38px !important;       
+    font-size: 11px !important;    
+    width: 100% !important;
+    z-index: 15 !important;
+    box-sizing: border-box !important;
+    
+    /* Bajamos la opacidad para que el fluido gris claro sea mas sutil y transparente */
+    background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
+    background-size: 200% auto !important;
+    animation: activeMenuMove 3s infinite linear !important;
+    
+    /* Outline en gris brillante solido de fabrica */
+    border: 2px solid #8e8e93 !important; 
+    
+    /* Texto en blanco solido mate limpio y sin nada de efectos glow */
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
+}
+
+/* Forzamos que las letras internas de estos botones se queden en blanco mate sin sombras */
+body.theme-cyberpunk .btn-theme *, 
+body.theme-cyberpunk .btn-receipt *, 
+body.theme-cyberpunk .btn-clear-master *, 
+body.theme-cyberpunk .btn-salario-bottom * {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
 
         /* El feedback táctil de Flash Blanco */
         body.theme-cyberpunk .btn-theme:active, 
@@ -1307,8 +1320,7 @@ body .btn-salario-bottom.btn-on::after {
                         <span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>
                     </div>
 
-                    <!-- Indicador de scroll cuando hay muchos artículos -->
-                    <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 30px; right: 2px; font-size: 8px; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 1px 4px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1;">▼ deslizar</div>
+                  <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 35px !important; right: 4px; font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase;">▼ deslizar</div>
 
                     <!-- ====================================================
                          SUBPANTALLA DE SALARIO (solo visible en modo salario)

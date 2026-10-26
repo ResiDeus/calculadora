@@ -319,16 +319,17 @@
             color: #ff6b6b !important;
         }
         
-        /* Tabs conversión — rojos, no azules */
+        /* Tabs conversión — más grandes y fáciles de tocar */
         .tab-conv {
             flex: 1;
-            background: rgba(255, 80, 80, 0.15) !important;
-            border: 1px solid rgba(255, 120, 120, 0.45) !important;
-            color: #ffb4b4 !important;
-            font-size: 8px !important;
+            background: rgba(255, 80, 80, 0.18) !important;
+            border: 1px solid rgba(255, 140, 140, 0.5) !important;
+            color: #ffc9c9 !important;
+            font-size: 10px !important;
             font-weight: 900 !important;
-            padding: 3px 2px !important;
-            border-radius: 4px !important;
+            padding: 6px 2px !important;
+            min-height: 26px !important;
+            border-radius: 5px !important;
             cursor: pointer;
             font-family: monospace;
             text-align: center;
@@ -336,8 +337,42 @@
         .tab-conv.active {
             background: #ff3b30 !important;
             color: #1a0505 !important;
-            border-color: #fff !important;
-            box-shadow: 0 0 8px rgba(255, 59, 48, 0.6) !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(255, 59, 48, 0.65) !important;
+        }
+        
+        /* Botones de unidad (kg) (lb) — independientes */
+        .btn-unidad-conv {
+            min-width: 72px;
+            padding: 8px 10px;
+            font-size: 14px;
+            font-weight: 900;
+            font-family: monospace;
+            border-radius: 8px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.35);
+            border: 2px solid #ff6b6b;
+            color: #ffffff;
+            text-transform: none;
+        }
+        .btn-unidad-conv:active {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border-color: #ffffff !important;
+        }
+        
+        /* Botón CONV. encendido (mismo vibe que salario, en rojo) */
+        body .btn-conv.btn-on {
+            position: relative !important;
+            overflow: hidden !important;
+            background: linear-gradient(90deg, #ff3b30, #ff6b6b, #ff3b30) !important;
+            background-size: 200% auto !important;
+            border: 2px solid #ffffff !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #ff3b30 !important;
+            box-shadow: 0 0 16px rgba(255, 59, 48, 0.7) !important;
+            animation: activeMenuMove 1.5s infinite linear !important;
+            opacity: 1 !important;
         }
         
         /* En pantalla roja no se ve lista vacía ni lista de compras */
@@ -1403,20 +1438,33 @@
                             </div>
                         </div>
                     </div><!-- fin subpantalla salario -->
-                            <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                            <div id="vistaConversion" style="display:none; flex-direction:column; gap:3px; width:96%; font-family:monospace; font-size:10px; position:absolute; top:0; left:4px; right:4px; z-index:96; height:85px; box-sizing:border-box;">
-                                <div style="display:flex; gap:2px; width:100%; margin-top:0;">
-                                    <button type="button" class="tab-conv active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
-                                    <button type="button" class="tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
-                                    <button type="button" class="tab-conv" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
-                                    <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
-                                    <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
-                                </div>
-                                <div style="font-weight:900; font-size:11px; color:#ffb4b4; cursor:pointer;" id="lblConvNombre" onclick="cambiarConversion(1)">kg → lb</div>
-                                <div style="font-size:9px; opacity:0.85; color:#ff9999;" id="lblConvFormula">× 2.2046 · toca nombre o ▲▼</div>
-                                <div style="font-size:15px; font-weight:900; color:#fff; margin-top:1px;" id="lblConvResultado">= 0.00 lb</div>
-                            </div>
-                            <!-- fin subpantalla conversión -->
+                    <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
+                    <div id="vistaConversion" style="display:none; flex-direction:column; justify-content:space-between; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; bottom:2px; z-index:96; box-sizing:border-box; padding:2px 0;">
+
+                        <!-- Tabs de categoría: más arriba y más grandes -->
+                        <div style="display:flex; gap:3px; width:100%; flex-shrink:0;">
+                            <button type="button" class="tab-conv active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
+                            <button type="button" class="tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
+                            <button type="button" class="tab-conv" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
+                            <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
+                            <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
+                        </div>
+
+                        <!-- Dos botones de unidad: izquierda y derecha independientes -->
+                        <div style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:6px; flex-shrink:0;">
+                            <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
+                            <span style="font-size:14px; font-weight:900; color:#ffb4b4;">→</span>
+                            <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
+                        </div>
+
+                        <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ff9999; opacity:0.9; margin-top:2px; flex-shrink:0;">toca cada unidad pa' cambiarla</div>
+
+                        <!-- Resultado grande abajo -->
+                        <div id="lblConvResultado" style="margin-top:auto; padding-top:8px; text-align:center; font-size:22px; font-weight:900; color:#ffffff; line-height:1.1; border-top:1px solid rgba(255,100,100,0.35);">
+                            = 0.00 lb
+                        </div>
+                    </div>
+                    <!-- fin subpantalla conversión -->
                 </div><!-- fin listaPrecios-container -->
             </div><!-- fin lcd-wrapper -->
 
@@ -1649,38 +1697,43 @@
         // --- Modo conversión ---
         let modoConversionActivo = false;
         let catConversion = 'peso';
-        let idxConversion = 0;
+        let idxUnidadIzq = 0;   // índice unidad izquierda
+        let idxUnidadDer = 1;   // índice unidad derecha (distinta por defecto)
         let sConv = "0";
 
-        const CONVERSIONES = {
+        // Cada categoría: lista de unidades con toBase / fromBase
+        // Base: peso=kg, cocina=ml, largo=m, temp=°C, data=byte
+        const UNIDADES_CONV = {
             peso: [
-                { id: 'kg_lb', nombre: 'kg → lb',  formula: '× 2.2046', fn: v => v * 2.2046, unidad: 'lb' },
-                { id: 'lb_kg', nombre: 'lb → kg',  formula: '× 0.4536', fn: v => v * 0.4536, unidad: 'kg' },
-                { id: 'g_oz',  nombre: 'g → oz',   formula: '× 0.0352', fn: v => v * 0.0352, unidad: 'oz' },
-                { id: 'oz_g',  nombre: 'oz → g',   formula: '× 28.35',  fn: v => v * 28.35,  unidad: 'g'  }
+                { id: 'kg', label: 'kg', toBase: v => v,              fromBase: v => v },
+                { id: 'lb', label: 'lb', toBase: v => v * 0.4536,     fromBase: v => v / 0.4536 },
+                { id: 'g',  label: 'g',  toBase: v => v * 0.001,      fromBase: v => v / 0.001 },
+                { id: 'oz', label: 'oz', toBase: v => v * 0.02835,    fromBase: v => v / 0.02835 }
             ],
             cocina: [
-                { id: 'cup_ml',   nombre: 'cup → ml',   formula: '× 240',   fn: v => v * 240,   unidad: 'ml' },
-                { id: 'tbsp_ml',  nombre: 'tbsp → ml',  formula: '× 15',    fn: v => v * 15,    unidad: 'ml' },
-                { id: 'tsp_ml',   nombre: 'tsp → ml',   formula: '× 5',     fn: v => v * 5,     unidad: 'ml' },
-                { id: 'floz_ml',  nombre: 'fl oz → ml', formula: '× 29.57', fn: v => v * 29.57, unidad: 'ml' },
-                { id: 'cup_tbsp', nombre: 'cup → tbsp', formula: '× 16',    fn: v => v * 16,    unidad: 'tbsp' },
-                { id: 'tbsp_tsp', nombre: 'tbsp → tsp', formula: '× 3',     fn: v => v * 3,     unidad: 'tsp' }
+                { id: 'cup',  label: 'cup',  toBase: v => v * 240,    fromBase: v => v / 240 },
+                { id: 'tbsp', label: 'tbsp', toBase: v => v * 15,     fromBase: v => v / 15 },
+                { id: 'tsp',  label: 'tsp',  toBase: v => v * 5,      fromBase: v => v / 5 },
+                { id: 'floz', label: 'fl oz',toBase: v => v * 29.57,  fromBase: v => v / 29.57 },
+                { id: 'ml',   label: 'ml',   toBase: v => v,          fromBase: v => v }
             ],
             largo: [
-                { id: 'm_ft',  nombre: 'm → ft',  formula: '× 3.2808', fn: v => v * 3.2808, unidad: 'ft' },
-                { id: 'in_cm', nombre: 'in → cm', formula: '× 2.54',   fn: v => v * 2.54,   unidad: 'cm' },
-                { id: 'km_mi', nombre: 'km → mi', formula: '× 0.6213', fn: v => v * 0.6213, unidad: 'mi' }
+                { id: 'm',  label: 'm',  toBase: v => v,              fromBase: v => v },
+                { id: 'ft', label: 'ft', toBase: v => v / 3.2808,     fromBase: v => v * 3.2808 },
+                { id: 'in', label: 'in', toBase: v => v * 0.0254,     fromBase: v => v / 0.0254 },
+                { id: 'cm', label: 'cm', toBase: v => v * 0.01,       fromBase: v => v / 0.01 },
+                { id: 'km', label: 'km', toBase: v => v * 1000,       fromBase: v => v / 1000 },
+                { id: 'mi', label: 'mi', toBase: v => v * 1609.34,    fromBase: v => v / 1609.34 }
             ],
             temp: [
-                { id: 'c_f', nombre: '°C → °F', formula: '×1.8 + 32', fn: v => v * 1.8 + 32, unidad: '°F' },
-                { id: 'f_c', nombre: '°F → °C', formula: '(−32)/1.8', fn: v => (v - 32) / 1.8, unidad: '°C' }
+                { id: 'c', label: '°C', toBase: v => v,                         fromBase: v => v },
+                { id: 'f', label: '°F', toBase: v => (v - 32) / 1.8,             fromBase: v => v * 1.8 + 32 }
             ],
             data: [
-                { id: 'gb_mb', nombre: 'GB → MB', formula: '× 1024', fn: v => v * 1024, unidad: 'MB' },
-                { id: 'mb_gb', nombre: 'MB → GB', formula: '÷ 1024', fn: v => v / 1024, unidad: 'GB' },
-                { id: 'b_kb',  nombre: 'B → KB',  formula: '÷ 1024', fn: v => v / 1024, unidad: 'KB' },
-                { id: 'kb_b',  nombre: 'KB → B',  formula: '× 1024', fn: v => v * 1024, unidad: 'B'  }
+                { id: 'b',  label: 'B',  toBase: v => v,              fromBase: v => v },
+                { id: 'kb', label: 'KB', toBase: v => v * 1024,       fromBase: v => v / 1024 },
+                { id: 'mb', label: 'MB', toBase: v => v * 1024 * 1024, fromBase: v => v / (1024 * 1024) },
+                { id: 'gb', label: 'GB', toBase: v => v * 1024 * 1024 * 1024, fromBase: v => v / (1024 * 1024 * 1024) }
             ]
         };
               
@@ -1826,7 +1879,8 @@
             if (!sistemaEncendido) return;
 
             if (modoConversionActivo) {
-                cambiarConversion(delta > 0 ? 1 : -1);
+                // ▲▼ cambian la unidad de la derecha (atajo)
+                rotarUnidadConv('der');
                 return;
             }
 
@@ -2183,6 +2237,11 @@
 
             // ---------- MODO SALARIO (toggle) ----------
             if (f === 'sal') {
+                // Si la pantalla roja está abierta, apágala antes de entrar a salario
+                if (modoConversionActivo) {
+                    apagarModoConversion();
+                }
+
                 modoSalarioActivo = !modoSalarioActivo;
                 const contenedorPadreLcd = document.querySelector('.listaPrecios-container');
 
@@ -2477,18 +2536,36 @@
            ============================================================ */
 
         /** Devuelve la conversión activa de la categoría actual */
-        function convActual() {
-            const lista = CONVERSIONES[catConversion] || CONVERSIONES.peso;
-            if (idxConversion >= lista.length) idxConversion = 0;
-            if (idxConversion < 0) idxConversion = 0;
-            return lista[idxConversion];
+        function listaUnidadesCat() {
+            return UNIDADES_CONV[catConversion] || UNIDADES_CONV.peso;
         }
 
-        /** Cambia de categoría (PESO / COCINA / LARGO / TEMP / DATA) */
+        /** Rota solo la unidad izquierda o solo la derecha */
+        function rotarUnidadConv(lado) {
+            if (!modoConversionActivo) return;
+            const lista = listaUnidadesCat();
+            if (lado === 'izq') {
+                idxUnidadIzq = (idxUnidadIzq + 1) % lista.length;
+            } else {
+                idxUnidadDer = (idxUnidadDer + 1) % lista.length;
+            }
+            // Si quedaron iguales, avanza la que acabas de tocar una vez más
+            if (idxUnidadIzq === idxUnidadDer) {
+                if (lado === 'izq') idxUnidadIzq = (idxUnidadIzq + 1) % lista.length;
+                else idxUnidadDer = (idxUnidadDer + 1) % lista.length;
+            }
+            actualizarPantallaConversion();
+            reproducirSonido('paso');
+        }
+
         function setCatConversion(cat) {
             if (!modoConversionActivo) return;
             catConversion = cat;
-            idxConversion = 0;
+            idxUnidadIzq = 0;
+            idxUnidadDer = Math.min(1, (UNIDADES_CONV[cat] || []).length - 1);
+            if (idxUnidadDer === idxUnidadIzq && listaUnidadesCat().length > 1) {
+                idxUnidadDer = 1;
+            }
             document.querySelectorAll('.tab-conv').forEach(t => {
                 t.classList.toggle('active', t.dataset.cat === cat);
             });
@@ -2496,51 +2573,102 @@
             reproducirSonido('menu');
         }
 
-        /** Cambia de fórmula dentro de la categoría (con las flechas ▲ ▼) */
-        function cambiarConversion(delta) {
-            if (!modoConversionActivo) return;
-            const lista = CONVERSIONES[catConversion] || CONVERSIONES.peso;
-            idxConversion = (idxConversion + delta + lista.length) % lista.length;
-            actualizarPantallaConversion();
-            reproducirSonido('paso');
-        }
-
-        /** Refresca nombre, fórmula y resultado en el LCD rojo */
         function actualizarPantallaConversion() {
-            const c = convActual();
+            const lista = listaUnidadesCat();
+            const uIzq = lista[idxUnidadIzq] || lista[0];
+            const uDer = lista[idxUnidadDer] || lista[1] || lista[0];
             const val = parseFloat(sConv) || 0;
-            const res = c.fn(val);
 
-            const lblNombre = document.getElementById('lblConvNombre');
+            // valor → base → unidad derecha
+            const enBase = uIzq.toBase(val);
+            const res = uDer.fromBase(enBase);
+
+            const btnIzq = document.getElementById('btnConvIzq');
+            const btnDer = document.getElementById('btnConvDer');
             const lblFormula = document.getElementById('lblConvFormula');
             const lblResultado = document.getElementById('lblConvResultado');
             const lblSub = document.getElementById('lblSub');
             const header = document.getElementById('txtHeaderIndicadores');
 
-            if (lblNombre) lblNombre.innerText = c.nombre;
-            if (lblFormula) lblFormula.innerText = c.formula;
+            if (btnIzq) btnIzq.innerText = uIzq.label;
+            if (btnDer) btnDer.innerText = uDer.label;
+            if (lblFormula) lblFormula.innerText = uIzq.label + ' → ' + uDer.label + ' · toca cada botón';
             if (lblResultado) {
-                const textoRes = (Math.abs(res) >= 1000) ? res.toFixed(2) : res.toFixed(4);
-                lblResultado.innerText = '= ' + textoRes + ' ' + c.unidad;
+                let textoRes;
+                if (catConversion === 'temp') textoRes = res.toFixed(2);
+                else if (Math.abs(res) >= 1000) textoRes = res.toFixed(2);
+                else if (Math.abs(res) < 0.0001 && res !== 0) textoRes = res.toExponential(2);
+                else textoRes = res.toFixed(4);
+                lblResultado.innerText = '= ' + textoRes + ' ' + uDer.label;
             }
             if (lblSub) lblSub.innerText = sConv;
             if (header) header.innerText = 'MODO: CONVERSIÓN';
         }
 
-        /**
-         * Prende / apaga el modo conversión.
-         * LCD rojo al entrar; al salir vuelve a la pantalla verde de compras.
-         */
+        /** Apaga conversión sin tocar salario (uso interno) */
+        function apagarModoConversion() {
+            if (!modoConversionActivo) return;
+            modoConversionActivo = false;
+            const lcd = document.getElementById('pantallaVerde');
+            const vistaConv = document.getElementById('vistaConversion');
+            const lista = document.getElementById('listaPrecios');
+            const wrapCompras = document.getElementById('wrapperDataComprasLcd');
+            const btnConv = document.getElementById('btnConv');
+            const tituloPrecio = document.querySelector('#cajaSub .lbl-title');
+            const signo = document.getElementById('signoDinero');
+
+            if (lcd) lcd.classList.remove('modo-conversion-activo');
+            if (vistaConv) vistaConv.style.display = 'none';
+            if (lista) lista.style.display = 'block';
+            if (wrapCompras) wrapCompras.style.display = 'block';
+            if (btnConv) btnConv.classList.remove('btn-on');
+            if (tituloPrecio) tituloPrecio.innerText = 'Precio';
+            if (signo) signo.style.display = '';
+
+            if (lista) {
+                if (preciosGuardados.length === 0) {
+                    lista.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+                } else if (typeof pintarListaCompras === 'function') {
+                    pintarListaCompras(lista);
+                }
+            }
+            mode = 'sub';
+            if (document.getElementById('lblSub')) {
+                document.getElementById('lblSub').innerText = sSub;
+            }
+        }
+
         function toggleModoConversion() {
             if (!sistemaEncendido) return;
 
-            // Si estás en salario, sal primero
-            if (modoSalarioActivo) {
-                seleccionarMenu('sal');
+            // Si vas a entrar a CONV y el salario está on → apagar salario primero
+            if (!modoConversionActivo && modoSalarioActivo) {
+                modoSalarioActivo = false;
+                const lcd = document.getElementById('pantallaVerde');
+                const bloqueSubPantallaSalario = document.getElementById('vistaSubPantallaSalario');
+                const wrapperSalario = document.getElementById('wrapperDataSalarioLcd');
+                const bloqueListaCompras = document.getElementById('listaPrecios');
+                const wrapperCompras = document.getElementById('wrapperDataComprasLcd');
+                if (lcd) lcd.classList.remove('modo-salario-activo');
+                if (bloqueSubPantallaSalario) bloqueSubPantallaSalario.style.display = 'none';
+                if (wrapperSalario) wrapperSalario.style.display = 'none';
+                if (bloqueListaCompras) bloqueListaCompras.style.display = 'block';
+                if (wrapperCompras) wrapperCompras.style.display = 'block';
+                const btnSal = document.getElementById('btnModoSalario');
+                if (btnSal) btnSal.className = 'btn-salario-bottom';
             }
 
-            modoConversionActivo = !modoConversionActivo;
+            // Si ya está en CONV → apagar y volver a compras
+            if (modoConversionActivo) {
+                apagarModoConversion();
+                actualizarHeaderIndicadores();
+                calc();
+                reproducirSonido('menu');
+                return;
+            }
 
+            // Entrar a CONV
+            modoConversionActivo = true;
             const lcd = document.getElementById('pantallaVerde');
             const vistaConv = document.getElementById('vistaConversion');
             const lista = document.getElementById('listaPrecios');
@@ -2549,67 +2677,33 @@
             const vistaSal = document.getElementById('vistaSubPantallaSalario');
             const btnConv = document.getElementById('btnConv');
             const tituloPrecio = document.querySelector('#cajaSub .lbl-title');
+            const signo = document.getElementById('signoDinero');
+            const lblArt = document.getElementById('lblArtText');
 
-            if (modoConversionActivo) {
-                // Entrar a conversión
-                if (lcd) {
-                    lcd.classList.add('modo-conversion-activo');
-                    lcd.classList.remove('modo-salario-activo');
-                }
-                if (vistaConv) vistaConv.style.display = 'flex';
-                if (lista) lista.style.display = 'none';
-                if (wrapCompras) wrapCompras.style.display = 'none';
-                if (wrapSal) wrapSal.style.display = 'none';
-                if (vistaSal) vistaSal.style.display = 'none';
-                if (btnConv) btnConv.classList.add('btn-on');
-                if (tituloPrecio) tituloPrecio.innerText = 'Valor';
-
-                // Quitar $ y esconder "Lista vacía"
-                const signo = document.getElementById('signoDinero');
-                if (signo) signo.style.display = 'none';
-                const lblArt = document.getElementById('lblArtText');
-                if (lblArt) lblArt.style.display = 'none';
-
-                // Empieza con 0 o con lo que hubiera en el teclado
-                sConv = (sSub && sSub !== '0') ? sSub : '0';
-                mode = 'conv';
-                catConversion = 'peso';
-                idxConversion = 0;
-
-                document.querySelectorAll('.tab-conv').forEach(t => {
-                    t.classList.toggle('active', t.dataset.cat === 'peso');
-                });
-
-                actualizarPantallaConversion();
-            } else {
-                if (lcd) lcd.classList.remove('modo-conversion-activo');
-                if (vistaConv) vistaConv.style.display = 'none';
-                if (lista) lista.style.display = 'block';
-                if (wrapCompras) wrapCompras.style.display = 'block';
-                if (btnConv) btnConv.classList.remove('btn-on');
-                if (tituloPrecio) tituloPrecio.innerText = 'Precio';
-
-                // Devolver el $
-                const signo = document.getElementById('signoDinero');
-                if (signo) signo.style.display = '';
-
-                // Restaurar lista o "Lista vacía"
-                if (lista) {
-                    if (preciosGuardados.length === 0) {
-                        lista.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
-                    } else if (typeof pintarListaCompras === 'function') {
-                        pintarListaCompras(lista);
-                    }
-                }
-
-                mode = 'sub';
-                if (document.getElementById('lblSub')) {
-                    document.getElementById('lblSub').innerText = sSub;
-                }
-                actualizarHeaderIndicadores();
-                calc();
-                reproducirSonido('menu');
+            if (lcd) {
+                lcd.classList.add('modo-conversion-activo');
+                lcd.classList.remove('modo-salario-activo');
             }
+            if (vistaConv) vistaConv.style.display = 'flex';
+            if (lista) lista.style.display = 'none';
+            if (wrapCompras) wrapCompras.style.display = 'none';
+            if (wrapSal) wrapSal.style.display = 'none';
+            if (vistaSal) vistaSal.style.display = 'none';
+            if (btnConv) btnConv.classList.add('btn-on');
+            if (tituloPrecio) tituloPrecio.innerText = 'Valor';
+            if (signo) signo.style.display = 'none';
+            if (lblArt) lblArt.style.display = 'none';
+
+            sConv = (sSub && sSub !== '0') ? sSub : '0';
+            mode = 'conv';
+            catConversion = 'peso';
+            idxUnidadIzq = 0;
+            idxUnidadDer = 1;
+            document.querySelectorAll('.tab-conv').forEach(t => {
+                t.classList.toggle('active', t.dataset.cat === 'peso');
+            });
+            actualizarPantallaConversion();
+            reproducirSonido('menu');
         }
         
         /* ============================================================

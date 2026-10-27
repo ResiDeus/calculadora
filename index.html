@@ -398,12 +398,12 @@
         }
         .btn-menu-item {
             width: 100%;
-            padding: 4px 4px !important;
+            padding: 3px 4px !important;
             margin-bottom: 0 !important;
-            min-height: 24px !important;
+            min-height: 22px !important;
             font-family: monospace;
             font-weight: 900;
-            font-size: 11px !important;
+            font-size: 10px !important;
             border-radius: 6px;
             cursor: pointer;
             background: rgba(124, 58, 237, 0.25);
@@ -846,7 +846,7 @@
             box-shadow: 0 0 14px var(--neon-secondary);
         }
 
-        /* Botón "+" pa' meter el precio a la lista */
+        /* Botón "añadir" pa' meter el precio a la lista */
         .btn-add-embedded {
             width: 55px;
             height: 44px;
@@ -859,9 +859,10 @@
             border: 2px solid #fff;
             border-radius: 6px;
             color: #ffffff !important;
-            font-size: 28px !important;
+            font-size: 9px !important;
             font-weight: 900 !important;
-            line-height: 1 !important;
+            line-height: 1.05 !important;
+            text-align: center !important;
             cursor: pointer;
             display: flex !important;
             justify-content: center !important;
@@ -1051,8 +1052,8 @@
         .btn-key, .btn-back {
             height: 38px;
             border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.45rem;
+            font-weight: 900;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -1364,6 +1365,32 @@
             color: inherit;
         }
 
+
+        /* CSS Extra */
+        .lcd.modo-conversion-activo .lcd-wrapper {
+            max-height: 160px !important;
+            overflow: visible !important;
+        }
+        .lcd.modo-conversion-activo .listaPrecios-container {
+            max-height: 160px !important;
+            overflow: visible !important;
+        }
+        .lcd.modo-menu-activo .lcd-wrapper,
+        .lcd.modo-menu-activo .listaPrecios-container {
+            max-height: 160px !important;
+            overflow: visible !important;
+        }
+        .tab-conv {
+            min-height: 18px !important;
+            padding: 2px 1px !important;
+            font-size: 7px !important;
+        }
+        .tab-conv-lg {
+            font-size: 9px !important;
+            padding: 3px 1px !important;
+            min-height: 20px !important;
+        }
+
         /* ============================================================
            GLITCH / FLASH SUTIL EN EL LCD AL TOCAR TECLAS
            ============================================================ */
@@ -1514,7 +1541,7 @@
                         </div>
                     </div><!-- fin subpantalla salario -->
                     <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                                        <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; font-family:monospace; position:absolute; top:0; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:0; overflow:hidden; max-height:100%; justify-content:flex-start;">
+                        <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; font-family:monospace; position:absolute; top:-2px; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:0; overflow:visible; max-height:none; justify-content:flex-start;">
                         
                         <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px; width:100%; margin-bottom:1px;">
                             <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
@@ -1523,7 +1550,7 @@
                             <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
+                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:1px;">
                             <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
                             <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
                             <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
@@ -1532,7 +1559,7 @@
                             <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:4px;">
+                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:1px;">
                             <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
                             <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
                             <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
@@ -1541,24 +1568,23 @@
                             <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
                         </div>
 
-                        <div style="display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:2px;">
+                        <div style="display:flex; align-items:center; justify-content:center; gap:4px; margin-bottom:1px;">
                             <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
-                            <span style="font-size:12px; font-weight:900; color:#ffb4b4;">→</span>
+                            <span style="font-size:11px; font-weight:900; color:#ffb4b4;">→</span>
                             <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
                             <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()">⇄</button>
                         </div>
 
-                        <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ffcccc; margin-bottom:2px;">Kilogramo → Libra</div>
+                        <div id="lblConvFormula" style="text-align:center; font-size:8px; color:#ffcccc; margin-bottom:0; line-height:1;">Kilogramo → Libra</div>
 
-                        <div id="lblConvResultado" style="text-align:center; font-size:16px; font-weight:900; color:#fff; line-height:1.05; margin-top:1px;">
+                        <div id="lblConvResultado" style="text-align:center; font-size:15px; font-weight:900; color:#fff; line-height:1.05; margin-top:0;">
                             = 0.00 lb
                         </div>
                     </div>
                     <!-- fin subpantalla conversión -->
 
                     <!-- ========== SUBPANTALLA MENU (violeta) ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:3px; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; z-index:96; box-sizing:border-box; overflow:hidden; justify-content:flex-start; padding-top:2px; max-height:100%;">
-                        <div id="lblMenuTitulo" style="font-size:11px; font-weight:900; text-align:center; color:#e9d5ff; margin-bottom:1px;">MENÚ</div>
+                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:2px; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; z-index:96; box-sizing:border-box; overflow:visible; justify-content:flex-start; padding-top:0; max-height:none;">
                         <button type="button" class="btn-menu-item" id="btnMenuCompras" onclick="desdeMenuAbrirCompras()">COMPRAS</button>
                         <button type="button" class="btn-menu-item" id="btnMenuSalario" onclick="desdeMenuAbrirSalario()">SALARIO</button>
                         <button type="button" class="btn-menu-item" id="btnMenuConv" onclick="desdeMenuAbrirConversion()">CONVERSIÓN</button>
@@ -1579,18 +1605,18 @@
                 <!-- ---------- Datos de modo COMPRAS ---------- -->
                 <div id="wrapperDataComprasLcd" style="position: relative; overflow: visible; display: block; flex-direction: column; width: 100%; font-size: 16px;">
                     
-                    <div id="rowPersonaCuota" style="opacity: 0.3; margin-bottom: 3px; transition: opacity 0.15s; font-family: monospace; font-weight: 900; font-size: 12px !important; line-height: 1.25;">
+                    <div id="rowPersonaCuota" style="opacity: 1; color: #000; margin-bottom: 3px; transition: opacity 0.15s; font-family: monospace; font-weight: 900; font-size: 12px !important; line-height: 1.25;">
                         <span id="txtSerruchoLabelType">SERRUCHO (C/U): N/A</span>
                         <span id="outPerPersonaLine"></span>
                     </div>
                 
-                    <div id="rowDesc" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                    <div id="rowDesc" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
                         DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                    <div id="rowTip" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
                         PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 0.3; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                    <div id="rowIvu" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
                         IVU: <span id="outIvu">$0.00</span>
                     </div>
 
@@ -1635,9 +1661,9 @@
             </div>
 
             <!-- Botón de añadir pa' meter el precio a la lista de artículos -->
-            <button id="btnAnadirGlobal" class="btn-add-embedded"
-    style="width: 48px; min-height: 44px; height: 44px; padding: 0; margin: 0; font-size: 28px; font-weight: 900; line-height: 1; display: flex; align-items: center; justify-content: center; text-align: center;"
-    onclick="addProducto()">+</button>
+                        <button id="btnAnadirGlobal" class="btn-add-embedded"
+    style="width: 48px; min-height: 44px; height: 44px; padding: 0; margin: 0; font-size: 9px; font-weight: 900; line-height: 1.05; display: flex; align-items: center; justify-content: center; text-align: center;"
+    onclick="addProducto()">AÑADIR</button>
         </div>
 
         <!-- ============================================================
@@ -1944,7 +1970,7 @@
         }
 
         // modo principal
-                    function desdeMenuAbrirCompras() {
+                function desdeMenuAbrirCompras() {
             modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
@@ -1961,7 +1987,7 @@
                 apagarModoConversion();
             }
             if (modoSalarioActivo) {
-                seleccionarMenu('sal'); // apaga salario
+                seleccionarMenu('sal');
             }
 
             var lista = document.getElementById('listaPrecios');
@@ -2481,7 +2507,7 @@
                 return;
             }
 
-            // Conversión → solo limpia el número
+            // Conversión → salir a modo compras (pantalla verde)
             if (modoConversionActivo) {
                 if (typeof apagarModoConversion === 'function') {
                     apagarModoConversion();
@@ -3345,18 +3371,23 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
     document.getElementById('outIvu').innerText = '$' + impuestoTotal.toFixed(2);
     document.getElementById('outPer').innerText = totalNetoGlobal.toFixed(2);
 
-    document.getElementById('rowDesc').style.opacity = modoDescuentoActivo ? "1" : "0.3";
-    document.getElementById('rowTip').style.opacity = incluirPropina ? "1" : "0.3";
-    document.getElementById('rowIvu').style.opacity = modoIvuActivo ? "1" : "0.3";
+    document.getElementById('rowDesc').style.opacity = "1";
+    document.getElementById('rowDesc').style.color = "#000";
+    document.getElementById('rowTip').style.opacity = "1";
+    document.getElementById('rowTip').style.color = "#000";
+    document.getElementById('rowIvu').style.opacity = "1";
+    document.getElementById('rowIvu').style.color = "#000";
 
     if (modoSerruchoActivo) {
         document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
         document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
         document.getElementById('rowPersonaCuota').style.opacity = "1";
+        document.getElementById('rowPersonaCuota').style.color = "#000";
     } else {
         document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
         document.getElementById('outPerPersonaLine').innerText = ``;
-        document.getElementById('rowPersonaCuota').style.opacity = "0.3";
+        document.getElementById('rowPersonaCuota').style.opacity = "1";
+        document.getElementById('rowPersonaCuota').style.color = "#000";
     }
 
     actualizarHeaderIndicadores();

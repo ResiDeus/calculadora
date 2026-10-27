@@ -3132,15 +3132,17 @@
             
             // Entrar a CONV
             modoConversionActivo = true;
+
             // Si el menú violeta estaba abierto, se apaga
             if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo && typeof apagarModoMenu === 'function') {
                 apagarModoMenu();
             }
             var vistaMenuFix = document.getElementById('vistaMenu');
             if (vistaMenuFix) vistaMenuFix.style.display = 'none';
-            var lcdMenuFix = document.getElementById('pantallaVerde');
-            if (lcdMenuFix) lcdMenuFix.classList.remove('modo-menu-activo');
+
             const lcd = document.getElementById('pantallaVerde');
+            if (lcd) lcd.classList.remove('modo-menu-activo');
+
             const vistaConv = document.getElementById('vistaConversion');
             const lista = document.getElementById('listaPrecios');
             const wrapCompras = document.getElementById('wrapperDataComprasLcd');

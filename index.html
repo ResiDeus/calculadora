@@ -1976,6 +1976,7 @@
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
+            
             var cur = parseFloat(sSub) || 0;
             if (typeof pendingOp === 'undefined') {
                 pendingOp = null;
@@ -2428,10 +2429,11 @@
 
             // Conversión → solo limpia el número
             if (modoConversionActivo) {
-                sConv = '0';
-                if (typeof actualizarPantallaConversion === 'function') {
-                    actualizarPantallaConversion();
+                if (typeof apagarModoConversion === 'function') {
+                    apagarModoConversion();
                 }
+                if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
+                if (typeof calc === 'function') calc();
                 return;
             }
 

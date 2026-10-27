@@ -372,17 +372,20 @@
         }
         .btn-menu-item {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 6px;
+            padding: 6px 4px !important;
+            margin-bottom: 0 !important;
+            min-height: 28px !important;
             font-family: monospace;
             font-weight: 900;
-            font-size: 12px;
-            border-radius: 8px;
+            font-size: 11px !important;
+            border-radius: 6px;
             cursor: pointer;
             background: rgba(124, 58, 237, 0.25);
             border: 2px solid #c084fc;
             color: #f3e8ff;
-        }
+            text-transform: uppercase;
+            box-sizing: border-box;
+    }
             background: #3b0a0a !important;
             color: #ffb4b4 !important;
             box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(255, 60, 60, 0.35) !important;
@@ -1654,8 +1657,8 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
                     <!-- fin subpantalla conversión -->
 
                     <!-- ========== SUBPANTALLA MENU (violeta) ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:6px; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; z-index:96; box-sizing:border-box;">
-                        <div id="lblMenuTitulo" style="font-size:12px; font-weight:900; text-align:center; color:#e9d5ff;">MENÚ</div>
+                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:4px; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; bottom:0; z-index:96; box-sizing:border-box; overflow:hidden; justify-content:center;">
+                        <div id="lblMenuTitulo" style="font-size:11px; font-weight:900; text-align:center; color:#e9d5ff; margin-bottom:2px;">MENÚ</div>
                         <button type="button" class="btn-menu-item" id="btnMenuSalario" onclick="desdeMenuAbrirSalario()">SALARIO</button>
                         <button type="button" class="btn-menu-item" id="btnMenuConv" onclick="desdeMenuAbrirConversion()">CONVERSIÓN</button>
                         <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA</button>
@@ -1995,26 +1998,46 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             }
 
                     function desdeMenuAbrirSalario() {
-            if (typeof apagarModoMenu === 'function') apagarModoMenu();
+            // 1) Cerrar menú violeta del todo
+            modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
             var lcd = document.getElementById('pantallaVerde');
             if (lcd) lcd.classList.remove('modo-menu-activo');
+            var btnMenu = document.getElementById('btnMenu');
+            if (btnMenu) btnMenu.classList.remove('btn-on');
+
+            // 2) Cerrar conversión si estaba
             if (modoConversionActivo && typeof apagarModoConversion === 'function') {
                 apagarModoConversion();
             }
-            if (!modoSalarioActivo) seleccionarMenu('sal');
+
+            // 3) Abrir salario (si ya está abierto, no lo apagues)
+            if (!modoSalarioActivo) {
+                seleccionarMenu('sal');
+            }
             reproducirSonido('menu');
         }
 
         function desdeMenuAbrirConversion() {
-            if (typeof apagarModoMenu === 'function') apagarModoMenu();
+            // 1) Cerrar menú violeta del todo
+            modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
             var lcd = document.getElementById('pantallaVerde');
             if (lcd) lcd.classList.remove('modo-menu-activo');
-            if (modoSalarioActivo) seleccionarMenu('sal');
-            if (!modoConversionActivo) toggleModoConversion();
+            var btnMenu = document.getElementById('btnMenu');
+            if (btnMenu) btnMenu.classList.remove('btn-on');
+
+            // 2) Cerrar salario si estaba
+            if (modoSalarioActivo) {
+                seleccionarMenu('sal');
+            }
+
+            // 3) Abrir conversión
+            if (!modoConversionActivo) {
+                toggleModoConversion();
+            }
             reproducirSonido('menu');
         }
 
@@ -2496,11 +2519,51 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
            ============================================================ */
         function ejecutarClearDirecto() {
             reproducirSonido('menu');
+
+            // Si estás en el menú violeta → salir a pantalla verde y limpiar
+                       // Salir de menú violeta
+            if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo) {
+                modoMenuActivo = false;
+            }
+            var vistaMenuR = document.getElementById('vistaMenu');
+            if (vistaMenuR) vistaMenuR.style.display = 'none';
+            var btnMenuR = document.getElementById('btnMenu');
+            if (btnMenuR) btnMenuR.classList.remove('btn-on');
+
+            // Salir de conversión
+            if (typeof modoConversionActivo !== 'undefined' && modoConversionActivo) {
+                modoConversionActivo = false;
+            }
+            var vistaConvR = document.getElementById('vistaConversion');
+            if (vistaConvR) vistaConvR.style.display = 'none';
+
+            var lcdR = document.getElementById('pantallaVerde');
+            if (lcdR) {
+                lcdR.classList.remove('modo-menu-activo');
+                lcdR.classList.remove('modo-conversion-activo');
+                lcdR.classList.remove('modo-salario-activo');
+            }
+
+            // Mostrar de nuevo la lista de compras
+            var listaR = document.getElementById('listaPrecios');
+            if (listaR) listaR.style.display = 'block';
+            var wrapR = document.getElementById('wrapperDataComprasLcd');
+            if (wrapR) wrapR.style.display = 'block';
+            var wrapSalR = document.getElementById('wrapperDataSalarioLcd');
+            if (wrapSalR) wrapSalR.style.display = 'none';
+            var vistaSalR = document.getElementById('vistaSubPantallaSalario');
+            if (vistaSalR) vistaSalR.style.display = 'none';
+        }
+
+            // Si estás en conversión → solo limpia el número
             if (modoConversionActivo) {
                 sConv = '0';
-                actualizarPantallaConversion();
+                if (typeof actualizarPantallaConversion === 'function') {
+                    actualizarPantallaConversion();
+                }
                 return;
             }
+
             ejecutarResetTotal();
         }
 

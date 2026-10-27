@@ -1472,7 +1472,6 @@
                             <!-- Paga por hora -->
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
                                 <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">PAGA POR HORA:</span>
-                                <span id="lblPagaHoraTitle" style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">HOURLY PAY:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
                                     <div style="text-align: left; display: inline-block; width: 58px; min-width: 58px; margin-right: auto; cursor: pointer;" onclick="seleccionarMenu('paga')">
                                         <span id="lblSalHoraLcd" style="font-size: 11px; font-weight: 900; background: rgba(0, 0, 0, 0.25); padding: 2px 5px; border-radius: 4px; color: rgb(255, 255, 255); border: 1px solid rgba(255, 255, 255, 0.15); line-height: 1; text-shadow: rgba(0, 240, 255, 0.3) 0px 0px 3px; display: inline-block;">$10.50</span>
@@ -1488,7 +1487,6 @@
                             <!-- Horas por semana -->
                             <div style="display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%; margin-top: 3px;">
                                 <span style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">HORAS SEMANA:</span>
-                                <span id="lblHorasSemanaTitle" style="opacity: 0.9; font-size: 11px; font-weight: 900; line-height: 1; text-align: left; white-space: nowrap;">WEEKLY HOURS:</span>
                                 <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%;">
                                     <div style="text-align: left; display: inline-block; margin-right: auto;">
                                         <span id="lblHorasSemanaLcd" style="font-size: 12px; font-weight: 900; background: rgba(0,0,0,0.2); padding: 2px 5px; border-radius: 3px; text-align: left;">40</span>
@@ -1627,14 +1625,14 @@
                         <span id="outPerPersonaLine"></span>
                     </div>
                 
-                    <div id="rowDesc" style="opacity: 1; color: #000; ...">
-                        <span id="lblRowDescTitle">DESCUENTO:</span> <span id="outDesc">-$0.00</span>
+                    <div id="rowDesc" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                        DESCUENTO: <span id="outDesc">-$0.00</span>
                     </div>
-                    <div id="rowTip" style="opacity: 1; color: #000; ...">
-                        <span id="lblRowTipTitle">PROPINA:</span> <span id="outTip">$0.00</span>
+                    <div id="rowTip" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                        PROPINA: <span id="outTip">$0.00</span>
                     </div>
-                    <div id="rowIvu" style="opacity: 1; color: #000; ...">
-                        <span id="lblRowIvuTitle">IVU:</span> <span id="outIvu">$0.00</span>
+                    <div id="rowIvu" style="opacity: 1; color: #000; transition: opacity 0.15s; font-family: monospace; font-weight: 900; margin-bottom: 3px; font-size: 12px !important; line-height: 1.25;">
+                        IVU: <span id="outIvu">$0.00</span>
                     </div>
 
                     <!-- Fila del TOTAL grande -->
@@ -1856,106 +1854,17 @@
         var I18N = {
             es: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECIBO', salario: 'SALARIO', clear: 'CLEAR',
-                precio: 'Precio', valor: 'Valor', anadir: 'AÑADIR',
-                modoMenu: 'MODO: MENÚ', modoCompras: 'MODO: COMPRAS', modoSueldo: 'MODO: SUELDO', modoConversion: 'MODO: CONVERSIÓN',
+                precio: 'Precio', valor: 'Valor', modoMenu: 'MODO: MENÚ',
                 serrucho: 'Serrucho', propina: 'Propina', descuento: 'Descuento', ivu: 'IVU',
-                listaVacia: 'Lista vacía', deslizar: '▼ deslizar',
-                conIvuDto: '(con IVU/DTO)', dtoCorto: 'DTO', ivuCorto: 'IVU', tipCorto: 'TIP',
-                temaBtn: 'TEMA', idiomaBtn: 'IDIOMA: ES',
-                menuCompras: 'COMPRAS', menuSalario: 'SALARIO', menuConv: 'CONVERSIÓN',
-                pagaHora: 'PAGA POR HORA:', horasSemana: 'HORAS SEMANA:',
-                retencionManual: 'RETENCIÓN MANUAL:', hacienda: 'HACIENDA:',
-                retencionTotal: 'RETENCIÓN TOTAL:', totalSemanal: 'TOTAL SEMANAL  :',
-                totalBisemanal: 'TOTAL BISEMANAL:', totalMensual: 'TOTAL MENSUAL  :', totalAnual: 'TOTAL ANUAL    :',
-                nomina: 'NOMINA', freelance: 'FREELANCE', na: 'N/A',
-                sSocial: 'S. SOCIAL', medicare: 'MEDICARE',
-                serruchoLinea: 'SERRUCHO (C/U):', descuentoLinea: 'DESCUENTO:', propinaLinea: 'PROPINA:', ivuLinea: 'IVU:', totalLinea: 'TOTAL:',
-                cat_peso: 'PESO', cat_cocina: 'COCINA', cat_largo: 'LARGO', cat_moneda: 'MONEDA',
-                cat_temp: 'TEMP', cat_energia: 'ENERGÍA', cat_velocidad: 'VEL', cat_presion: 'PSI',
-                cat_angulos: 'ÁNGULO', cat_sonido: 'SONIDO', cat_tiempo: 'TIEMPO', cat_area: 'ÁREA',
-                cat_iluminacion: 'LUZ', cat_combustible: 'MPG', cat_densidad: 'DENS', cat_data: 'DATA',
-                reciboTitulo: 'RECIBO', reciboCargando: 'Cargando flujos...', reciboCopiar: 'Copiar', reciboCerrar: 'Cerrar', reciboCopiado: '¡Copiado!',
-                reciboDetalle: 'DETALLE DE LA CUENTA', reciboFecha: 'Fecha', reciboHora: 'Hora',
-                reciboArts: 'Artículos Guardados:', reciboNoArts: 'No hay artículos guardados.',
-                reciboPrecioBase: 'Precio Base', reciboDescuento: 'Descuento', reciboIvu: 'IVU', reciboTotalArt: 'Total Art.',
-                reciboSubtotal: 'Subtotal', reciboDescTotal: 'Descuento Total', reciboIvuAcum: 'IVU Acumulado',
-                reciboPropina: 'Propina', reciboTotalFinal: 'TOTAL FINAL', reciboSerrucho: 'SERRUCHO COMPARTIDO',
-                reciboCuota: 'CUOTA POR CABEZA', reciboGracias: '¡Gracias por usar la app!', reciboPanas: 'panas'
+                listaVacia: 'Lista vacía', temaBtn: 'TEMA / THEME', idiomaBtn: 'ESPAÑOL ↔ ENGLISH'
             },
             en: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECEIPT', salario: 'WAGE', clear: 'CLEAR',
-                precio: 'Price', valor: 'Value', anadir: 'ADD',
-                modoMenu: 'MODE: MENU', modoCompras: 'MODE: SHOPPING', modoSueldo: 'MODE: WAGE', modoConversion: 'MODE: CONVERT',
-                serrucho: 'Split', propina: 'Tip', descuento: 'Discount', ivu: 'Tax',
-                listaVacia: 'Empty list', deslizar: '▼ scroll',
-                conIvuDto: '(w/ tax & disc.)', dtoCorto: 'DISC', ivuCorto: 'TAX', tipCorto: 'TIP',
-                temaBtn: 'THEME', idiomaBtn: 'LANG: EN',
-                menuCompras: 'SHOPPING', menuSalario: 'WAGE', menuConv: 'CONVERT',
-                pagaHora: 'PAY PER HOUR:', horasSemana: 'HOURS / WEEK:',
-                retencionManual: 'MANUAL WITHHOLD:', hacienda: 'TAX WITHHOLD:',
-                retencionTotal: 'TOTAL WITHHOLD:', totalSemanal: 'WEEKLY TOTAL   :',
-                totalBisemanal: 'BIWEEKLY TOTAL :', totalMensual: 'MONTHLY TOTAL  :', totalAnual: 'YEARLY TOTAL   :',
-                nomina: 'W-2', freelance: '1099', na: 'N/A',
-                sSocial: 'SOC. SEC.', medicare: 'MEDICARE',
-                serruchoLinea: 'SPLIT (EACH):', descuentoLinea: 'DISCOUNT:', propinaLinea: 'TIP:', ivuLinea: 'TAX:', totalLinea: 'TOTAL:',
-                cat_peso: 'WEIGHT', cat_cocina: 'COOKING', cat_largo: 'LENGTH', cat_moneda: 'MONEY',
-                cat_temp: 'TEMP', cat_energia: 'ENERGY', cat_velocidad: 'SPD', cat_presion: 'PSI',
-                cat_angulos: 'ANGLE', cat_sonido: 'SOUND', cat_tiempo: 'TIME', cat_area: 'AREA',
-                cat_iluminacion: 'LIGHT', cat_combustible: 'MPG', cat_densidad: 'DENS', cat_data: 'DATA',
-                reciboTitulo: 'RECEIPT', reciboCargando: 'Loading...', reciboCopiar: 'Copy', reciboCerrar: 'Close', reciboCopiado: 'Copied!',
-                reciboDetalle: 'BILL DETAILS', reciboFecha: 'Date', reciboHora: 'Time',
-                reciboArts: 'Saved items:', reciboNoArts: 'No saved items.',
-                reciboPrecioBase: 'Base price', reciboDescuento: 'Discount', reciboIvu: 'Tax', reciboTotalArt: 'Item total',
-                reciboSubtotal: 'Subtotal', reciboDescTotal: 'Total discount', reciboIvuAcum: 'Tax total',
-                reciboPropina: 'Tip', reciboTotalFinal: 'FINAL TOTAL', reciboSerrucho: 'SPLIT BILL',
-                reciboCuota: 'EACH PERSON', reciboGracias: 'Thanks for using the app!', reciboPanas: 'people'
+                precio: 'Price', valor: 'Value', modoMenu: 'MODE: MENU',
+                serrucho: 'Split', propina: 'Tip', descuento: 'Discount', ivu: 'TAX',
+                listaVacia: 'Empty list', temaBtn: 'THEME', idiomaBtn: 'SPANISH ↔ ENGLISH'
             }
         };
-
-        // Nombres de unidades ES / EN (por id)
-        var NOMBRES_UNIDAD = {
-            es: {
-                kg:'Kilogramo', lb:'Libra', g:'Gramo', oz:'Onza', t:'Tonelada métrica',
-                cup:'Taza', tbsp:'Cucharada', tsp:'Cucharadita', floz:'Onza líquida', ml:'Mililitro', l:'Litro', gal:'Galón USA', pt:'Pinta',
-                m:'Metro', ft:'Pie', in:'Pulgada', cm:'Centímetro', km:'Kilómetro', mi:'Milla', yd:'Yarda',
-                c:'Celsius', f:'Fahrenheit', k:'Kelvin',
-                b:'Byte', kb:'Kilobyte', mb:'Megabyte', gb:'Gigabyte', tb:'Terabyte', mbit:'Megabit',
-                usd:'Dólar estadounidense', eur:'Euro', gbp:'Libra esterlina', jpy:'Yen japonés', mxn:'Peso mexicano',
-                dop:'Peso dominicano', brl:'Real brasileño', cop:'Peso colombiano', clp:'Peso chileno', ars:'Peso argentino',
-                pen:'Sol peruano', cad:'Dólar canadiense', aud:'Dólar australiano', cny:'Yuan chino', chf:'Franco suizo',
-                kmh:'Kilómetros por hora', mph:'Millas por hora', ms:'Metros por segundo',
-                kw:'Kilovatio', hp:'Caballo de fuerza', kwh:'Kilovatio-hora', j:'Julio',
-                m2:'Metro cuadrado', ft2:'Pie cuadrado', ha:'Hectárea', ac:'Acre',
-                psi:'PSI', bar:'Bar', atm:'Atmósfera', kpa:'Kilopascal',
-                s:'Segundo', min:'Minuto', h:'Hora', d:'Día', sem:'Semana',
-                deg:'Grado', rad:'Radián', l100:'Litros / 100 km', mpg:'Millas por galón',
-                lx:'Lux', fc:'Foot-candle', lm:'Lumen', wled:'Vatio LED (aprox.)',
-                hz:'Hertz', khz:'Kilohertz', gcm3:'Gramo / cm³', lbft3:'Libra / pie³'
-            },
-            en: {
-                kg:'Kilogram', lb:'Pound', g:'Gram', oz:'Ounce', t:'Metric ton',
-                cup:'Cup', tbsp:'Tablespoon', tsp:'Teaspoon', floz:'Fluid ounce', ml:'Milliliter', l:'Liter', gal:'US gallon', pt:'Pint',
-                m:'Meter', ft:'Foot', in:'Inch', cm:'Centimeter', km:'Kilometer', mi:'Mile', yd:'Yard',
-                c:'Celsius', f:'Fahrenheit', k:'Kelvin',
-                b:'Byte', kb:'Kilobyte', mb:'Megabyte', gb:'Gigabyte', tb:'Terabyte', mbit:'Megabit',
-                usd:'US Dollar', eur:'Euro', gbp:'British Pound', jpy:'Japanese Yen', mxn:'Mexican Peso',
-                dop:'Dominican Peso', brl:'Brazilian Real', cop:'Colombian Peso', clp:'Chilean Peso', ars:'Argentine Peso',
-                pen:'Peruvian Sol', cad:'Canadian Dollar', aud:'Australian Dollar', cny:'Chinese Yuan', chf:'Swiss Franc',
-                kmh:'Kilometers per hour', mph:'Miles per hour', ms:'Meters per second',
-                kw:'Kilowatt', hp:'Horsepower', kwh:'Kilowatt-hour', j:'Joule',
-                m2:'Square meter', ft2:'Square foot', ha:'Hectare', ac:'Acre',
-                psi:'PSI', bar:'Bar', atm:'Atmosphere', kpa:'Kilopascal',
-                s:'Second', min:'Minute', h:'Hour', d:'Day', sem:'Week',
-                deg:'Degree', rad:'Radian', l100:'Liters / 100 km', mpg:'Miles per gallon',
-                lx:'Lux', fc:'Foot-candle', lm:'Lumen', wled:'LED Watt (approx.)',
-                hz:'Hertz', khz:'Kilohertz', gcm3:'Gram / cm³', lbft3:'Pound / ft³'
-            }
-        };
-
-        function nombreUnidad(id, fallback) {
-            var pack = NOMBRES_UNIDAD[idiomaActual] || NOMBRES_UNIDAD.es;
-            return (pack && pack[id]) || fallback || id;
-        }
 
         function t(key) {
             return (I18N[idiomaActual] && I18N[idiomaActual][key]) || key;
@@ -1967,27 +1876,14 @@
                 if (el) el.innerText = t(key);
             }
             set('btnMenu', 'menu');
+            set('btnConv', 'conv');
             set('btnReceipt', 'recibo');
+            set('btnModoSalario', 'salario');
             set('btnClearMaster', 'clear');
-            set('btnMenuCompras', 'menuCompras');
-            set('btnMenuSalario', 'menuSalario');
-            set('btnMenuConv', 'menuConv');
             set('btnMenuTema', 'temaBtn');
             set('btnMenuIdioma', 'idiomaBtn');
-
-            var rd = document.getElementById('lblRowDescTitle'); if (rd) rd.innerText = t('descuentoLinea');
-            var rt = document.getElementById('lblRowTipTitle'); if (rt) rt.innerText = t('propinaLinea');
-            var ri = document.getElementById('lblRowIvuTitle'); if (ri) ri.innerText = t('ivuLinea');
-
-            var btnAdd = document.getElementById('btnAnadirGlobal');
-            if (btnAdd) btnAdd.innerText = t('anadir');
-
             var tit = document.querySelector('#cajaSub .lbl-title');
             if (tit) tit.innerText = modoConversionActivo ? t('valor') : t('precio');
-
-            var ph = document.getElementById('lblPagaHoraTitle'); if (ph) ph.innerText = t('pagaHora');
-            var hs = document.getElementById('lblHorasSemanaTitle'); if (hs) hs.innerText = t('horasSemana');
-
             [['cajaPpl','serrucho'],['cajaTip','propina'],['cajaDesc','descuento'],['btnToggleIvu','ivu']].forEach(function (par) {
                 var box = document.getElementById(par[0]);
                 if (!box) return;
@@ -1995,64 +1891,6 @@
                 if (title) title.innerText = t(par[1]);
             });
         }
-
-        // Categorías conversión
-            document.querySelectorAll('.tab-conv[data-cat]').forEach(function (btn) {
-                var cat = btn.getAttribute('data-cat');
-                var key = 'cat_' + cat;
-                if (I18N[idiomaActual] && I18N[idiomaActual][key]) btn.innerText = t(key);
-            });
-
-            // Salario labels fijos
-            var spans = document.querySelectorAll('#vistaSubPantallaSalario span');
-            // más seguro por ids si existen:
-            var mapaSal = [
-                ['lblTextoManual', regimenContributivo === 'EXENTO' ? 'retencionManual' : 'hacienda']
-            ];
-            mapaSal.forEach(function (p) {
-                var el = document.getElementById(p[0]);
-                if (el) el.innerText = t(p[1]);
-            });
-
-            var tabW2 = document.getElementById('tabW2');
-            var tab1099 = document.getElementById('tab1099');
-            var tabExento = document.getElementById('tabExento');
-            if (tabW2) tabW2.innerText = t('nomina');
-            if (tab1099) tab1099.innerText = t('freelance');
-            if (tabExento) tabExento.innerText = t('na');
-            var tSS = document.getElementById('toggleSS');
-            var tMED = document.getElementById('toggleMED');
-            if (tSS) tSS.innerText = t('sSocial');
-            if (tMED) tMED.innerText = t('medicare');
-
-            // Textos fijos de salario (por búsqueda de contenedor)
-            var wrapSal = document.getElementById('wrapperDataSalarioLcd');
-            if (wrapSal) {
-                // se refresca en calcularSalarioSubPantalla vía labels; aquí tocamos prefijos si hay spans sueltos
-            }
-
-            // Lista vacía
-            var vacia = document.getElementById('lblArtText');
-            if (vacia && preciosGuardados.length === 0) vacia.innerText = t('listaVacia');
-
-            var flecha = document.getElementById('flechaGuia');
-            if (flecha) flecha.innerText = t('deslizar');
-
-            // Líneas compras
-            var td = document.getElementById('txtSerruchoLabelType');
-            if (td && !modoSerruchoActivo) td.innerText = t('serruchoLinea') + ' N/A';
-
-            // Recibo botones
-            set('btnCopiarHolo', 'reciboCopiar');
-            var holoTitulo = document.querySelector('#visorHolograma .holograma-ticket > div');
-            // mejor por id si agregas uno; ver sección recibo
-
-            if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
-            if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') actualizarPantallaConversion();
-            if (preciosGuardados.length > 0 && typeof pintarListaCompras === 'function') {
-                pintarListaCompras(document.getElementById('listaPrecios'));
-            }
-            if (typeof calc === 'function') calc();
 
         function alternarIdioma() {
             idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
@@ -2817,7 +2655,7 @@
 
             // Lista vacía otra vez
             if (bloqueListaCompras) {
-                bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">' + t('listaVacia') + '</span>';
+                bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
             }
             if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = "none";
 
@@ -2870,24 +2708,16 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         /** Actualiza el texto de la cabecera del LCD según el estado */
         function actualizarHeaderIndicadores() {
             if (!sistemaEncendido) return;
-            if (modoMenuActivo) {
-                document.getElementById('txtHeaderIndicadores').innerText = t('modoMenu');
-                return;
-            }
-            if (modoConversionActivo) {
-                document.getElementById('txtHeaderIndicadores').innerText = t('modoConversion');
-                return;
-            }
             if (modoSalarioActivo) {
-                document.getElementById('txtHeaderIndicadores').innerText = t('modoSueldo');
+                document.getElementById('txtHeaderIndicadores').innerText = "MODO: SUELDO";
                 return;
             }
             let subpartes = [];
-            if (modoIvuActivo) subpartes.push(t('ivuCorto') + ': ' + ivu.toFixed(1) + '%');
-            if (incluirPropina) subpartes.push(t('tipCorto') + ': ' + memoriaTipPct + '%');
-            if (modoDescuentoActivo) subpartes.push(t('dtoCorto') + ': -' + memoriaDescuentoPct + '%');
+            if (modoIvuActivo) subpartes.push(`IVU: ${ivu.toFixed(1)}%`);
+            if (incluirPropina) subpartes.push(`TIP: ${memoriaTipPct}%`);
+            if (modoDescuentoActivo) subpartes.push(`DTO: -${memoriaDescuentoPct}%`);
             document.getElementById('txtHeaderIndicadores').innerText =
-                subpartes.length > 0 ? subpartes.join(' | ') : t('modoCompras');
+                subpartes.length > 0 ? subpartes.join(' | ') : "MODO: COMPRAS";
         }
 
         /* ============================================================
@@ -2984,7 +2814,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
                 if (preciosGuardados.length === 0) {
-                    bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">' + t('listaVacia') + '</span>';
+                    bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
                 } else {
                     pintarListaCompras(bloqueListaCompras);
                 }
@@ -3060,18 +2890,17 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         /** Dibuja la lista de artículos en el LCD (evita código repetido) */
         function pintarListaCompras(contenedor) {
             if (!contenedor) return;
-                        contenedor.innerHTML = preciosGuardados.map((item, i) =>
+            contenedor.innerHTML = preciosGuardados.map((item, i) =>
                 '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                ' <span style="font-size:8px; opacity:0.75;">(' + t('dtoCorto') + ':-$' +
-                item.descuento.toFixed(2) + '/' + t('ivuCorto') + ':' +
+                ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
+                item.descuento.toFixed(2) + '/IVU:' +
                 item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
             ).join('');
         
             let totalConTax = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
             contenedor.innerHTML +=
                 '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
-                t('totalLinea') + ' $' + totalConTax.toFixed(2) +
-                ' <span style="font-size:8px; opacity:0.8;">' + t('conIvuDto') + '</span></div>';
+                'TOTAL: $' + totalConTax.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(con IVU/DTO)</span></div>';
         
             if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
                 document.getElementById('flechaGuia').style.display = "block";
@@ -3288,7 +3117,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             if (btnIzq) btnIzq.innerText = uIzq.label;
             if (btnDer) btnDer.innerText = uDer.label;
-            if (lblFormula) lblFormula.innerText = nombreUnidad(uIzq.id, uIzq.nombre) + ' → ' + nombreUnidad(uDer.id, uDer.nombre);
+            if (lblFormula) lblFormula.innerText = uIzq.nombre + ' → ' + uDer.nombre;
             if (lblResultado) {
                 let textoRes;
                 if (catConversion === 'temp') textoRes = res.toFixed(2);
@@ -3298,7 +3127,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 lblResultado.innerText = '= ' + textoRes + ' ' + uDer.label;
             }
             if (lblSub) lblSub.innerText = sConv;
-            if (header) header.innerText = t('modoConversion');
+            if (header) header.innerText = 'MODO: CONVERSIÓN';
         }
 
         /** Apaga conversión sin tocar salario (uso interno) */
@@ -3318,7 +3147,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (lista) lista.style.display = 'block';
             if (wrapCompras) wrapCompras.style.display = 'block';
             if (btnConv) btnConv.classList.remove('btn-on');
-            if (tituloPrecio) tituloPrecio.innerText = t('precio');
+            if (tituloPrecio) tituloPrecio.innerText = 'Precio';
             if (signo) signo.style.display = '';
 
             if (lista) {
@@ -3579,12 +3408,12 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
     document.getElementById('rowIvu').style.color = "#000";
 
     if (modoSerruchoActivo) {
-        document.getElementById('txtSerruchoLabelType').innerText = t('serruchoLinea') + ' ';
+        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
         document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
         document.getElementById('rowPersonaCuota').style.opacity = "1";
         document.getElementById('rowPersonaCuota').style.color = "#000";
     } else {
-        document.getElementById('txtSerruchoLabelType').innerText = t('serruchoLinea') + ' N/A';
+        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
         document.getElementById('outPerPersonaLine').innerText = ``;
         document.getElementById('rowPersonaCuota').style.opacity = "1";
         document.getElementById('rowPersonaCuota').style.color = "#000";

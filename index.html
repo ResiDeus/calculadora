@@ -1506,39 +1506,28 @@
                         </div>
                     </div><!-- fin subpantalla salario -->
                     <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:8px; width:96%; font-family:monospace; position:absolute; top:4px; left:4px; right:4px; z-index:96;">
-                        <div style="font-size:12px; font-weight:900; text-align:center; color:#e9d5ff;">MENÚ</div>
-                        <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA / THEME</button>
-                        <button type="button" class="btn-menu-item" id="btnMenuIdioma" onclick="alternarIdioma()">ESPAÑOL ↔ ENGLISH</button>
-                        <div id="filaCatsConv" style="display:flex; flex-wrap:wrap; gap:3px; width:100%;">
+                    <div id="vistaConversion" style="display:none; flex-direction:column; justify-content:space-between; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; bottom:2px; z-index:96; box-sizing:border-box; padding:2px 0;">
+
+                        <!-- Tabs de categoría: más arriba y más grandes -->
+                        <div style="display:flex; gap:3px; width:100%; flex-shrink:0;">
                             <button type="button" class="tab-conv active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
                             <button type="button" class="tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
                             <button type="button" class="tab-conv" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
                             <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
                             <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
-                            <button type="button" class="tab-conv" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
-                            <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
-                            <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
-                            <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
-                            <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
-                            <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
-                            <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
-                            <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
-                            <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
-                            <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
-                            <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
                         </div>
-                    
-                        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px;">
+
+                        <!-- Dos botones de unidad: izquierda y derecha independientes -->
+                        <div style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin-top:6px; flex-shrink:0;">
                             <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
                             <span style="font-size:14px; font-weight:900; color:#ffb4b4;">→</span>
                             <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
-                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()">⇄</button>
                         </div>
-                    
-                        <div id="lblConvFormula" style="text-align:center; font-size:10px; color:#ffcccc; margin-top:4px;">Kilogramo → Libra</div>
-                    
-                        <div id="lblConvResultado" style="margin-top:auto; padding-top:6px; text-align:center; font-size:20px; font-weight:900; color:#fff; border-top:1px solid rgba(255,100,100,0.35);">
+
+                        <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ff9999; opacity:0.9; margin-top:2px; flex-shrink:0;">toca cada unidad pa' cambiarla</div>
+
+                        <!-- Resultado grande abajo -->
+                        <div id="lblConvResultado" style="margin-top:auto; padding-top:8px; text-align:center; font-size:22px; font-weight:900; color:#ffffff; line-height:1.1; border-top:1px solid rgba(255,100,100,0.35);">
                             = 0.00 lb
                         </div>
                     </div>

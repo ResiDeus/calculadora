@@ -398,9 +398,9 @@
         }
         .btn-menu-item {
             width: 100%;
-            padding: 6px 4px !important;
+            padding: 4px 4px !important;
             margin-bottom: 0 !important;
-            min-height: 28px !important;
+            min-height: 24px !important;
             font-family: monospace;
             font-weight: 900;
             font-size: 11px !important;
@@ -1555,8 +1555,9 @@
                     <!-- fin subpantalla conversión -->
 
                     <!-- ========== SUBPANTALLA MENU (violeta) ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:4px; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; bottom:0; z-index:96; box-sizing:border-box; overflow:hidden; justify-content:center;">
-                        <div id="lblMenuTitulo" style="font-size:11px; font-weight:900; text-align:center; color:#e9d5ff; margin-bottom:2px;">MENÚ</div>
+                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:3px; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; z-index:96; box-sizing:border-box; overflow:hidden; justify-content:flex-start; padding-top:2px; max-height:100%;">
+                        <div id="lblMenuTitulo" style="font-size:11px; font-weight:900; text-align:center; color:#e9d5ff; margin-bottom:1px;">MENÚ</div>
+                        <button type="button" class="btn-menu-item" id="btnMenuCompras" onclick="desdeMenuAbrirCompras()">COMPRAS</button>
                         <button type="button" class="btn-menu-item" id="btnMenuSalario" onclick="desdeMenuAbrirSalario()">SALARIO</button>
                         <button type="button" class="btn-menu-item" id="btnMenuConv" onclick="desdeMenuAbrirConversion()">CONVERSIÓN</button>
                         <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA</button>
@@ -1937,6 +1938,44 @@
             if (header) {
                 header.innerText = (typeof t === 'function') ? t('modoMenu') : 'MODO: MENÚ';
             }
+            reproducirSonido('menu');
+        }
+
+        // modo principal
+                    function desdeMenuAbrirCompras() {
+            modoMenuActivo = false;
+            var vistaMenu = document.getElementById('vistaMenu');
+            if (vistaMenu) vistaMenu.style.display = 'none';
+            var lcd = document.getElementById('pantallaVerde');
+            if (lcd) {
+                lcd.classList.remove('modo-menu-activo');
+                lcd.classList.remove('modo-salario-activo');
+                lcd.classList.remove('modo-conversion-activo');
+            }
+            var btnMenu = document.getElementById('btnMenu');
+            if (btnMenu) btnMenu.classList.remove('btn-on');
+
+            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
+                apagarModoConversion();
+            }
+            if (modoSalarioActivo) {
+                seleccionarMenu('sal'); // apaga salario
+            }
+
+            var lista = document.getElementById('listaPrecios');
+            var wrap = document.getElementById('wrapperDataComprasLcd');
+            var wrapSal = document.getElementById('wrapperDataSalarioLcd');
+            var vistaSal = document.getElementById('vistaSubPantallaSalario');
+            var vistaConv = document.getElementById('vistaConversion');
+
+            if (lista) lista.style.display = 'block';
+            if (wrap) wrap.style.display = 'block';
+            if (wrapSal) wrapSal.style.display = 'none';
+            if (vistaSal) vistaSal.style.display = 'none';
+            if (vistaConv) vistaConv.style.display = 'none';
+
+            if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
+            if (typeof calc === 'function') calc();
             reproducirSonido('menu');
         }
 

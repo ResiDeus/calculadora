@@ -350,34 +350,13 @@
             display: none !important;
         }
         
-        body .btn-menu.btn-on,
-        body.theme-cyberpunk .btn-menu.btn-on {
-            position: relative !important;
-            overflow: hidden !important;
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+        body .btn-menu.btn-on {
+            background: linear-gradient(90deg, #7c3aed, #c084fc, #7c3aed) !important;
             background-size: 200% auto !important;
-            border: 2px solid #00f0ff !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
-        body .btn-menu.btn-on::after,
-        body.theme-cyberpunk .btn-menu.btn-on::after {
-            content: "MENU" !important;
-            position: absolute !important;
-            top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            background: rgba(0,0,0,0.1) !important;
-            color: #00f0ff !important;
-            text-shadow: -2px 0 #ff0055 !important;
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none !important;
-            z-index: 10 !important;
+            border: 2px solid #e9d5ff !important;
+            color: #fff !important;
+            box-shadow: 0 0 16px rgba(124, 58, 237, 0.7) !important;
+            animation: activeMenuMove 1.5s infinite linear !important;
         }
         
         .btn-swap-conv {
@@ -1023,8 +1002,8 @@
 
         .row-acciones-inferior {
             display: grid;
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 4px;
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 3px;
             margin-top: 2px;
             width: 100%;
         }
@@ -1119,45 +1098,9 @@
            ============================================================ */
         .pad-num {
             display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
+            grid-template-columns: repeat(3, 1fr) !important;
             gap: 4px !important;
             width: 100% !important;
-        }
-
-        /* Operadores: otro tono de azul */
-        .btn-key.btn-op {
-            background-color: #0a1a3a !important;
-            border-color: #4da3ff !important;
-            color: #b3d9ff !important;
-            box-shadow: 0 0 8px rgba(77, 163, 255, 0.35) !important;
-        }
-        body.theme-cyberpunk .btn-key.btn-op {
-            background-color: #061428 !important;
-            border: 2px solid #4da3ff !important;
-            color: #cce6ff !important;
-        }
-
-                let pendingOp = null;   // '+', '-', '*', '/'
-        let pendingVal = null;
-
-        function opMath(op) {
-            if (!sistemaEncendido || modoSalarioActivo) return;
-            if (modoConversionActivo) return; // en conv solo números
-            reproducirSonido('tecla');
-            var cur = parseFloat(sSub) || 0;
-            if (pendingOp && pendingVal !== null) {
-                if (pendingOp === '+') cur = pendingVal + cur;
-                else if (pendingOp === '-') cur = pendingVal - cur;
-                else if (pendingOp === '*') cur = pendingVal * cur;
-                else if (pendingOp === '/') cur = pendingVal === 0 ? 0 : pendingVal / cur;
-                sSub = String(Number(cur.toFixed(8)));
-                document.getElementById('lblSub').innerText = sSub;
-            }
-            pendingVal = parseFloat(sSub) || 0;
-            pendingOp = op;
-            sSub = '0';
-            document.getElementById('lblSub').innerText = '0';
-            calc();
         }
 
         /* Estrellitas suaves encima de las teclas */
@@ -1636,58 +1579,46 @@
                         </div>
                     </div><!-- fin subpantalla salario -->
                     <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                    <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; font-family:monospace; position:absolute; top:0; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:1px 0 2px; overflow:hidden; max-height:100%;">
-
-                        <!-- Fila 1: 4 botones grandes -->
-                        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:3px; width:100%; margin-bottom:3px;">
-                            <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
-                        </div>
-
-                        <!-- Fila 2: 6 botones estándar -->
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
+                    <div id="vistaConversion" style="display:none; flex-direction:column; width:96%; font-family:monospace; position:absolute; top:0; left:4px; right:4px; bottom:0; z-index:96; box-sizing:border-box; padding:2px 0 4px;">
+                        <div style="display:flex; flex-wrap:wrap; gap:3px; width:100%;">
+                            <button type="button" class="tab-conv active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
+                            <button type="button" class="tab-conv" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
+                            <button type="button" class="tab-conv" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
                             <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
-                            <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
-                            <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
-                            <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
-                            <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
-                            <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
-                        </div>
-
-                        <!-- Fila 3: 6 botones estándar -->
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:4px;">
-                            <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
-                            <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
-                            <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
-                            <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
-                            <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
                             <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
+                            <button type="button" class="tab-conv" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
+                            <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
+                            <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
+                            <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
+                            <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
+                            <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
+                            <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
+                            <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
+                            <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
+                            <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
+                            <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
                         </div>
 
-                        <div style="display:flex; align-items:center; justify-content:center; gap:5px; margin-bottom:2px;">
+                        <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px;">
                             <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
-                            <span style="font-size:12px; font-weight:900; color:#ffb4b4;">→</span>
+                            <span style="font-size:14px; font-weight:900; color:#ffb4b4;">→</span>
                             <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
                             <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()">⇄</button>
                         </div>
 
-                        <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ffcccc; margin-bottom:2px;">Kilogramo → Libra</div>
+                        <div id="lblConvFormula" style="text-align:center; font-size:10px; color:#ffcccc; margin-top:4px;">Kilogramo → Libra</div>
 
-                        <div id="lblConvResultado" style="text-align:center; font-size:18px; font-weight:900; color:#fff; line-height:1.1;">
+                        <div id="lblConvResultado" style="margin-top:auto; padding-top:6px; text-align:center; font-size:20px; font-weight:900; color:#fff; border-top:1px solid rgba(255,100,100,0.35);">
                             = 0.00 lb
                         </div>
                     </div>
                     <!-- fin subpantalla conversión -->
 
                     <!-- ========== SUBPANTALLA MENU (violeta) ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:6px; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; z-index:96; box-sizing:border-box;">
-                        <div id="lblMenuTitulo" style="font-size:12px; font-weight:900; text-align:center; color:#e9d5ff;">MENÚ</div>
-                        <button type="button" class="btn-menu-item" id="btnMenuSalario" onclick="desdeMenuAbrirSalario()">SALARIO</button>
-                        <button type="button" class="btn-menu-item" id="btnMenuConv" onclick="desdeMenuAbrirConversion()">CONVERSIÓN</button>
-                        <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA</button>
-                        <button type="button" class="btn-menu-item" id="btnMenuIdioma" onclick="alternarIdioma()">IDIOMA: ES</button>
+                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:8px; width:96%; font-family:monospace; position:absolute; top:4px; left:4px; right:4px; z-index:96;">
+                        <div style="font-size:12px; font-weight:900; text-align:center; color:#e9d5ff;">MENÚ</div>
+                        <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA / THEME</button>
+                        <button type="button" class="btn-menu-item" id="btnMenuIdioma" onclick="alternarIdioma()">ESPAÑOL ↔ ENGLISH</button>
                     </div>
                     <!-- fin subpantalla menu -->
 
@@ -1812,36 +1743,34 @@
         </div><!-- fin row-opciones-pasos -->
 
         <!-- ============================================================
-             TECLADO NUMÉRICO (7-8-9 / 4-5-6 / 1-2-3 / . 0 ← etc.)
+             TECLADO NUMÉRICO (7-8-9 / 4-5-6 / 1-2-3 / . 0 ←)
              ============================================================ -->
         <div class="pad-num">
             <button id="btnN7" onclick="num('7')" class="btn-key">7</button>
             <button id="btnN8" onclick="num('8')" class="btn-key">8</button>
             <button id="btnN9" onclick="num('9')" class="btn-key">9</button>
-            <button id="btnDiv" onclick="opMath('/')" class="btn-key btn-op">÷</button>
 
             <button id="btnN4" onclick="num('4')" class="btn-key">4</button>
             <button id="btnN5" onclick="num('5')" class="btn-key">5</button>
             <button id="btnN6" onclick="num('6')" class="btn-key">6</button>
-            <button id="btnMul" onclick="opMath('*')" class="btn-key btn-op">×</button>
 
             <button id="btnN1" onclick="num('1')" class="btn-key">1</button>
             <button id="btnN2" onclick="num('2')" class="btn-key">2</button>
             <button id="btnN3" onclick="num('3')" class="btn-key">3</button>
-            <button id="btnSub" onclick="opMath('-')" class="btn-key btn-op">−</button>
 
             <button id="btnPunto" onclick="num('.')" class="btn-key">.</button>
             <button id="btnN0" onclick="num('0')" class="btn-key">0</button>
             <button id="btnBksp" onclick="bksp()" class="btn-key btn-back">←</button>
-            <button id="btnAdd" onclick="opMath('+')" class="btn-key btn-op">+</button>
         </div>
 
         <!-- ============================================================
-             FILA INFERIOR: MENU | RECIBO | CLEAR
+             FILA INFERIOR: TEMA | RECIBO | SALARIO | CLEAR
              ============================================================ -->
         <div class="row-acciones-inferior">
             <button id="btnMenu" class="btn-theme btn-menu" onclick="toggleModoMenu()">MENU</button>
+            <button id="btnConv" class="btn-theme btn-conv" onclick="toggleModoConversion()">CONV.</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
+            <button id="btnModoSalario" class="btn-salario-bottom" onclick="seleccionarMenu('sal')">SALARIO</button>
             <button id="btnClearMaster" class="btn-clear-master" onclick="ejecutarClearDirecto()">CLEAR</button>
         </div>
 
@@ -1990,7 +1919,6 @@
             var btn = document.getElementById('btnMenu');
             if (lcd) lcd.classList.remove('modo-menu-activo');
             if (vista) vista.style.display = 'none';
-            var vistaConv = document.getElementById('vistaConversion');
             if (lista) lista.style.display = 'block';
             if (wrap) wrap.style.display = 'block';
             if (btn) btn.classList.remove('btn-on');
@@ -1999,9 +1927,6 @@
         function toggleModoMenu() {
             if (!sistemaEncendido) return;
             if (modoConversionActivo) apagarModoConversion();
-            var vistaConv = document.getElementById('vistaConversion');
-            if (vistaConv) vistaConv.style.display = 'none';
-            if (lcd) lcd.classList.remove('modo-conversion-activo');
             if (modoSalarioActivo) seleccionarMenu('sal');
 
             if (modoMenuActivo) {
@@ -2011,24 +1936,6 @@
                 reproducirSonido('menu');
                 return;
             }
-
-        function desdeMenuAbrirSalario() {
-            apagarModoMenu();
-            if (modoConversionActivo) apagarModoConversion();
-            // si salario ya está off, prenderlo
-            if (!modoSalarioActivo) seleccionarMenu('sal');
-            reproducirSonido('menu');
-        }
-
-        function desdeMenuAbrirConversion() {
-            apagarModoMenu();
-            if (modoSalarioActivo) {
-                // apagar salario sin quedar a medias
-                seleccionarMenu('sal');
-            }
-            if (!modoConversionActivo) toggleModoConversion();
-            reproducirSonido('menu');
-        }
 
             modoMenuActivo = true;
             var lcd = document.getElementById('pantallaVerde');
@@ -3090,14 +2997,7 @@
         }
 
         function toggleModoConversion() {
-            
             if (!sistemaEncendido) return;
-            
-            if (modoMenuActivo) apagarModoMenu();
-            var vistaMenu = document.getElementById('vistaMenu');
-            if (vistaMenu) vistaMenu.style.display = 'none';
-            var lcd = document.getElementById('pantallaVerde');
-            if (lcd) lcd.classList.remove('modo-menu-activo');
 
             // Si vas a entrar a CONV y el salario está on → apagar salario primero
             if (!modoConversionActivo && modoSalarioActivo) {

@@ -1571,22 +1571,23 @@
                         
                         <!-- MEDIO: unidades + swap (VERSIÓN ALINEADA A LA DERECHA) -->
                         <!-- #cambiar -->
-                        <div style="flex-shrink:0; display:flex; flex-direction:row; align-items:center; justify-content:center; width:100%; padding:2px 0;">
-                            <!-- Bloque fantasma invisible para equilibrar el centrado perfecto de las unidades -->
-                            <div style="width: 46px; flex-shrink: 0;"></div>
-                        
-                            <!-- Bloque Izquierdo (AHORA EN EL CENTRO): Unidades y Fórmula en columna -->
-                            <div style="display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:center; flex-grow: 1;">
-                                <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+                        <div style="flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; padding:2px 0; position:relative;">
+                            
+                            <!-- Bloque Central: Unidades y Fórmula en columna -->
+                            <div style="display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:center; width:100%;">
+                                
+                                <!-- Fila de unidades (Sirve como eje de altura para el SWAP) -->
+                                <div style="display:flex; align-items:center; justify-content:center; gap:6px; width:100%; position:relative;">
                                     <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')" style="font-size: 16px; padding: 4px 10px; font-weight: bold;">kg</button>
                                     <span style="font-size:15px; font-weight:900; color:#ffb4b4;">→</span>
                                     <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')" style="font-size: 16px; padding: 4px 10px; font-weight: bold;">lb</button>
+                        
+                                    <!-- Botón SWAP: Todo a la derecha, centrado verticalmente solo con las unidades y un poco más pequeño -->
+                                    <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()" style="font-size: 13px; padding: 4px 8px; font-weight: bold; display:flex; align-items:center; justify-content:center; margin:0; position:absolute; right:0; top:50%; transform:translateY(-50%); flex-shrink:0;">⇄</button>
                                 </div>
+                                
                                 <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ffcccc; line-height:1.0;">Kilogramo → Libra</div>
                             </div>
-                        
-                            <!-- Botón SWAP todo a la derecha (Mismo tamaño que unidades) -->
-                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()" style="font-size: 16px; padding: 4px 10px; font-weight: bold; display:flex; align-items:center; justify-content:center; margin: 0 0 0 auto; width: 46px; min-width: 46px; flex-shrink:0;">⇄</button>
                         </div>
 
                         <!-- ABAJO: resultado -->

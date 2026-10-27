@@ -491,33 +491,35 @@
         }
         
         body .btn-menu.btn-on,
-        body.theme-cyberpunk .btn-menu.btn-on {
-            position: relative !important;
-            overflow: hidden !important;
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border: 2px solid #00f0ff !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-        }
-        body .btn-menu.btn-on::after,
-        body.theme-cyberpunk .btn-menu.btn-on::after {
-            content: "MENU" !important;
-            position: absolute !important;
-            top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            color: #00f0ff !important;
-            text-shadow: -2px 0 #ff0055 !important;
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none !important;
-            z-index: 10 !important;
-        }
+body.theme-cyberpunk .btn-menu.btn-on {
+    position: relative !important;
+    overflow: hidden !important;
+    background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+    background-size: 200% auto !important;
+    border: 2px solid #00f0ff !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+    box-shadow: 0 0 18px #ff0055 !important;
+    animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+    opacity: 1 !important;
+}
+body .btn-menu.btn-on::after,
+body.theme-cyberpunk .btn-menu.btn-on::after {
+    content: "MENU" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #00f0ff !important;
+    text-shadow: -2px 0 #ff0055 !important;
+    animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
         
         .btn-swap-conv {
             width: 36px; height: 36px;
@@ -1945,10 +1947,22 @@
             });
         }
 
-        function alternarIdioma() {
+            function alternarIdioma() {
             idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
-            aplicarIdiomaUI();
-            if (modoConversionActivo) actualizarPantallaConversion();
+
+            if (typeof aplicarIdiomaUI === 'function') {
+                aplicarIdiomaUI();
+            }
+
+            var btnIdioma = document.getElementById('btnMenuIdioma');
+            if (btnIdioma) {
+                btnIdioma.innerText = (idiomaActual === 'es') ? 'IDIOMA: ES' : 'LANG: EN';
+            }
+
+            if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') {
+                actualizarPantallaConversion();
+            }
+
             reproducirSonido('menu');
         }
 
@@ -1982,11 +1996,13 @@
 
                     function desdeMenuAbrirSalario() {
             if (typeof apagarModoMenu === 'function') apagarModoMenu();
-            if (modoConversionActivo && typeof apagarModoConversion === 'function') apagarModoConversion();
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
             var lcd = document.getElementById('pantallaVerde');
             if (lcd) lcd.classList.remove('modo-menu-activo');
+            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
+                apagarModoConversion();
+            }
             if (!modoSalarioActivo) seleccionarMenu('sal');
             reproducirSonido('menu');
         }
@@ -2006,11 +2022,11 @@
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
-            if (typeof pendingOp === 'undefined') {
-                window.pendingOp = null;
-                window.pendingVal = null;
-            }
             var cur = parseFloat(sSub) || 0;
+            if (typeof pendingOp === 'undefined') {
+                pendingOp = null;
+                pendingVal = null;
+            }
             if (pendingOp && pendingVal !== null) {
                 if (pendingOp === '+') cur = pendingVal + cur;
                 else if (pendingOp === '-') cur = pendingVal - cur;

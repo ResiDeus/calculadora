@@ -1575,9 +1575,10 @@
                             <!-- Fila principal: Unidades en el centro y SWAP a la derecha alineados perfectamente -->
                             <div style="display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; width:100%;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-                                    <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')" style="font-size: 16px; padding: 4px 10px; font-weight: bold;">kg</button>
+                                    <!-- Unidades con min-width para que no se deformen -->
+                                    <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')" style="font-size: 16px; padding: 4px 6px; font-weight: bold; min-width: 50px; text-align: center;">kg</button>
                                     <span style="font-size:15px; font-weight:900; color:#ffb4b4;">→</span>
-                                    <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')" style="font-size: 16px; padding: 4px 10px; font-weight: bold;">lb</button>
+                                    <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')" style="font-size: 16px; padding: 4px 6px; font-weight: bold; min-width: 50px; text-align: center;">lb</button>
                                 </div>
                         
                                 <!-- Botón SWAP al lado derecho (Mismo tamaño y alineación horizontal exacta) -->

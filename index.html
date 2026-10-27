@@ -1985,7 +1985,7 @@
                 if (pendingOp === '+') cur = pendingVal + cur;
                 else if (pendingOp === '-') cur = pendingVal - cur;
                 else if (pendingOp === '*') cur = pendingVal * cur;
-                else if (pendingOp === '/') cur = (pendingVal === 0 ? 0 : pendingVal / cur);
+                else if (pendingOp === '/') cur = (cur === 0 ? 0 : pendingVal / cur);
                 sSub = String(Number(cur.toFixed(8)));
                 var lbl = document.getElementById('lblSub');
                 if (lbl) lbl.innerText = sSub;
@@ -1998,50 +1998,9 @@
             if (typeof calc === 'function') calc();
         }
 
-            const UNIDADES_CONV = {
-
-            // Si estaba la pantalla roja (CONV), se apaga
-            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
-                apagarModoConversion();
-            }
-            var vistaConvFix = document.getElementById('vistaConversion');
-            if (vistaConvFix) vistaConvFix.style.display = 'none';
-
-            // Elementos de la pantalla
-            var lcd = document.getElementById('pantallaVerde');
-            if (lcd) {
-                lcd.classList.add('modo-menu-activo');
-                lcd.classList.remove('modo-salario-activo');
-                lcd.classList.remove('modo-conversion-activo');
-            }
-            var vista = document.getElementById('vistaMenu');
-            var lista = document.getElementById('listaPrecios');
-            var wrap = document.getElementById('wrapperDataComprasLcd');
-            var wrapSal = document.getElementById('wrapperDataSalarioLcd');
-            var vistaSal = document.getElementById('vistaSubPantallaSalario');
-            var vistaConv = document.getElementById('vistaConversion');
-            var btn = document.getElementById('btnMenu');
-
-            if (lcd) {
-                lcd.classList.add('modo-menu-activo');
-                lcd.classList.remove('modo-salario-activo', 'modo-conversion-activo');
-            }
-            if (vista) vista.style.display = 'flex';
-            if (lista) lista.style.display = 'none';
-            if (wrap) wrap.style.display = 'none';
-            if (wrapSal) wrapSal.style.display = 'none';
-            if (vistaSal) vistaSal.style.display = 'none';
-            if (vistaConv) vistaConv.style.display = 'none';
-            if (btn) btn.classList.add('btn-on');
-
-            var header = document.getElementById('txtHeaderIndicadores');
-            if (header) header.innerText = t('modoMenu');
-            reproducirSonido('menu');
-        }
-
         // Cada categoría: lista de unidades con toBase / fromBase
         // Base: peso=kg, cocina=ml, largo=m, temp=°C, data=byte
-                const UNIDADES_CONV = {
+        const UNIDADES_CONV = {
             peso: [
                 { id: 'kg', label: 'kg', nombre: 'Kilogramo', toBase: v => v, fromBase: v => v },
                 { id: 'lb', label: 'lb', nombre: 'Libra', toBase: v => v * 0.4536, fromBase: v => v / 0.4536 },
@@ -2091,7 +2050,6 @@
                 { id: 'brl', label: 'BRL', nombre: 'Real brasileño', toBase: v => v / 5.0, fromBase: v => v * 5.0 },
                 { id: 'cop', label: 'COP', nombre: 'Peso colombiano', toBase: v => v / 4100, fromBase: v => v * 4100 },
                 { id: 'clp', label: 'CLP', nombre: 'Peso chileno', toBase: v => v / 950, fromBase: v => v * 950 },
-                                { id: 'clp', label: 'CLP', nombre: 'Peso chileno', toBase: v => v / 950, fromBase: v => v * 950 },
                 { id: 'ars', label: 'ARS', nombre: 'Peso argentino', toBase: v => v / 900, fromBase: v => v * 900 },
                 { id: 'pen', label: 'PEN', nombre: 'Sol peruano', toBase: v => v / 3.7, fromBase: v => v * 3.7 },
                 { id: 'cad', label: 'CAD', nombre: 'Dólar canadiense', toBase: v => v / 1.36, fromBase: v => v * 1.36 },

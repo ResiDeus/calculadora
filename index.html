@@ -310,19 +310,9 @@
         }
         /* LCD modo conversión (rojo) */
         .lcd.modo-conversion-activo {
-        /* CONV activo = mismo glitch que SALARIO */
-        body .btn-conv.btn-on,
-        body.theme-cyberpunk .btn-conv.btn-on {
-            position: relative !important;
-            overflow: hidden !important;
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border: 2px solid #00f0ff !important;
-            color: #ffffff !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
+            background: #3b0a0a !important;
+            color: #ffb4b4 !important;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(255, 60, 60, 0.35) !important;
         }
         body .btn-conv.btn-on::after,
         body.theme-cyberpunk .btn-conv.btn-on::after {
@@ -341,24 +331,60 @@
             z-index: 10 !important;
         }
         
+.lcd.modo-conversion-activo .lcd-header {
+            border-bottom: 1px solid rgba(255, 100, 100, 0.4) !important;
+            color: #ff6b6b !important;
+        }
+        .lcd.modo-conversion-activo #listaPrecios,
+        .lcd.modo-conversion-activo #lblArtText,
+        .lcd.modo-conversion-activo .lbl-lista-vacia-texto,
+        .lcd.modo-conversion-activo #flechaGuia {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+
         .lcd.modo-menu-activo {
             background: #1a0a2e !important;
             color: #e0b0ff !important;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(160, 80, 255, 0.4) !important;
         }
         .lcd.modo-menu-activo #listaPrecios,
-        .lcd.modo-menu-activo #lblArtText {
+        .lcd.modo-menu-activo #lblArtText,
+        .lcd.modo-menu-activo .lbl-lista-vacia-texto {
             display: none !important;
+            visibility: hidden !important;
         }
-        
-        body .btn-menu.btn-on {
-            background: linear-gradient(90deg, #7c3aed, #c084fc, #7c3aed) !important;
+
+        body .btn-menu.btn-on,
+        body.theme-cyberpunk .btn-menu.btn-on {
+            position: relative !important;
+            overflow: hidden !important;
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
             background-size: 200% auto !important;
-            border: 2px solid #e9d5ff !important;
-            color: #fff !important;
-            box-shadow: 0 0 16px rgba(124, 58, 237, 0.7) !important;
-            animation: activeMenuMove 1.5s infinite linear !important;
+            border: 2px solid #00f0ff !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055 !important;
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+            opacity: 1 !important;
         }
-        
+        body .btn-menu.btn-on::after,
+        body.theme-cyberpunk .btn-menu.btn-on::after {
+            content: "MENU" !important;
+            position: absolute !important;
+            top: 0 !important; left: 0 !important;
+            width: 100% !important; height: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            color: #00f0ff !important;
+            text-shadow: -2px 0 #ff0055 !important;
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+        }
+
         .btn-swap-conv {
             width: 36px;
             height: 36px;
@@ -385,26 +411,16 @@
             color: #f3e8ff;
             text-transform: uppercase;
             box-sizing: border-box;
-    }
-            background: #3b0a0a !important;
-            color: #ffb4b4 !important;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(255, 60, 60, 0.35) !important;
         }
-        .lcd.modo-conversion-activo .lcd-header {
-            border-bottom: 1px solid rgba(255, 100, 100, 0.4) !important;
-            color: #ff6b6b !important;
-        }
-        
-        /* Tabs conversión — más grandes y fáciles de tocar */
+
         .tab-conv {
-            flex: 1;
             background: rgba(255, 80, 80, 0.18) !important;
             border: 1px solid rgba(255, 140, 140, 0.5) !important;
             color: #ffc9c9 !important;
-            font-size: 10px !important;
+            font-size: 8px !important;
             font-weight: 900 !important;
-            padding: 6px 2px !important;
-            min-height: 26px !important;
+            padding: 4px 1px !important;
+            min-height: 22px !important;
             border-radius: 5px !important;
             cursor: pointer;
             font-family: monospace;
@@ -421,12 +437,10 @@
             border-color: #ffffff !important;
             box-shadow: 0 0 10px rgba(255, 59, 48, 0.65) !important;
         }
-        
-        /* Botones de unidad (kg) (lb) — independientes */
         .btn-unidad-conv {
-            min-width: 72px;
-            padding: 8px 10px;
-            font-size: 14px;
+            min-width: 56px;
+            padding: 5px 6px;
+            font-size: 12px;
             font-weight: 900;
             font-family: monospace;
             border-radius: 8px;
@@ -434,132 +448,12 @@
             background: rgba(0, 0, 0, 0.35);
             border: 2px solid #ff6b6b;
             color: #ffffff;
-            text-transform: none;
         }
         .btn-unidad-conv:active {
             background: #ffffff !important;
             color: #000000 !important;
             border-color: #ffffff !important;
         }
-        
-        /* CONV activo = mismo glitch que SALARIO (incluye tema principal) */
-        body .btn-conv.btn-on,
-        body.theme-cyberpunk .btn-conv.btn-on,
-        body.theme-retro-gold .btn-conv.btn-on,
-        body.theme-matrix .btn-conv.btn-on,
-        body.theme-sunset .btn-conv.btn-on,
-        body.theme-puertorico .btn-conv.btn-on {
-            position: relative !important;
-            overflow: hidden !important;
-            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-            background-size: 200% auto !important;
-            border: 2px solid #00f0ff !important;
-            color: #ffffff !important;
-            text-transform: uppercase !important;
-            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-            box-shadow: 0 0 18px #ff0055 !important;
-            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-            opacity: 1 !important;
-            filter: none !important;
-        }
-        
-        body .btn-conv.btn-on::after,
-        body.theme-cyberpunk .btn-conv.btn-on::after {
-            content: "CONV." !important;
-            position: absolute !important;
-            top: 0 !important; left: 0 !important;
-            width: 100% !important; height: 100% !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            background: rgba(0,0,0,0.1) !important;
-            color: #00f0ff !important;
-            text-shadow: -2px 0 #ff0055 !important;
-            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-            pointer-events: none !important;
-            z-index: 10 !important;
-        }
-        
-        /* MENU violeta */
-        .lcd.modo-menu-activo {
-            background: #1a0a2e !important;
-            color: #e0b0ff !important;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(160, 80, 255, 0.4) !important;
-        }
-        .lcd.modo-menu-activo #listaPrecios,
-        .lcd.modo-menu-activo #lblArtText,
-        .lcd.modo-menu-activo .lbl-lista-vacia-texto {
-            display: none !important;
-            visibility: hidden !important;
-        }
-        
-        body .btn-menu.btn-on,
-body.theme-cyberpunk .btn-menu.btn-on {
-    position: relative !important;
-    overflow: hidden !important;
-    background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
-    background-size: 200% auto !important;
-    border: 2px solid #00f0ff !important;
-    color: #ffffff !important;
-    text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
-    box-shadow: 0 0 18px #ff0055 !important;
-    animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
-    opacity: 1 !important;
-}
-body .btn-menu.btn-on::after,
-body.theme-cyberpunk .btn-menu.btn-on::after {
-    content: "MENU" !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    color: #00f0ff !important;
-    text-shadow: -2px 0 #ff0055 !important;
-    animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
-    pointer-events: none !important;
-    z-index: 10 !important;
-}
-        
-        .btn-swap-conv {
-            width: 36px; height: 36px;
-            border-radius: 8px;
-            font-size: 16px; font-weight: 900;
-            cursor: pointer;
-            background: rgba(0,0,0,0.35);
-            border: 2px solid #ff6b6b;
-            color: #fff;
-        }
-        .btn-menu-item {
-            width: 100%; padding: 8px; margin-bottom: 6px;
-            font-family: monospace; font-weight: 900; font-size: 12px;
-            border-radius: 8px; cursor: pointer;
-            background: rgba(124, 58, 237, 0.25);
-            border: 2px solid #c084fc;
-            color: #f3e8ff;
-            text-transform: uppercase;
-        }
-        
-        /* En pantalla roja no se ve lista vacía ni lista de compras */
-        .lcd.modo-conversion-activo #listaPrecios,
-        .lcd.modo-conversion-activo #lblArtText,
-        .lcd.modo-conversion-activo .lbl-lista-vacia-texto,
-        .lcd.modo-conversion-activo #flechaGuia {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
-        
-        .btn-conv.btn-on {
-            border-color: #ff3b30 !important;
-            color: #ff6b6b !important;
-            box-shadow: 0 0 12px rgba(255, 59, 48, 0.5) !important;
-        }
-
-        /* En modo salario escondemos la lista de compras */
         .lcd.modo-salario-activo #listaPrecios,
         .lcd.modo-salario-activo #lblArtText {
             display: none !important;
@@ -2104,7 +1998,7 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             if (typeof calc === 'function') calc();
         }
 
-            modoMenuActivo = true;
+            const UNIDADES_CONV = {
 
             // Si estaba la pantalla roja (CONV), se apaga
             if (modoConversionActivo && typeof apagarModoConversion === 'function') {
@@ -2554,45 +2448,27 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
         /* ============================================================
            CLEAR DIRECTO (sin preguntas)
            ============================================================ */
-        function ejecutarClearDirecto() {
+                function ejecutarClearDirecto() {
             reproducirSonido('menu');
 
-            // Si estás en el menú violeta → salir a pantalla verde y limpiar
-                       // Salir de menú violeta
+            // Menú violeta → salir y limpiar todo
             if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo) {
                 modoMenuActivo = false;
-            }
-            var vistaMenuR = document.getElementById('vistaMenu');
-            if (vistaMenuR) vistaMenuR.style.display = 'none';
-            var btnMenuR = document.getElementById('btnMenu');
-            if (btnMenuR) btnMenuR.classList.remove('btn-on');
-
-            // Salir de conversión
-            if (typeof modoConversionActivo !== 'undefined' && modoConversionActivo) {
-                modoConversionActivo = false;
-            }
-            var vistaConvR = document.getElementById('vistaConversion');
-            if (vistaConvR) vistaConvR.style.display = 'none';
-
-            var lcdR = document.getElementById('pantallaVerde');
-            if (lcdR) {
-                lcdR.classList.remove('modo-menu-activo');
-                lcdR.classList.remove('modo-conversion-activo');
-                lcdR.classList.remove('modo-salario-activo');
+                var vistaMenu = document.getElementById('vistaMenu');
+                if (vistaMenu) vistaMenu.style.display = 'none';
+                var btnMenu = document.getElementById('btnMenu');
+                if (btnMenu) btnMenu.classList.remove('btn-on');
+                var lcd = document.getElementById('pantallaVerde');
+                if (lcd) {
+                    lcd.classList.remove('modo-menu-activo');
+                    lcd.classList.remove('modo-conversion-activo');
+                    lcd.classList.remove('modo-salario-activo');
+                }
+                ejecutarResetTotal();
+                return;
             }
 
-            // Mostrar de nuevo la lista de compras
-            var listaR = document.getElementById('listaPrecios');
-            if (listaR) listaR.style.display = 'block';
-            var wrapR = document.getElementById('wrapperDataComprasLcd');
-            if (wrapR) wrapR.style.display = 'block';
-            var wrapSalR = document.getElementById('wrapperDataSalarioLcd');
-            if (wrapSalR) wrapSalR.style.display = 'none';
-            var vistaSalR = document.getElementById('vistaSubPantallaSalario');
-            if (vistaSalR) vistaSalR.style.display = 'none';
-        }
-
-            // Si estás en conversión → solo limpia el número
+            // Conversión → solo limpia el número
             if (modoConversionActivo) {
                 sConv = '0';
                 if (typeof actualizarPantallaConversion === 'function') {
@@ -2746,7 +2622,8 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             if (document.getElementById('btnToggleIvu')) document.getElementById('btnToggleIvu').className = "caja-data btn-off";
 
             if (document.getElementById('btnModoSalario')) {
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                var btnSalTmp = document.getElementById('btnModoSalario');
+if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             }
 
             // Precio a cero con parpadeo
@@ -2817,7 +2694,8 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
                     wrapperSalario.style.display = "block";
                     wrapperCompras.style.display = "none";
 
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom btn-on";
+                    var btnSalTmp = document.getElementById('btnModoSalario');
+if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                     calcularSalarioSubPantalla();
                 } else {
                     lcd.classList.remove('modo-salario-activo');
@@ -2848,7 +2726,8 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
                         pintarListaCompras(bloqueListaCompras);
                     }
 
-                    document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                    var btnSalTmp = document.getElementById('btnModoSalario');
+                    if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                     calc();
                 }
                 actualizarHeaderIndicadores();
@@ -2865,7 +2744,8 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
                 wrapperCompras.style.display = "block";
 
                 if (textoListaVacia && preciosGuardados.length === 0) textoListaVacia.style.display = "block";
-                document.getElementById('btnModoSalario').className = "btn-salario-bottom";
+                var btnSalTmp = document.getElementById('btnModoSalario');
+if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
                 if (preciosGuardados.length === 0) {
                     bloqueListaCompras.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';

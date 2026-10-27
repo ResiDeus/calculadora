@@ -2017,30 +2017,39 @@
             reproducirSonido('menu');
         }
 
+        function evaluarPendiente() {
+            if (!pendingOp || pendingVal === null) return parseFloat(sSub) || 0;
+            var cur = parseFloat(sSub) || 0;
+            var res = cur;
+            if (pendingOp === '+') res = pendingVal + cur;
+            else if (pendingOp === '-') res = pendingVal - cur;
+            else if (pendingOp === '*') res = pendingVal * cur;
+            else if (pendingOp === '/') res = (cur === 0 ? 0 : pendingVal / cur);
+            pendingOp = null;
+            pendingVal = null;
+            sSub = String(Number(res.toFixed(8)));
+            var lbl = document.getElementById('lblSub');
+            if (lbl) lbl.innerText = sSub;
+            return res;
+        }
+
         function opMath(op) {
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
-            
+
             var cur = parseFloat(sSub) || 0;
-            if (typeof pendingOp === 'undefined') {
-                pendingOp = null;
-                pendingVal = null;
-            }
             if (pendingOp && pendingVal !== null) {
-                if (pendingOp === '+') cur = pendingVal + cur;
-                else if (pendingOp === '-') cur = pendingVal - cur;
-                else if (pendingOp === '*') cur = pendingVal * cur;
-                else if (pendingOp === '/') cur = (cur === 0 ? 0 : pendingVal / cur);
-                sSub = String(Number(cur.toFixed(8)));
-                var lbl = document.getElementById('lblSub');
-                if (lbl) lbl.innerText = sSub;
+                evaluarPendiente();
+                cur = parseFloat(sSub) || 0;
             }
-            pendingVal = parseFloat(sSub) || 0;
+            pendingVal = cur;
             pendingOp = op;
+
+            var simbolo = op === '*' ? '×' : (op === '/' ? '÷' : (op === '-' ? '−' : '+'));
+            var lbl = document.getElementById('lblSub');
+            if (lbl) lbl.innerText = (Number(cur.toFixed(8))) + simbolo;
             sSub = '0';
-            var lbl2 = document.getElementById('lblSub');
-            if (lbl2) lbl2.innerText = '0';
             if (typeof calc === 'function') calc();
         }
 
@@ -2559,6 +2568,8 @@
             cuentaAcumulada = 0;
             preciosGuardados = [];
             modoSalarioActivo = false;
+            pendingOp = null;
+            pendingVal = null;
 
             // Valores de fábrica de nómina
             precioHoraTrabajo = 10.50;
@@ -3229,7 +3240,15 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             reproducirSonido('tecla');
 
             sSub = sSub.slice(0, -1);
-            if (!sSub) sSub = "0";
+            if (!sSub) {
+                if (pendingOp && pendingVal !== null) {
+                    sSub = String(Number(pendingVal.toFixed(8)));
+                    pendingOp = null;
+                    pendingVal = null;
+                } else {
+                    sSub = "0";
+                }
+            }
 
             document.getElementById('lblSub').innerText = sSub;
             calc();
@@ -3245,6 +3264,11 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          */
         function addProducto() {
             if (!sistemaEncendido || modoSalarioActivo) return;
+
+            // Si hay operación pendiente (ej: 5 × 2), resuélvela antes de añadir
+            if (pendingOp && pendingVal !== null) {
+                evaluarPendiente();
+            }
 
             // Si escribes 0.1, lo convertimos a 0.01
             let textoPrecio = sSub;

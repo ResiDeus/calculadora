@@ -1950,7 +1950,7 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             });
         }
 
-            function alternarIdioma() {
+        function alternarIdioma() {
             idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
 
             if (typeof aplicarIdiomaUI === 'function') {
@@ -1986,19 +1986,63 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
 
         function toggleModoMenu() {
             if (!sistemaEncendido) return;
-            if (modoConversionActivo) apagarModoConversion();
-            if (modoSalarioActivo) seleccionarMenu('sal');
 
+            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
+                apagarModoConversion();
+            }
+            if (modoSalarioActivo) {
+                seleccionarMenu('sal');
+            }
+
+            // Si el menú ya está abierto → cerrarlo
             if (modoMenuActivo) {
                 apagarModoMenu();
-                actualizarHeaderIndicadores();
-                calc();
+                if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
+                if (typeof calc === 'function') calc();
                 reproducirSonido('menu');
                 return;
             }
 
-                    function desdeMenuAbrirSalario() {
-            // 1) Cerrar menú violeta del todo
+            // Abrir menú violeta
+            modoMenuActivo = true;
+
+            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
+                apagarModoConversion();
+            }
+            var vistaConvFix = document.getElementById('vistaConversion');
+            if (vistaConvFix) vistaConvFix.style.display = 'none';
+
+            var lcd = document.getElementById('pantallaVerde');
+            if (lcd) {
+                lcd.classList.add('modo-menu-activo');
+                lcd.classList.remove('modo-salario-activo');
+                lcd.classList.remove('modo-conversion-activo');
+            }
+
+            var vista = document.getElementById('vistaMenu');
+            var lista = document.getElementById('listaPrecios');
+            var wrap = document.getElementById('wrapperDataComprasLcd');
+            var wrapSal = document.getElementById('wrapperDataSalarioLcd');
+            var vistaSal = document.getElementById('vistaSubPantallaSalario');
+            var vistaConv = document.getElementById('vistaConversion');
+            var btn = document.getElementById('btnMenu');
+
+            if (vista) vista.style.display = 'flex';
+            if (lista) lista.style.display = 'none';
+            if (wrap) wrap.style.display = 'none';
+            if (wrapSal) wrapSal.style.display = 'none';
+            if (vistaSal) vistaSal.style.display = 'none';
+            if (vistaConv) vistaConv.style.display = 'none';
+            if (btn) btn.classList.add('btn-on');
+
+            var header = document.getElementById('txtHeaderIndicadores');
+            if (header) {
+                header.innerText = (typeof t === 'function') ? t('modoMenu') : 'MODO: MENÚ';
+            }
+            reproducirSonido('menu');
+        }
+
+        function desdeMenuAbrirSalario() {
             modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
@@ -2007,12 +2051,9 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             var btnMenu = document.getElementById('btnMenu');
             if (btnMenu) btnMenu.classList.remove('btn-on');
 
-            // 2) Cerrar conversión si estaba
             if (modoConversionActivo && typeof apagarModoConversion === 'function') {
                 apagarModoConversion();
             }
-
-            // 3) Abrir salario (si ya está abierto, no lo apagues)
             if (!modoSalarioActivo) {
                 seleccionarMenu('sal');
             }
@@ -2020,7 +2061,6 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
         }
 
         function desdeMenuAbrirConversion() {
-            // 1) Cerrar menú violeta del todo
             modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
@@ -2029,12 +2069,9 @@ body.theme-cyberpunk .btn-menu.btn-on::after {
             var btnMenu = document.getElementById('btnMenu');
             if (btnMenu) btnMenu.classList.remove('btn-on');
 
-            // 2) Cerrar salario si estaba
             if (modoSalarioActivo) {
                 seleccionarMenu('sal');
             }
-
-            // 3) Abrir conversión
             if (!modoConversionActivo) {
                 toggleModoConversion();
             }

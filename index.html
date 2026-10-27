@@ -1571,7 +1571,7 @@
                         
                         <!-- MEDIO: unidades + swap (VERSIÓN ALINEADA A LA DERECHA) -->
                         <!-- #cambiar -->
-                        <div style="flex-shrink:0; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:10px; padding:2px 0;">
+                        <div style="flex-shrink:0; display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:10px; width:100%; padding:2px 0;">
                             <!-- Bloque Izquierdo: Unidades y Fórmula en columna -->
                             <div style="display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:center;">
                                 <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
@@ -1582,8 +1582,8 @@
                                 <div id="lblConvFormula" style="text-align:center; font-size:9px; color:#ffcccc; line-height:1.0;">Kilogramo → Libra</div>
                             </div>
                         
-                            <!-- Botón SWAP al lado derecho (Mismo tamaño que unidades) -->
-                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()" style="font-size: 16px; padding: 4px 10px; font-weight: bold; display:flex; align-items:center; justify-content:center; margin:0;">⇄</button>
+                            <!-- Botón SWAP al lado derecho (Mismo tamaño que unidades, empujado al extremo) -->
+                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()" style="font-size: 16px; padding: 4px 10px; font-weight: bold; display:flex; align-items:center; justify-content:center; margin:0; flex-shrink:0;">⇄</button>
                         </div>
 
                         <!-- ABAJO: resultado -->

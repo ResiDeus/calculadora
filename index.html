@@ -2029,7 +2029,21 @@
         }
 
             modoMenuActivo = true;
+
+            // Si estaba la pantalla roja (CONV), se apaga
+            if (modoConversionActivo && typeof apagarModoConversion === 'function') {
+                apagarModoConversion();
+            }
+            var vistaConvFix = document.getElementById('vistaConversion');
+            if (vistaConvFix) vistaConvFix.style.display = 'none';
+
+            // Elementos de la pantalla
             var lcd = document.getElementById('pantallaVerde');
+            if (lcd) {
+                lcd.classList.add('modo-menu-activo');
+                lcd.classList.remove('modo-salario-activo');
+                lcd.classList.remove('modo-conversion-activo');
+            }
             var vista = document.getElementById('vistaMenu');
             var lista = document.getElementById('listaPrecios');
             var wrap = document.getElementById('wrapperDataComprasLcd');
@@ -3115,9 +3129,17 @@
                 reproducirSonido('menu');
                 return;
             }
-
+            
             // Entrar a CONV
             modoConversionActivo = true;
+            // Si el menú violeta estaba abierto, se apaga
+            if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo && typeof apagarModoMenu === 'function') {
+                apagarModoMenu();
+            }
+            var vistaMenuFix = document.getElementById('vistaMenu');
+            if (vistaMenuFix) vistaMenuFix.style.display = 'none';
+            var lcdMenuFix = document.getElementById('pantallaVerde');
+            if (lcdMenuFix) lcdMenuFix.classList.remove('modo-menu-activo');
             const lcd = document.getElementById('pantallaVerde');
             const vistaConv = document.getElementById('vistaConversion');
             const lista = document.getElementById('listaPrecios');

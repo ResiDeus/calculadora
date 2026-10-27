@@ -1029,10 +1029,10 @@
         }
 
         .btn-key.btn-op {
-            background-color: #0a1a3a !important;
-            border-color: #4da3ff !important;
-            color: #b3d9ff !important;
-            box-shadow: 0 0 8px rgba(77, 163, 255, 0.35) !important;
+            background: linear-gradient(135deg, #5b21b6 0%, #ea580c 100%) !important;
+            border-color: #f97316 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 10px rgba(249, 115, 22, 0.45) !important;
         }
 
         /* Estrellitas suaves encima de las teclas */
@@ -1970,6 +1970,7 @@
             var btn = document.getElementById('btnMenu');
 
             if (vista) vista.style.display = 'flex';
+            if (document.getElementById('flechaGuia')) document.getElementById('flechaGuia').style.display = 'none';
             if (lista) lista.style.display = 'none';
             if (wrap) wrap.style.display = 'none';
             if (wrapSal) wrapSal.style.display = 'none';
@@ -2902,8 +2903,10 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
                 'TOTAL: $' + totalConTax.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(con IVU/DTO)</span></div>';
         
-            if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia')) {
+            if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo) {
                 document.getElementById('flechaGuia').style.display = "block";
+            } else if (document.getElementById('flechaGuia')) {
+                document.getElementById('flechaGuia').style.display = "none";
             }
         }
 
@@ -3072,10 +3075,6 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
         function intercambiarUnidadesConv() {
             if (!modoConversionActivo) return;
-            if (catConversion === 'moneda') {
-                reproducirSonido('paso');
-                return;
-            }
             var tmp = idxUnidadIzq;
             idxUnidadIzq = idxUnidadDer;
             idxUnidadDer = tmp;

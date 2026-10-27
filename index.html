@@ -419,8 +419,8 @@
             color: #ffc9c9 !important;
             font-size: 8px !important;
             font-weight: 900 !important;
-            padding: 4px 1px !important;
-            min-height: 22px !important;
+            padding: 5px 1px !important;
+            min-height: 24px !important;
             border-radius: 5px !important;
             cursor: pointer;
             font-family: monospace;
@@ -429,7 +429,7 @@
         .tab-conv-lg {
             font-size: 10px !important;
             padding: 6px 2px !important;
-            min-height: 26px !important;
+            min-height: 28px !important;
         }
         .tab-conv.active {
             background: #ff3b30 !important;
@@ -438,9 +438,9 @@
             box-shadow: 0 0 10px rgba(255, 59, 48, 0.65) !important;
         }
         .btn-unidad-conv {
-            min-width: 56px;
-            padding: 5px 6px;
-            font-size: 12px;
+            min-width: 64px;
+            padding: 8px 8px;
+            font-size: 14px;
             font-weight: 900;
             font-family: monospace;
             border-radius: 8px;
@@ -1464,7 +1464,7 @@
                          Izquierda: paga/hora + horas/semana
                          Derecha: régimen, SS, Medicare, retención
                          ==================================================== -->
-                    <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0px; overflow: visible; z-index: 95; box-sizing: border-box; height: 75px !important; max-height: 75px !important; position: absolute !important; top: 6px !important; left: 6px !important;">
+                    <div id="vistaSubPantallaSalario" style="display: none; flex-direction: row; justify-content: space-between; align-items: flex-start; width: 96%; font-family: monospace; line-height: 1.1; font-size: 11px; gap: 8px; padding: 0px; overflow: visible; z-index: 95; box-sizing: border-box; height: 82px !important; max-height: 82px !important; position: absolute !important; top: 6px !important; left: 6px !important;">
 
                         <!-- Columna izquierda: paga y horas -->
                         <div style="display: flex; flex-direction: column; gap: 5px; width: 46%; height: 100%; justify-content: flex-start !important; overflow: visible; margin: 0; margin-left: -6px; padding-left: 0px; align-items: flex-start; text-align: left;">
@@ -1526,9 +1526,9 @@
                             </div>
 
                             <!-- Retención manual / Hacienda -->
-                            <div style="display: flex; flex-direction: column; width: 100%; gap: 2px; overflow: visible; margin-bottom: 2px;">
-                                <span id="lblTextoManual" style="font-size: 11px; opacity: 1; font-weight: 900; color: #fff; white-space: nowrap; text-shadow: 0 0 2px rgba(0,240,255,0.25); line-height: 1;">RETENCIÓN MANUAL:</span>
-                                <div style="display: flex; align-items: center; line-height: 1; height: 18px; width: 100%; overflow: visible;">
+                            <div style="display: flex; flex-direction: column; width: 100%; gap: 2px; overflow: visible; margin-bottom: 0; padding-bottom: 2px;">
+                                <span id="lblTextoManual" style="font-size: 10px; opacity: 1; font-weight: 900; color: #fff; white-space: nowrap; text-shadow: 0 0 2px rgba(0,240,255,0.25); line-height: 1;">RETENCIÓN MANUAL:</span>
+                                <div style="display: flex; align-items: center; line-height: 1; height: 20px; width: 100%; overflow: visible; margin-bottom: 2px;">
                                     <div style="text-align: left; display: inline-block; width: 38px; min-width: 38px; margin-right: auto;">
                                         <span id="lblManualPctLcd" style="font-size: 12px; font-weight: 900; color: #fff; background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 2px;">0.0%</span>
                                     </div>
@@ -1541,43 +1541,47 @@
                         </div>
                     </div><!-- fin subpantalla salario -->
                     <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
-                        <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; font-family:monospace; position:absolute; top:-2px; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:0; overflow:visible; max-height:none; justify-content:flex-start;">
-                        
-                        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:2px; width:100%; margin-bottom:1px;">
-                            <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
-                            <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
+                    <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; height:100%; font-family:monospace; position:absolute; top:0; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:2px 0 0; overflow:hidden; justify-content:space-between;">
+
+                        <!-- ARRIBA: categorías -->
+                        <div style="flex-shrink:0;">
+                            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:3px; width:100%; margin-bottom:3px;">
+                                <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
+                            </div>
+                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
+                                <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
+                                <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
+                                <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
+                                <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
+                                <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
+                                <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
+                            </div>
+                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%;">
+                                <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
+                                <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
+                                <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
+                                <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
+                                <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
+                                <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
+                            </div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:1px;">
-                            <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
-                            <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
-                            <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
-                            <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
-                            <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
-                            <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
+                        <!-- MEDIO: unidades + swap -->
+                        <div style="flex-shrink:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:4px 0;">
+                            <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+                                <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
+                                <span style="font-size:14px; font-weight:900; color:#ffb4b4;">→</span>
+                                <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
+                            </div>
+                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()" style="width:auto; min-width:70px; height:28px; font-size:11px; padding:0 8px;">⇄ SWAP</button>
+                            <div id="lblConvFormula" style="text-align:center; font-size:10px; color:#ffcccc; line-height:1.1;">Kilogramo → Libra</div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:1px;">
-                            <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
-                            <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
-                            <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
-                            <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
-                            <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
-                            <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
-                        </div>
-
-                        <div style="display:flex; align-items:center; justify-content:center; gap:4px; margin-bottom:1px;">
-                            <button type="button" id="btnConvIzq" class="btn-unidad-conv" onclick="rotarUnidadConv('izq')">kg</button>
-                            <span style="font-size:11px; font-weight:900; color:#ffb4b4;">→</span>
-                            <button type="button" id="btnConvDer" class="btn-unidad-conv" onclick="rotarUnidadConv('der')">lb</button>
-                            <button type="button" id="btnSwapConv" class="btn-swap-conv" onclick="intercambiarUnidadesConv()">⇄</button>
-                        </div>
-
-                        <div id="lblConvFormula" style="text-align:center; font-size:8px; color:#ffcccc; margin-bottom:0; line-height:1;">Kilogramo → Libra</div>
-
-                        <div id="lblConvResultado" style="text-align:center; font-size:15px; font-weight:900; color:#fff; line-height:1.05; margin-top:0;">
+                        <!-- ABAJO: resultado -->
+                        <div id="lblConvResultado" style="flex-shrink:0; text-align:center; font-size:20px; font-weight:900; color:#fff; line-height:1.1; padding-bottom:2px;">
                             = 0.00 lb
                         </div>
                     </div>

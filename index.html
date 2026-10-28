@@ -2248,6 +2248,22 @@
             densidad: [
                 { id: 'gcm3', label: 'g/cm³', nombre: 'Gramo / cm³', toBase: v => v, fromBase: v => v },
                 { id: 'lbft3', label: 'lb/ft³', nombre: 'Libra / pie³', toBase: v => v / 62.4279, fromBase: v => v * 62.4279 }
+            ],
+            fuerza: [
+                { id: 'n', label: 'N', nombre: 'Newton', toBase: v => v, fromBase: v => v },
+                { id: 'lbf', label: 'lbf', nombre: 'Libra fuerza', toBase: v => v * 4.4482216153, fromBase: v => v / 4.4482216153 },
+                { id: 'kgf', label: 'kgf', nombre: 'Kilogramo fuerza', toBase: v => v * 9.80665, fromBase: v => v / 9.80665 },
+                { id: 'dyn', label: 'dyn', nombre: 'Dina', toBase: v => v * 0.00001, fromBase: v => v / 0.00001 }
+            ],
+    
+            potencia: [
+                { id: 'w', label: 'W', nombre: 'Vatio', toBase: v => v, fromBase: v => v },
+                { id: 'kw', label: 'kW', nombre: 'Kilovatio', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'mw', label: 'MW', nombre: 'Megavatio', toBase: v => v * 1000000, fromBase: v => v / 1000000 },
+                { id: 'mw_mili', label: 'mW', nombre: 'Miliwatio', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'hp', label: 'hp', nombre: 'Caballo de fuerza (mecánico)', toBase: v => v * 745.69987158, fromBase: v => v / 745.69987158 },
+                { id: 'cals', label: 'cal/s', nombre: 'Caloría por segundo', toBase: v => v * 4.1868, fromBase: v => v / 4.1868 },
+                { id: 'btuh', label: 'Btu/h', nombre: 'BTU por hora', toBase: v => v * 0.29307107, fromBase: v => v / 0.29307107 }
             ]
         };
         

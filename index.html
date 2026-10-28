@@ -1423,6 +1423,112 @@
             min-height: 20px !important;
         }
 
+
+        /* MENU, ⌫ y C = mismo look que el antiguo botón MENU de abajo */
+        .btn-menu-pad {
+            font-size: 11px !important;
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            background: var(--num-bg-theme) !important;
+            border: 2px solid var(--neon-primary) !important;
+            color: #ffffff !important;
+            animation: none !important;
+        }
+        body.theme-cyberpunk .btn-menu-pad {
+            background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
+            background-size: 200% auto !important;
+            animation: activeMenuMove 3s infinite linear !important;
+            border: 2px solid #8e8e93 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
+            text-shadow: none !important;
+        }
+
+        /* MENU activo (glitch) se mantiene con .btn-on */
+        body .btn-menu-pad.btn-on,
+        body.theme-cyberpunk .btn-menu-pad.btn-on {
+            position: relative !important;
+            overflow: hidden !important;
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-size: 200% auto !important;
+            border: 2px solid #00f0ff !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055 !important;
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+            opacity: 1 !important;
+        }
+        body .btn-menu-pad.btn-on::after,
+        body.theme-cyberpunk .btn-menu-pad.btn-on::after {
+            content: "MENU" !important;
+            position: absolute !important;
+            top: 0 !important; left: 0 !important;
+            width: 100% !important; height: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            color: #00f0ff !important;
+            text-shadow: -2px 0 #ff0055 !important;
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+        }
+
+        /* . y = = mismo color que antiguos MENU / RECIBO / CLEAR */
+        .btn-action-pad {
+            font-size: 1.2rem !important;
+            font-weight: 900 !important;
+            background: var(--num-bg-theme) !important;
+            border: 2px solid var(--neon-primary) !important;
+            color: #ffffff !important;
+            animation: none !important;
+        }
+        body.theme-cyberpunk .btn-action-pad {
+            background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
+            background-size: 200% auto !important;
+            animation: activeMenuMove 3s infinite linear !important;
+            border: 2px solid #8e8e93 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
+            text-shadow: none !important;
+        }
+
+        /* ÷ más grande */
+        .btn-divide {
+            font-size: 1.7rem !important;
+            font-weight: 900 !important;
+        }
+
+        /* Flash blanco al presionar (todos los del pad) */
+        .btn-key:active,
+        .btn-menu-pad:active,
+        .btn-action-pad:active,
+        .btn-key.btn-op:active {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            background-image: none !important;
+            color: #000000 !important;
+            border-color: #ffffff !important;
+            filter: brightness(2) contrast(1.5) !important;
+            box-shadow: 0 0 25px #ffffff, inset 0 0 12px #ffffff !important;
+            text-shadow: none !important;
+            animation: none !important;
+            transition: none !important;
+        }
+        .btn-key:active::before,
+        .btn-menu-pad:active::before,
+        .btn-action-pad:active::before {
+            display: none !important;
+        }
+
+        /* Menú scrollable */
+        #vistaMenu {
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            max-height: 150px !important;
+        }
+
+        
         /* ============================================================
            GLITCH / FLASH SUTIL EN EL LCD AL TOCAR TECLAS
            ============================================================ */
@@ -1651,10 +1757,11 @@
                     <!-- fin subpantalla conversión -->
 
                     <!-- ========== SUBPANTALLA MENU (violeta) ========== -->
-                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:5px; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; z-index:96; box-sizing:border-box; overflow:visible; justify-content:flex-start; padding-top:2px; max-height:none;">
+                    <div id="vistaMenu" style="display:none; flex-direction:column; gap:5px; width:96%; font-family:monospace; position:absolute; top:2px; left:4px; right:4px; z-index:96; box-sizing:border-box; overflow-y:auto; -webkit-overflow-scrolling:touch; justify-content:flex-start; padding-top:2px; max-height:150px;">
                         <button type="button" class="btn-menu-item" id="btnMenuCompras" onclick="desdeMenuAbrirCompras()">COMPRAS</button>
                         <button type="button" class="btn-menu-item" id="btnMenuSalario" onclick="desdeMenuAbrirSalario()">SALARIO</button>
                         <button type="button" class="btn-menu-item" id="btnMenuConv" onclick="desdeMenuAbrirConversion()">CONVERSIÓN</button>
+                        <button type="button" class="btn-menu-item" id="btnMenuRecibo" onclick="abrirHologramaRecibo()">RECIBO</button>
                         <button type="button" class="btn-menu-item" id="btnMenuTema" onclick="rotarTema()">TEMA</button>
                         <button type="button" class="btn-menu-item" id="btnMenuIdioma" onclick="alternarIdioma()">IDIOMA: ES</button>
                     </div>
@@ -1781,49 +1888,46 @@
         </div><!-- fin row-opciones-pasos -->
 
         <!-- ============================================================
-             TECLADO NUMÉRICO (5 filas)
+             TECLADO NUMÉRICO (5 filas × 4 columnas)
+             MENU | ⌫ | C | ÷
+             7 8 9 ×
+             4 5 6 −
+             1 2 3 +
+             0 . = STAT
              ============================================================ -->
         <div class="pad-num">
 
-            <!-- FILA 1: ⌫ (doble) · C · ÷ -->
-            <button type="button" class="btn-key btn-back" style="grid-column: span 2;" onclick="bksp()">⌫</button>
-            <button type="button" class="btn-key btn-op" onclick="clrPad()">C</button>
+            <!-- FILA 1 -->
+            <button type="button" id="btnMenu" class="btn-key btn-menu-pad btn-menu" onclick="toggleModoMenu()">MENU</button>
+            <button type="button" class="btn-key btn-menu-pad" onclick="bksp()">⌫</button>
+            <button type="button" class="btn-key btn-menu-pad" onclick="ejecutarClearDirecto()">C</button>
             <button type="button" class="btn-key btn-op btn-divide" onclick="opMath('/')">÷</button>
 
-            <!-- FILA 2: 7 8 9 × -->
+            <!-- FILA 2 -->
             <button type="button" class="btn-key" onclick="num('7')">7</button>
             <button type="button" class="btn-key" onclick="num('8')">8</button>
             <button type="button" class="btn-key" onclick="num('9')">9</button>
             <button type="button" class="btn-key btn-op" onclick="opMath('*')">×</button>
 
-            <!-- FILA 3: 4 5 6 − -->
+            <!-- FILA 3 -->
             <button type="button" class="btn-key" onclick="num('4')">4</button>
             <button type="button" class="btn-key" onclick="num('5')">5</button>
             <button type="button" class="btn-key" onclick="num('6')">6</button>
             <button type="button" class="btn-key btn-op" onclick="opMath('-')">−</button>
 
-            <!-- FILA 4: 1 2 3 + -->
+            <!-- FILA 4 -->
             <button type="button" class="btn-key" onclick="num('1')">1</button>
             <button type="button" class="btn-key" onclick="num('2')">2</button>
             <button type="button" class="btn-key" onclick="num('3')">3</button>
             <button type="button" class="btn-key btn-op" onclick="opMath('+')">+</button>
 
-            <!-- FILA 5: 0 · . · = (doble) -->
+            <!-- FILA 5 -->
             <button type="button" class="btn-key" onclick="num('0')">0</button>
-            <button type="button" class="btn-key btn-op" onclick="num('.')">.</button>
-            <button type="button" class="btn-key btn-op" style="grid-column: span 2;" onclick="equalsMath()">=</button>
+            <button type="button" class="btn-key btn-action-pad" onclick="num('.')">.</button>
+            <button type="button" class="btn-key btn-action-pad" onclick="equalsMath()">=</button>
+            <button type="button" class="btn-key btn-op" onclick="openStatMenu()">STAT</button>
 
         </div>
-
-        <!-- ============================================================
-             FILA INFERIOR: MENU | RECIBO | CLEAR
-             ============================================================ -->
-        <div class="row-acciones-inferior">
-            <button id="btnMenu" class="btn-theme btn-menu" onclick="toggleModoMenu()">MENU</button>
-            <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
-            <button id="btnStat" class="btn-clear-master btn-stat" onclick="openStatMenu()">STAT</button>
-        </div>
-
     </div><!-- fin chasis -->
 
     <!-- ============================================================
@@ -2151,7 +2255,7 @@
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
 
-            // Si ya había operación, evalúa primero (ej: 2+3+  → primero 5)
+            // Si ya había operación pendiente, primero resuélvela
             if (pendingOp && pendingVal !== null) {
                 evaluarPendiente();
             }
@@ -2166,17 +2270,22 @@
             // NO llama calc() automático
         }
 
-                /** Botón = : calcula y muestra el resultado en el precio */
+               /** Botón = : calcula y muestra el resultado en el precio */
         function equalsMath() {
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
 
             if (pendingOp && pendingVal !== null) {
-                evaluarPendiente(); // deja el resultado en sSub y en lblSub
+                evaluarPendiente(); // deja el resultado en sSub y lblSub
             }
-            // El total de la cuenta (lista) sigue siendo con calc()
             if (typeof calc === 'function') calc();
+        }
+
+        /** STAT → abre el menú con glitch (mismo efecto que MENU) */
+        function openStatMenu() {
+            if (!sistemaEncendido) return;
+            toggleModoMenu();
         }
 
         /** Clear solo del pad (limpia precio y operación pendiente, NO toda la lista) */
@@ -3395,9 +3504,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             sSub += c;
             if (parseFloat(sSub) > 1000000) sSub = "1000000";
 
-            // Solo muestra lo que escribes (NO calcula hasta pulsar =)
+            // Solo muestra lo que escribes. NO calcula hasta pulsar =
             document.getElementById('lblSub').innerText = sSub;
-            // NO llamar calc() aquí para operaciones matemáticas pendientes
         }
 
         /** Borra el último carácter del precio (backspace) */

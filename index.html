@@ -1423,33 +1423,38 @@
             min-height: 20px !important;
         }
 
+                /* ============================================================
+           PAD: glow unificado (todas las teclas = mismo sistema que 7/8/9)
+           ============================================================ */
 
-        /* MENU, ⌫ y C = mismo look que el antiguo botón MENU de abajo */
-        .btn-menu-pad {
-            font-size: 11px !important;
+        /* MENU más legible, pero SIN quitar el glow de .btn-key */
+        #btnMenu {
+            font-size: 0.72rem !important;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Backspace flecha grande */
+        .btn-backspace-big {
+            font-size: 1.75rem !important;
             font-weight: 900 !important;
-            text-transform: uppercase !important;
-            background: var(--num-bg-theme) !important;
-            border: 2px solid var(--neon-primary) !important;
-            color: #ffffff !important;
-            animation: none !important;
-        }
-        body.theme-cyberpunk .btn-menu-pad {
-            background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
-            background-size: 200% auto !important;
-            animation: activeMenuMove 3s infinite linear !important;
-            border: 2px solid #8e8e93 !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
-            text-shadow: none !important;
+            line-height: 1 !important;
         }
 
-        /* MENU activo (glitch) se mantiene con .btn-on */
-        body .btn-menu-pad.btn-on,
-        body.theme-cyberpunk .btn-menu-pad.btn-on {
+        /* ÷ más grande */
+        .btn-divide {
+            font-size: 1.7rem !important;
+            font-weight: 900 !important;
+            letter-spacing: 1px;
+        }
+
+        /* MENU activo (glitch) — solo cuando tiene .btn-on */
+        body .btn-key.btn-menu.btn-on,
+        body.theme-cyberpunk .btn-key.btn-menu.btn-on {
             position: relative !important;
             overflow: hidden !important;
             background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-image: none !important;
             background-size: 200% auto !important;
             border: 2px solid #00f0ff !important;
             color: #ffffff !important;
@@ -1458,8 +1463,8 @@
             animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
             opacity: 1 !important;
         }
-        body .btn-menu-pad.btn-on::after,
-        body.theme-cyberpunk .btn-menu-pad.btn-on::after {
+        body .btn-key.btn-menu.btn-on::after,
+        body.theme-cyberpunk .btn-key.btn-menu.btn-on::after {
             content: "MENU" !important;
             position: absolute !important;
             top: 0 !important; left: 0 !important;
@@ -1472,38 +1477,16 @@
             animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
             pointer-events: none !important;
             z-index: 10 !important;
+            background-image: none !important;
+        }
+        body .btn-key.btn-menu.btn-on::before {
+            display: none !important;
         }
 
-        /* . y = = mismo color que antiguos MENU / RECIBO / CLEAR */
-        .btn-action-pad {
-            font-size: 1.2rem !important;
-            font-weight: 900 !important;
-            background: var(--num-bg-theme) !important;
-            border: 2px solid var(--neon-primary) !important;
-            color: #ffffff !important;
-            animation: none !important;
-        }
-        body.theme-cyberpunk .btn-action-pad {
-            background: linear-gradient(90deg, rgba(220, 220, 230, 0.08), rgba(220, 220, 230, 0.15), rgba(220, 220, 230, 0.08)) !important;
-            background-size: 200% auto !important;
-            animation: activeMenuMove 3s infinite linear !important;
-            border: 2px solid #8e8e93 !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 6px rgba(142, 142, 147, 0.1) !important;
-            text-shadow: none !important;
-        }
+        /* Operadores (+ − × ÷ =) ya tienen .btn-op → mismo look y glow naranja/tema */
 
-        /* ÷ más grande */
-        .btn-divide {
-            font-size: 1.7rem !important;
-            font-weight: 900 !important;
-        }
-
-        /* Flash blanco al presionar (todos los del pad) */
-        .btn-key:active,
-        .btn-menu-pad:active,
-        .btn-action-pad:active,
-        .btn-key.btn-op:active {
+        /* Flash blanco al presionar CUALQUIER tecla del pad */
+        .pad-num .btn-key:active {
             background: #ffffff !important;
             background-color: #ffffff !important;
             background-image: none !important;
@@ -1515,9 +1498,8 @@
             animation: none !important;
             transition: none !important;
         }
-        .btn-key:active::before,
-        .btn-menu-pad:active::before,
-        .btn-action-pad:active::before {
+        .pad-num .btn-key:active::before,
+        .pad-num .btn-key:active::after {
             display: none !important;
         }
 
@@ -1527,63 +1509,7 @@
             -webkit-overflow-scrolling: touch !important;
             max-height: 150px !important;
         }
-
         
-        /* ============================================================
-           GLITCH / FLASH SUTIL EN EL LCD AL TOCAR TECLAS
-           ============================================================ */
-        .lcd.glitch-active {
-            animation: flashSutilLcd 0.12s ease-out !important;
-        }
-
-        @keyframes flashSutilLcd {
-            0% {
-                filter: brightness(1);
-                box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-            }
-            15% {
-                filter: brightness(1.45) contrast(1.1);
-                box-shadow: inset 0 0 15px rgba(255,255,255,0.6), 0 0 10px var(--neon-secondary);
-            }
-            100% {
-                filter: brightness(1);
-                box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
-            }
-        }
-
-        /* El total grande no se parte en dos líneas */
-        #lblTotalGeneralLcd,
-        #lblTotalGeneral,
-        .total-grande-lcd {
-            white-space: nowrap !important;
-            display: inline-block !important;
-        }
-                /* Símbolo ÷ más grande */
-        .btn-divide {
-            font-size: 1.7rem !important;
-            font-weight: 900 !important;
-            letter-spacing: 1px;
-        }
-
-        /* Flash blanco también en C, ⌫, . y = */
-        .btn-key.btn-op:active,
-        .btn-key.btn-back:active {
-            background: #ffffff !important;
-            background-color: #ffffff !important;
-            background-image: none !important;
-            color: #000000 !important;
-            border-color: #ffffff !important;
-            filter: brightness(2) contrast(1.5) !important;
-            box-shadow: 0 0 25px #ffffff, inset 0 0 12px #ffffff !important;
-            text-shadow: none !important;
-            animation: none !important;
-            transition: none !important;
-        }
-
-        /* STAT con mismo estilo base que CLEAR */
-        .btn-stat {
-            /* hereda de .btn-clear-master */
-        }
     </style>
 </head>
 
@@ -1888,19 +1814,18 @@
         </div><!-- fin row-opciones-pasos -->
 
         <!-- ============================================================
-             TECLADO NUMÉRICO (5 filas × 4 columnas)
-             MENU | ⌫ | C | ÷
+             TECLADO NUMÉRICO
+             MENU | CLEAR (doble) | ÷
              7 8 9 ×
              4 5 6 −
              1 2 3 +
-             0 . = STAT
+             0 . ⌫ =
              ============================================================ -->
         <div class="pad-num">
 
             <!-- FILA 1 -->
-            <button type="button" id="btnMenu" class="btn-key btn-menu-pad btn-menu" onclick="toggleModoMenu()">MENU</button>
-            <button type="button" class="btn-key btn-menu-pad" onclick="bksp()">⌫</button>
-            <button type="button" class="btn-key btn-menu-pad" onclick="ejecutarClearDirecto()">C</button>
+            <button type="button" id="btnMenu" class="btn-key btn-menu" onclick="toggleModoMenu()">MENU</button>
+            <button type="button" class="btn-key" style="grid-column: span 2; font-size: 0.95rem;" onclick="ejecutarClearDirecto()">CLEAR</button>
             <button type="button" class="btn-key btn-op btn-divide" onclick="opMath('/')">÷</button>
 
             <!-- FILA 2 -->
@@ -1923,9 +1848,9 @@
 
             <!-- FILA 5 -->
             <button type="button" class="btn-key" onclick="num('0')">0</button>
-            <button type="button" class="btn-key btn-action-pad" onclick="num('.')">.</button>
-            <button type="button" class="btn-key btn-action-pad" onclick="equalsMath()">=</button>
-            <button type="button" class="btn-key btn-op" onclick="openStatMenu()">STAT</button>
+            <button type="button" class="btn-key" onclick="num('.')">.</button>
+            <button type="button" class="btn-key btn-backspace-big" onclick="bksp()">⌫</button>
+            <button type="button" class="btn-key btn-op" onclick="equalsMath()">=</button>
 
         </div>
     </div><!-- fin chasis -->

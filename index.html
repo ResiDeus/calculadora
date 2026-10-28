@@ -2178,6 +2178,29 @@
         let cuentaAcumulada = 0;
         let textoReciboGlobal = "";       // Texto del recibo pa' copiar
 
+
+
+        
+        function guardarListaCompras() {
+            try {
+                localStorage.setItem('resi_preciosGuardados', JSON.stringify(preciosGuardados));
+            } catch (e) {}
+        }
+
+        function cargarListaCompras() {
+            try {
+                var raw = localStorage.getItem('resi_preciosGuardados');
+                if (!raw) return;
+                var data = JSON.parse(raw);
+                if (Array.isArray(data)) preciosGuardados = data;
+            } catch (e) {
+                preciosGuardados = [];
+                guardarListaCompras();
+            }
+        }
+
+        
+
         // Temas disponibles (se rotan con el botón TEMA)
         let themes = [
             'theme-cyberpunk',
@@ -3778,7 +3801,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                     porcientoIvuUsado: ivu,
                     total: totalArticulo
                 });
-
+                guardarListaCompras();
                 sSub = "0";
                 document.getElementById('lblSub').innerText = "0";
 
@@ -3990,6 +4013,15 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         /* ============================================================
            INICIALIZACIÓN AL CARGAR LA PÁGINA
            ============================================================ */
+                cargarListaCompras();
+        var listaInit = document.getElementById('listaPrecios');
+        if (listaInit) {
+            if (preciosGuardados.length === 0) {
+                listaInit.innerHTML = '<span id="lblArtText" class="lbl-lista-vacia-texto">Lista vacía</span>';
+            } else {
+                pintarListaCompras(listaInit);
+            }
+        }
         actualizarHeaderIndicadores();
         calc();
         if (typeof aplicarIdiomaUI === 'function') aplicarIdiomaUI();

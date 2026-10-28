@@ -1882,13 +1882,13 @@
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECIBO', salario: 'SALARIO', clear: 'CLEAR',
                 precio: 'Precio', valor: 'Valor', modoMenu: 'MODO: MENÚ',
                 serrucho: 'Serrucho', propina: 'Propina', descuento: 'Descuento', ivu: 'IVU',
-                listaVacia: 'Lista vacía', temaBtn: 'TEMA', idiomaBtn: 'ESPAÑOL'
+                listaVacia: 'Lista vacía', temaBtn: 'CAMBIAR TEMA', idiomaBtn: 'CAMBIAR IDIOMA: ESPAÑOL'
             },
             en: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECEIPT', salario: 'WAGE', clear: 'CLEAR',
                 precio: 'Price', valor: 'Value', modoMenu: 'MODE: MENU',
                 serrucho: 'Split', propina: 'Tip', descuento: 'Discount', ivu: 'TAX',
-                listaVacia: 'Empty list', temaBtn: 'THEME', idiomaBtn: 'SPANISH ↔ ENGLISH'
+                listaVacia: 'Empty list', temaBtn: 'CHANGE THEME', idiomaBtn: 'SPANISH ↔ ENGLISH'
             }
         };
 
@@ -1927,7 +1927,7 @@
 
             var btnIdioma = document.getElementById('btnMenuIdioma');
             if (btnIdioma) {
-                btnIdioma.innerText = (idiomaActual === 'es') ? 'ESPAÑOL' : 'SPANGLISH';
+                btnIdioma.innerText = (idiomaActual === 'es') ? 'CAMBIAR IDIOMA: ESPAÑOL' : 'CAMBIAR IDIOMA: ENGLISH';
             }
 
             if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') {

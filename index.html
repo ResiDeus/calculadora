@@ -1577,24 +1577,26 @@
 
                         <!-- ARRIBA: categorías -->
                         <div style="flex-shrink:0;">
-                            <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:3px; width:100%; margin-bottom:3px;">
-                                <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">PESO</button>
-                                <button type="button" class="tab-conv tab-conv-lg" data-cat="cocina" onclick="setCatConversion('cocina')">COCINA</button>
-                                <button type="button" class="tab-conv tab-conv-lg" data-cat="largo" onclick="setCatConversion('largo')">LARGO</button>
-                                <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">MONEDA</button>
+                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
+                                <button type="button" class="tab-conv tab-conv-lg active" data-cat="peso" onclick="setCatConversion('peso')">WGHT</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="cocina" onclick="setCatConversion('cocina')">VOL</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="largo" onclick="setCatConversion('largo')">DIST</button>
+                                <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
+                                <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
+                                <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">CURR</button>
                             </div>
                             <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
-                                <button type="button" class="tab-conv" data-cat="temp" onclick="setCatConversion('temp')">TEMP</button>
-                                <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENERGÍA</button>
-                                <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
+                                <button type="button" class="tab-conv" data-cat="fuerza" onclick="setCatConversion('fuerza')">FORC</button>
+                                <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENER</button>
+                                <button type="button" class="tab-conv" data-cat="potencia" onclick="setCatConversion('potencia')">POWR</button>
                                 <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
-                                <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ÁNGULO</button>
-                                <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">SONIDO</button>
+                                <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ANG</button>
+                                <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">DB</button>
                             </div>
                             <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%;">
-                                <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIEMPO</button>
-                                <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">ÁREA</button>
-                                <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUZ</button>
+                                <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIME</button>
+                                <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">AREA</button>
+                                <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUX</button>
                                 <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
                                 <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
                                 <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
@@ -2247,6 +2249,23 @@
                 { id: 'gcm3', label: 'g/cm³', nombre: 'Gramo / cm³', toBase: v => v, fromBase: v => v },
                 { id: 'lbft3', label: 'lb/ft³', nombre: 'Libra / pie³', toBase: v => v / 62.4279, fromBase: v => v * 62.4279 }
             ]
+            fuerza: [
+                { id: 'n', label: 'N', nombre: 'Newton', toBase: v => v, fromBase: v => v },
+                { id: 'lbf', label: 'lbf', nombre: 'Libra fuerza', toBase: v => v * 4.4482216153, fromBase: v => v / 4.4482216153 },
+                { id: 'kgf', label: 'kgf', nombre: 'Kilogramo fuerza', toBase: v => v * 9.80665, fromBase: v => v / 9.80665 },
+                { id: 'dyn', label: 'dyn', nombre: 'Dina', toBase: v => v * 0.00001, fromBase: v => v / 0.00001 }
+            ],
+            
+            potencia: [
+                { id: 'w', label: 'W', nombre: 'Vatio', toBase: v => v, fromBase: v => v },
+                { id: 'kw', label: 'kW', nombre: 'Kilovatio', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'mw', label: 'MW', nombre: 'Megavatio', toBase: v => v * 1000000, fromBase: v => v / 1000000 },
+                { id: 'mw_mili', label: 'mW', nombre: 'Miliwatio', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'hp', label: 'hp', nombre: 'Caballo de fuerza (mecánico)', toBase: v => v * 745.69987158, fromBase: v => v / 745.69987158 },
+                { id: 'cals', label: 'cal/s', nombre: 'Caloría por segundo', toBase: v => v * 4.1868, fromBase: v => v / 4.1868 },
+                { id: 'btuh', label: 'Btu/h', nombre: 'BTU por hora', toBase: v => v * 0.29307107, fromBase: v => v / 0.29307107 }
+            ]
+          
         };
         
         // Timers pa' cuando mantienes pulsado ▲ / ▼

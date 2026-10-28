@@ -1105,7 +1105,7 @@
             display: none !important;
         }
 
-        /* Capa de estrellitas SVG encima de cada tecla (se ve bien en iOS) */
+        /* Capa de estrellitas SVG encima de cada tecla */
         .btn-key::before, .btn-back::before {
             content: "";
             position: absolute;
@@ -1126,7 +1126,7 @@
         body.theme-cyberpunk .btn-back {
             --neon-secondary: #00f0ff;
             background-color: #040d21 !important;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%2300f0ff' opacity='0.22'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23ff007f' opacity='0.18'/></svg>") !important;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org' viewBox='0 0 100 100'><path d='M100,100 Q80,70 50,70 Q75,55 100,45 Q70,40 55,20 Q80,25 100,5 Q60,15 45,5 Q65,0 80,-15 Q50,-5 35,-15 Q40,-35 45,-55 Q20,-30 0,-40 C30,10 60,40 100,100 Z' fill='%2300f0ff' opacity='0.22'/><path d='M100,100 Q85,75 60,80 Q78,65 100,60 Q75,50 65,35 Q82,35 100,20 Q65,25 55,15 Z' fill='%23ff007f' opacity='0.18'/></svg>") !important;
             color: #ffffff !important;
             border: 2px solid #00f0ff !important;
             box-shadow: 0 0 8px rgba(0, 240, 255, 0.3) !important;
@@ -1170,8 +1170,8 @@
         }
 
         /* San Juan Neon */
-            body.theme-puertorico .btn-key,
-            body.theme-puertorico .btn-back {
+        body.theme-puertorico .btn-key,
+        body.theme-puertorico .btn-back {
             --neon-secondary: #22d3ee;
             background-color: #020617 !important;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30,95 Q55,94 70,95 T110,95 L110,100 L30,100 Z' fill='%2322d3ee' opacity='0.15'/><path d='M48,35 L48,70 Q48,90 56,105 L44,105 Q34,85 34,70 L34,35 Z' fill='%2322d3ee' opacity='0.25'/><rect x='36' y='37' width='10' height='30' fill='%2338bdf8' opacity='0.2'/><rect x='39' y='42' width='3' height='10' rx='0.5' fill='%23020617'/><path d='M31,37 C31,10 51,10 51,37 Z' fill='%2322d3ee' opacity='0.25'/><ellipse cx='41' cy='7' rx='2.5' ry='3.5' fill='%2322d3ee' opacity='0.25'/><line x1='41' y1='4' x2='41' y2='0' stroke='%2322d3ee' stroke-width='1.5' opacity='0.25'/><path d='M45,40 L54,40 L54,70 L45,70 Z' fill='%23020617'/><path d='M46,35 L105,35 L105,100 L52,100 Q47,80 47,70 Z' fill='%2338bdf8' opacity='0.15'/><path d='M49,38 L105,38 L105,44 L49,44 Z' fill='%2322d3ee' opacity='0.2'/><path d='M51,48 L105,48 L105,54 L51,54 Z' fill='%2322d3ee' opacity='0.2'/><path d='M53,58 L105,58 L105,64 L53,64 Z' fill='%2322d3ee' opacity='0.2'/><path d='M55,68 L105,68 L105,74 L55,74 Z' fill='%2322d3ee' opacity='0.2'/><path d='M0,55 Q20,50 45,55 T100,55 L100,100 L0,100 Z' fill='%2322d3ee' opacity='0.1'/><path d='M-10,65 Q20,60 50,65 T110,65 L110,100 L-10,100 Z' fill='%2338bdf8' opacity='0.08'/></svg>") !important;
@@ -1180,9 +1180,6 @@
             box-shadow: 0 0 10px rgba(34, 211, 238, 0.4) !important;
             animation: auraNeonParpadeo 2.6s infinite ease-in-out;
         }
-
-
-
 
         /* ============================================================
            CONTROLES DENTRO DEL LCD AZUL (modo salario)

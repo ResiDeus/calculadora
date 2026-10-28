@@ -1819,60 +1819,71 @@
                          Izquierda: paga/hora + horas/semana
                          Derecha: régimen, SS, Medicare, retención
                          ==================================================== -->
-<div id="vistaSubPantallaSalario" style="display:none; flex-direction:row; justify-content:space-between; align-items:stretch; width:96%; font-family:monospace; line-height:1.05; font-size:10px; gap:0; padding:0; overflow:hidden; z-index:95; box-sizing:border-box; height:78px !important; max-height:78px !important; position:absolute !important; top:10px !important; left:4px !important;">
+<div id="vistaSubPantallaSalario" style="display:none; flex-direction:row; justify-content:space-between; align-items:stretch; width:96%; font-family:monospace; line-height:1.1; font-size:11px; gap:0; padding:0; overflow:hidden; z-index:95; box-sizing:border-box; height:88px !important; max-height:88px !important; position:absolute !important; top:4px !important; left:6px !important;">
 
-                        <!-- Izquierda -->
-                        <div style="display:flex; flex-direction:column; gap:3px; width:46%; height:100%; justify-content:flex-start; overflow:hidden; margin:0; padding-right:5px; align-items:flex-start; box-sizing:border-box;">
-                            <div style="display:flex; flex-direction:column; gap:1px; width:100%;">
-                                <span style="opacity:0.9; font-size:10px; font-weight:900; line-height:1; white-space:nowrap;">PAGA POR HORA:</span>
-                                <div style="display:flex; align-items:center; height:16px; width:100%;">
-                                    <div style="margin-right:auto; cursor:pointer;" onclick="seleccionarMenu('paga')">
-                                        <span id="lblSalHoraLcd" style="font-size:10px; font-weight:900; background:rgba(0,0,0,0.25); padding:1px 4px; border-radius:3px; color:#fff; border:1px solid rgba(255,255,255,0.15);">$10.50</span>
+                        <!-- Columna izquierda -->
+                        <div style="display:flex; flex-direction:column; gap:5px; width:46%; height:100%; justify-content:flex-start; overflow:hidden; margin:0; margin-left:-6px; padding-left:0; padding-right:6px; align-items:flex-start; text-align:left; box-sizing:border-box;">
+
+                            <div style="display:flex; flex-direction:column; gap:2px; align-items:flex-start; width:100%;">
+                                <span style="opacity:0.9; font-size:11px; font-weight:900; line-height:1; white-space:nowrap;">PAGA POR HORA:</span>
+                                <div style="display:flex; align-items:center; line-height:1; height:18px; width:100%;">
+                                    <div style="text-align:left; display:inline-block; width:58px; min-width:58px; margin-right:auto; cursor:pointer;" onclick="seleccionarMenu('paga')">
+                                        <span id="lblSalHoraLcd" style="font-size:11px; font-weight:900; background:rgba(0,0,0,0.25); padding:2px 5px; border-radius:4px; color:#fff; border:1px solid rgba(255,255,255,0.15); line-height:1; text-shadow:0 0 3px rgba(0,240,255,0.3); display:inline-block;">$10.50</span>
                                     </div>
-                                    <div style="display:flex; gap:8px;">
-                                        <button class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('paga', -0.01)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.01)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('paga', 0.01)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.01)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                    <div style="display:flex; gap:12px; position:relative; z-index:100; margin-right:2px;">
+                                        <button class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('paga', -0.01)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', -0.01)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('paga', 0.01)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'paga', 0.01)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
-                            <div style="display:flex; flex-direction:column; gap:1px; width:100%; margin-top:2px;">
-                                <span style="opacity:0.9; font-size:10px; font-weight:900; line-height:1; white-space:nowrap;">HORAS SEMANA:</span>
-                                <div style="display:flex; align-items:center; height:16px; width:100%;">
-                                    <div style="margin-right:auto;">
-                                                                            <span id="lblHorasSemanaLcd" style="font-size:11px; font-weight:900; background:rgba(0,0,0,0.2); padding:1px 4px; border-radius:3px;">40</span>
+
+                            <div style="display:flex; flex-direction:column; gap:2px; align-items:flex-start; width:100%; margin-top:3px;">
+                                <span style="opacity:0.9; font-size:11px; font-weight:900; line-height:1; white-space:nowrap;">HORAS SEMANA:</span>
+                                <div style="display:flex; align-items:center; line-height:1; height:18px; width:100%;">
+                                    <div style="text-align:left; display:inline-block; margin-right:auto;">
+                                        <span id="lblHorasSemanaLcd" style="font-size:12px; font-weight:900; background:rgba(0,0,0,0.2); padding:2px 5px; border-radius:3px;">40</span>
                                     </div>
-                                    <div style="display:flex; gap:8px;">
-                                        <button class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('horas', -1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('horas', 1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+                                    <div style="display:flex; gap:12px; position:relative; z-index:100; margin-right:2px;">
+                                        <button class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('horas', -1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', -1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('horas', 1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'horas', 1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Derecha + línea corta (NO llega a RETENCIÓN TOTAL) -->
-                        <div style="display:flex; flex-direction:column; width:54%; border-left:1px dotted rgba(0,240,255,0.45); padding-left:5px; height:100%; max-height:78px; justify-content:flex-start; gap:2px; overflow:hidden; box-sizing:border-box;">
-                            <div style="display:flex; gap:2px; width:100%; height:16px; margin-top:0;">
-                                <button id="tabW2" class="tab-btn-lcd" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
-                                <button id="tab1099" class="tab-btn-lcd" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
-                                <button id="tabExento" class="tab-btn-lcd active" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
+                        <!-- Columna derecha + línea de puntitos SOLO aquí (no baja al total) -->
+                        <div style="display:flex; flex-direction:column; width:54%; border-left:1px dotted rgba(0,240,255,0.45); padding-left:6px; height:100%; max-height:88px; justify-content:flex-start; gap:3px; overflow:hidden; margin:0; box-sizing:border-box;">
+
+                            <div style="display:flex; flex-direction:column; gap:3px; width:100%; overflow:hidden;">
+                                <div style="display:flex; align-items:center; gap:2px; width:100%; height:18px; line-height:1;">
+                                    <button id="tabW2" class="tab-btn-lcd" style="font-size:9.5px; padding:3px 2px; font-weight:900;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
+                                    <button id="tab1099" class="tab-btn-lcd" style="font-size:9.5px; padding:3px 2px; font-weight:900;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
+                                    <button id="tabExento" class="tab-btn-lcd active" style="font-size:9.5px; padding:3px 2px; font-weight:900;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
+                                </div>
+
+                                <table style="width:100%; table-layout:fixed; border-collapse:collapse; height:18px; margin:0;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding:0 2px 0 0; width:50%;">
+                                                <button id="toggleSS" class="toggle-label-lcd off" style="width:100%; height:18px; padding:0; font-size:9px; font-weight:900; white-space:nowrap; text-align:center; display:block;" onclick="toggleImpuestoIndividual('SS')">S. SOCIAL</button>
+                                            </td>
+                                            <td style="padding:0 0 0 2px; width:50%;">
+                                                <button id="toggleMED" class="toggle-label-lcd off" style="width:100%; height:18px; padding:0; font-size:9px; font-weight:900; white-space:nowrap; text-align:center; display:block;" onclick="toggleImpuestoIndividual('MED')">MEDICARE</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <table style="width:100%; table-layout:fixed; border-collapse:collapse; height:16px;">
-                                <tr>
-                                    <td style="padding:0 1px 0 0; width:50%;">
-                                        <button id="toggleSS" class="toggle-label-lcd off" style="width:100%; height:16px; padding:0; font-size:8px; font-weight:900;" onclick="toggleImpuestoIndividual('SS')">S. SOCIAL</button>
-                                    </td>
-                                    <td style="padding:0 0 0 1px; width:50%;">
-                                        <button id="toggleMED" class="toggle-label-lcd off" style="width:100%; height:16px; padding:0; font-size:8px; font-weight:900;" onclick="toggleImpuestoIndividual('MED')">MEDICARE</button>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div style="display:flex; flex-direction:column; width:100%; gap:1px; overflow:hidden;">
-                                <span id="lblTextoManual" style="font-size:8px; font-weight:900; color:#fff; white-space:nowrap; line-height:1;">RETENCIÓN MANUAL:</span>
-                                <div style="display:flex; align-items:center; height:16px; width:100%;">
-                                    <span id="lblManualPctLcd" style="font-size:10px; font-weight:900; color:#fff; background:rgba(0,0,0,0.15); padding:1px 3px; border-radius:2px; margin-right:auto;">0.0%</span>
-                                    <div style="display:flex; gap:6px;">
-                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
-                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
+
+                            <div style="display:flex; flex-direction:column; width:100%; gap:1px; overflow:hidden; margin-top:2px; flex-shrink:0;">
+                                <span id="lblTextoManual" style="font-size:9px; font-weight:900; color:#fff; white-space:nowrap; text-shadow:0 0 2px rgba(0,240,255,0.25); line-height:1;">RETENCIÓN MANUAL:</span>
+                                <div style="display:flex; align-items:center; line-height:1; height:18px; width:100%;">
+                                    <div style="text-align:left; display:inline-block; width:38px; min-width:38px; margin-right:auto;">
+                                        <span id="lblManualPctLcd" style="font-size:11px; font-weight:900; color:#fff; background:rgba(0,0,0,0.15); padding:1px 4px; border-radius:2px;">0.0%</span>
+                                    </div>
+                                    <div style="display:flex; gap:8px; position:relative; z-index:100;">
+                                        <button id="btnManualMenos" class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
+                                        <button id="btnManualMas" class="btn-hrs-lcd" style="width:18px; height:18px; font-size:12px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
                                 </div>
                             </div>

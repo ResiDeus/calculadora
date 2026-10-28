@@ -1423,6 +1423,74 @@
             min-height: 20px !important;
         }
 
+
+        /* ============================================================
+           MENU PRENDIDO (rojo/glitch) — gana a todo el resto
+           ============================================================ */
+        body .btn-key.btn-menu.btn-on,
+        body.theme-cyberpunk .btn-key.btn-menu.btn-on,
+        body.theme-retro-gold .btn-key.btn-menu.btn-on,
+        body.theme-matrix .btn-key.btn-menu.btn-on,
+        body.theme-sunset .btn-key.btn-menu.btn-on,
+        body.theme-puertorico .btn-key.btn-menu.btn-on {
+            position: relative !important;
+            overflow: hidden !important;
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-color: transparent !important;
+            background-image: none !important;
+            background-size: 200% auto !important;
+            border: 2px solid #00f0ff !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 8px #00f0ff, 0 0 15px #ff0055 !important;
+            box-shadow: 0 0 18px #ff0055, 0 0 30px rgba(255, 0, 85, 0.5) !important;
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+            opacity: 1 !important;
+            filter: none !important;
+            z-index: 20 !important;
+        }
+
+        /* Quitar estrellitas / capas que opacan el rojo */
+        body .btn-key.btn-menu.btn-on::before,
+        body.theme-cyberpunk .btn-key.btn-menu.btn-on::before {
+            display: none !important;
+            content: none !important;
+            background: none !important;
+            animation: none !important;
+        }
+
+        body .btn-key.btn-menu.btn-on::after,
+        body.theme-cyberpunk .btn-key.btn-menu.btn-on::after {
+            content: "MENU" !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background: transparent !important;
+            color: #00f0ff !important;
+            text-shadow: -2px 0 #ff0055 !important;
+            animation: glitchMovimiento 0.3s infinite linear alternate-reverse !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+        }
+
+        /* Que el flash blanco al tocar NO deje el botón “apagado” en modo menú */
+        body .btn-key.btn-menu.btn-on:active {
+            background: linear-gradient(90deg, #ff0055, #9c00ff, #ff0055) !important;
+            background-image: none !important;
+            color: #ffffff !important;
+            border-color: #00f0ff !important;
+            filter: brightness(1.25) !important;
+            box-shadow: 0 0 22px #ff0055 !important;
+            text-shadow: 0 0 8px #00f0ff !important;
+            animation: activeMenuMove 1.5s infinite linear, pulsoFlasheoLcd 0.4s infinite alternate !important;
+        }
+
+        
+
                 /* ============================================================
            PAD: glow unificado (todas las teclas = mismo sistema que 7/8/9)
            ============================================================ */

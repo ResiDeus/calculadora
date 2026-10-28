@@ -3332,7 +3332,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             let totalBase = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
             contenedor.innerHTML +=
                 '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
-                'TOTAL: $' + totalBase.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(precio base)</span></div>';
+                'TOTAL: $' + totalConTax.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(precio base)</span></div>';
         
             if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo) {
                 document.getElementById('flechaGuia').style.display = "block";

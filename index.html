@@ -1452,6 +1452,32 @@
             white-space: nowrap !important;
             display: inline-block !important;
         }
+                /* Símbolo ÷ más grande */
+        .btn-divide {
+            font-size: 1.7rem !important;
+            font-weight: 900 !important;
+            letter-spacing: 1px;
+        }
+
+        /* Flash blanco también en C, ⌫, . y = */
+        .btn-key.btn-op:active,
+        .btn-key.btn-back:active {
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            background-image: none !important;
+            color: #000000 !important;
+            border-color: #ffffff !important;
+            filter: brightness(2) contrast(1.5) !important;
+            box-shadow: 0 0 25px #ffffff, inset 0 0 12px #ffffff !important;
+            text-shadow: none !important;
+            animation: none !important;
+            transition: none !important;
+        }
+
+        /* STAT con mismo estilo base que CLEAR */
+        .btn-stat {
+            /* hereda de .btn-clear-master */
+        }
     </style>
 </head>
 
@@ -1755,28 +1781,38 @@
         </div><!-- fin row-opciones-pasos -->
 
         <!-- ============================================================
-             TECLADO NUMÉRICO (7-8-9 / 4-5-6 / 1-2-3 / . 0 ← símbolos math)
+             TECLADO NUMÉRICO (5 filas)
              ============================================================ -->
         <div class="pad-num">
-            <button id="btnN7" onclick="num('7')" class="btn-key">7</button>
-            <button id="btnN8" onclick="num('8')" class="btn-key">8</button>
-            <button id="btnN9" onclick="num('9')" class="btn-key">9</button>
-            <button id="btnDiv" onclick="opMath('/')" class="btn-key btn-op">÷</button>
 
-            <button id="btnN4" onclick="num('4')" class="btn-key">4</button>
-            <button id="btnN5" onclick="num('5')" class="btn-key">5</button>
-            <button id="btnN6" onclick="num('6')" class="btn-key">6</button>
-            <button id="btnMul" onclick="opMath('*')" class="btn-key btn-op">×</button>
+            <!-- FILA 1: ⌫ (doble) · C · ÷ -->
+            <button type="button" class="btn-key btn-back" style="grid-column: span 2;" onclick="bksp()">⌫</button>
+            <button type="button" class="btn-key btn-op" onclick="clrPad()">C</button>
+            <button type="button" class="btn-key btn-op btn-divide" onclick="opMath('/')">÷</button>
 
-            <button id="btnN1" onclick="num('1')" class="btn-key">1</button>
-            <button id="btnN2" onclick="num('2')" class="btn-key">2</button>
-            <button id="btnN3" onclick="num('3')" class="btn-key">3</button>
-            <button id="btnSub" onclick="opMath('-')" class="btn-key btn-op">−</button>
+            <!-- FILA 2: 7 8 9 × -->
+            <button type="button" class="btn-key" onclick="num('7')">7</button>
+            <button type="button" class="btn-key" onclick="num('8')">8</button>
+            <button type="button" class="btn-key" onclick="num('9')">9</button>
+            <button type="button" class="btn-key btn-op" onclick="opMath('*')">×</button>
 
-            <button id="btnPunto" onclick="num('.')" class="btn-key">.</button>
-            <button id="btnN0" onclick="num('0')" class="btn-key">0</button>
-            <button id="btnBksp" onclick="bksp()" class="btn-key btn-back">←</button>
-            <button id="btnAdd" onclick="opMath('+')" class="btn-key btn-op">+</button>
+            <!-- FILA 3: 4 5 6 − -->
+            <button type="button" class="btn-key" onclick="num('4')">4</button>
+            <button type="button" class="btn-key" onclick="num('5')">5</button>
+            <button type="button" class="btn-key" onclick="num('6')">6</button>
+            <button type="button" class="btn-key btn-op" onclick="opMath('-')">−</button>
+
+            <!-- FILA 4: 1 2 3 + -->
+            <button type="button" class="btn-key" onclick="num('1')">1</button>
+            <button type="button" class="btn-key" onclick="num('2')">2</button>
+            <button type="button" class="btn-key" onclick="num('3')">3</button>
+            <button type="button" class="btn-key btn-op" onclick="opMath('+')">+</button>
+
+            <!-- FILA 5: 0 · . · = (doble) -->
+            <button type="button" class="btn-key" onclick="num('0')">0</button>
+            <button type="button" class="btn-key btn-op" onclick="num('.')">.</button>
+            <button type="button" class="btn-key btn-op" style="grid-column: span 2;" onclick="equalsMath()">=</button>
+
         </div>
 
         <!-- ============================================================
@@ -1785,7 +1821,7 @@
         <div class="row-acciones-inferior">
             <button id="btnMenu" class="btn-theme btn-menu" onclick="toggleModoMenu()">MENU</button>
             <button id="btnReceipt" class="btn-receipt" onclick="abrirHologramaRecibo()">RECIBO</button>
-            <button id="btnClearMaster" class="btn-clear-master" onclick="ejecutarClearDirecto()">CLEAR</button>
+            <button id="btnStat" class="btn-clear-master btn-stat" onclick="openStatMenu()">STAT</button>
         </div>
 
     </div><!-- fin chasis -->
@@ -2115,7 +2151,7 @@
             if (modoConversionActivo) return;
             reproducirSonido('tecla');
 
-            // Si ya había operación, usa el resultado actual como base
+            // Si ya había operación, evalúa primero (ej: 2+3+  → primero 5)
             if (pendingOp && pendingVal !== null) {
                 evaluarPendiente();
             }
@@ -2127,7 +2163,44 @@
 
             var lbl = document.getElementById('lblSub');
             if (lbl) lbl.innerText = Number(cur.toFixed(8)) + simboloOp(op);
+            // NO llama calc() automático
+        }
+
+                /** Botón = : calcula y muestra el resultado en el precio */
+        function equalsMath() {
+            if (!sistemaEncendido || modoSalarioActivo) return;
+            if (modoConversionActivo) return;
+            reproducirSonido('tecla');
+
+            if (pendingOp && pendingVal !== null) {
+                evaluarPendiente(); // deja el resultado en sSub y en lblSub
+            }
+            // El total de la cuenta (lista) sigue siendo con calc()
             if (typeof calc === 'function') calc();
+        }
+
+        /** Clear solo del pad (limpia precio y operación pendiente, NO toda la lista) */
+        function clrPad() {
+            if (!sistemaEncendido) return;
+            reproducirSonido('tecla');
+
+            if (modoConversionActivo) {
+                sConv = '0';
+                actualizarPantallaConversion();
+                return;
+            }
+
+            pendingOp = null;
+            pendingVal = null;
+            sSub = '0';
+            var lbl = document.getElementById('lblSub');
+            if (lbl) lbl.innerText = '0';
+        }
+
+        /** STAT → mismo efecto de menú / glitch */
+        function openStatMenu() {
+            if (!sistemaEncendido) return;
+            toggleModoMenu(); // reutiliza el menú violeta con glitch
         }
 
         // Cada categoría: lista de unidades con toBase / fromBase
@@ -3322,14 +3395,9 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             sSub += c;
             if (parseFloat(sSub) > 1000000) sSub = "1000000";
 
-            // Si hay operación pendiente (2 + …), muestra el RESULTADO en el precio
-            if (pendingOp && pendingVal !== null) {
-                var res = calcularPendienteSinBorrar();
-                document.getElementById('lblSub').innerText = String(Number(res.toFixed(8)));
-            } else {
-                document.getElementById('lblSub').innerText = sSub;
-            }
-            calc();
+            // Solo muestra lo que escribes (NO calcula hasta pulsar =)
+            document.getElementById('lblSub').innerText = sSub;
+            // NO llamar calc() aquí para operaciones matemáticas pendientes
         }
 
         /** Borra el último carácter del precio (backspace) */

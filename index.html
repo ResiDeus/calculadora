@@ -1882,7 +1882,7 @@
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECIBO', salario: 'SALARIO', clear: 'CLEAR',
                 precio: 'Precio', valor: 'Valor', modoMenu: 'MODO: MENÚ',
                 serrucho: 'Serrucho', propina: 'Propina', descuento: 'Descuento', ivu: 'IVU',
-                listaVacia: 'Lista vacía', temaBtn: 'TEMA / THEME', idiomaBtn: 'ESPAÑOL ↔ ENGLISH'
+                listaVacia: 'Lista vacía', temaBtn: 'TEMA / THEME', idiomaBtn: 'ESPAÑOL'
             },
             en: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECEIPT', salario: 'WAGE', clear: 'CLEAR',
@@ -1927,7 +1927,7 @@
 
             var btnIdioma = document.getElementById('btnMenuIdioma');
             if (btnIdioma) {
-                btnIdioma.innerText = (idiomaActual === 'es') ? 'IDIOMA: ES' : 'LANG: EN';
+                btnIdioma.innerText = (idiomaActual === 'es') ? 'ESPAÑOL' : 'SPANGLISH';
             }
 
             if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') {

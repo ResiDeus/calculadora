@@ -3320,19 +3320,19 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         }
 
         /** Dibuja la lista de artículos en el LCD (evita código repetido) */
-        function pintarListaCompras(contenedor) {
+            function pintarListaCompras(contenedor) {
             if (!contenedor) return;
             contenedor.innerHTML = preciosGuardados.map((item, i) =>
-                '<div>• (' + (i + 1) + '): $' + item.total.toFixed(2) +
-                ' <span style="font-size:8px; opacity:0.75;">(DTO:-$' +
-                item.descuento.toFixed(2) + '/IVU:' +
-                item.porcientoIvuUsado.toFixed(1) + '%)</span></div>'
+                '<div>• (' + (i + 1) + '): $' + item.precio.toFixed(2) +
+                ' <span style="font-size:8px; opacity:0.75;">(IVU:$' +
+                item.ivuCalculado.toFixed(2) + '/DTO:-$' +
+                item.descuento.toFixed(2) + ')</span></div>'
             ).join('');
         
-            let totalConTax = preciosGuardados.reduce((sum, item) => sum + item.total, 0);
+            let totalBase = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
             contenedor.innerHTML +=
                 '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
-                'TOTAL: $' + totalConTax.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(con IVU/DTO)</span></div>';
+                'TOTAL: $' + totalBase.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(precio base)</span></div>';
         
             if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo) {
                 document.getElementById('flechaGuia').style.display = "block";

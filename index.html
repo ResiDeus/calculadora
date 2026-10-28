@@ -1585,20 +1585,12 @@
                                 <button type="button" class="tab-conv" data-cat="velocidad" onclick="setCatConversion('velocidad')">VEL</button>
                                 <button type="button" class="tab-conv tab-conv-lg" data-cat="moneda" onclick="setCatConversion('moneda')">CURR</button>
                             </div>
-                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%; margin-bottom:3px;">
+                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%;">
                                 <button type="button" class="tab-conv" data-cat="fuerza" onclick="setCatConversion('fuerza')">FORC</button>
                                 <button type="button" class="tab-conv" data-cat="energia" onclick="setCatConversion('energia')">ENER</button>
                                 <button type="button" class="tab-conv" data-cat="potencia" onclick="setCatConversion('potencia')">POWR</button>
-                                <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PSI</button>
-                                <button type="button" class="tab-conv" data-cat="angulos" onclick="setCatConversion('angulos')">ANG</button>
-                                <button type="button" class="tab-conv" data-cat="sonido" onclick="setCatConversion('sonido')">DB</button>
-                            </div>
-                            <div style="display:grid; grid-template-columns:repeat(6,1fr); gap:2px; width:100%;">
+                                <button type="button" class="tab-conv" data-cat="presion" onclick="setCatConversion('presion')">PRES</button>
                                 <button type="button" class="tab-conv" data-cat="tiempo" onclick="setCatConversion('tiempo')">TIME</button>
-                                <button type="button" class="tab-conv" data-cat="area" onclick="setCatConversion('area')">AREA</button>
-                                <button type="button" class="tab-conv" data-cat="iluminacion" onclick="setCatConversion('iluminacion')">LUX</button>
-                                <button type="button" class="tab-conv" data-cat="combustible" onclick="setCatConversion('combustible')">MPG</button>
-                                <button type="button" class="tab-conv" data-cat="densidad" onclick="setCatConversion('densidad')">DENS</button>
                                 <button type="button" class="tab-conv" data-cat="data" onclick="setCatConversion('data')">DATA</button>
                             </div>
                         </div>
@@ -2143,35 +2135,40 @@
         const UNIDADES_CONV = {
             peso: [
                 { id: 'kg', label: 'kg', nombre: 'Kilogramo', toBase: v => v, fromBase: v => v },
-                { id: 'lb', label: 'lb', nombre: 'Libra', toBase: v => v * 0.4536, fromBase: v => v / 0.4536 },
+                { id: 'lb', label: 'lb', nombre: 'Libra', toBase: v => v * 0.45359237, fromBase: v => v / 0.45359237 },
                 { id: 'g',  label: 'g',  nombre: 'Gramo', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
-                { id: 'oz', label: 'oz', nombre: 'Onza', toBase: v => v * 0.02835, fromBase: v => v / 0.02835 },
+                { id: 'oz', label: 'oz', nombre: 'Onza', toBase: v => v * 0.028349523125, fromBase: v => v / 0.028349523125 },
                 { id: 't',  label: 't',  nombre: 'Tonelada métrica', toBase: v => v * 1000, fromBase: v => v / 1000 }
             ],
-            cocina: [
+            
+            cocina: [ // volumen
+                { id: 'ml',   label: 'ml',   nombre: 'Mililitro', toBase: v => v, fromBase: v => v },
+                { id: 'l',    label: 'L',    nombre: 'Litro', toBase: v => v * 1000, fromBase: v => v / 1000 },
                 { id: 'cup',  label: 'cup',  nombre: 'Taza', toBase: v => v * 240, fromBase: v => v / 240 },
                 { id: 'tbsp', label: 'tbsp', nombre: 'Cucharada', toBase: v => v * 15, fromBase: v => v / 15 },
                 { id: 'tsp',  label: 'tsp',  nombre: 'Cucharadita', toBase: v => v * 5, fromBase: v => v / 5 },
-                { id: 'floz', label: 'fl oz', nombre: 'Onza líquida', toBase: v => v * 29.57, fromBase: v => v / 29.57 },
-                { id: 'ml',   label: 'ml',   nombre: 'Mililitro', toBase: v => v, fromBase: v => v },
-                { id: 'l',    label: 'L',    nombre: 'Litro', toBase: v => v * 1000, fromBase: v => v / 1000 },
-                { id: 'gal',  label: 'gal',  nombre: 'Galón USA', toBase: v => v * 3785.4, fromBase: v => v / 3785.4 },
-                { id: 'pt',   label: 'pt',   nombre: 'Pinta', toBase: v => v * 473.17, fromBase: v => v / 473.17 }
+                { id: 'floz', label: 'fl oz', nombre: 'Onza líquida', toBase: v => v * 29.5735, fromBase: v => v / 29.5735 },
+                { id: 'gal',  label: 'gal',  nombre: 'Galón USA', toBase: v => v * 3785.41, fromBase: v => v / 3785.41 },
+                { id: 'pt',   label: 'pt',   nombre: 'Pinta', toBase: v => v * 473.176, fromBase: v => v / 473.176 }
             ],
+            
             largo: [
                 { id: 'm',  label: 'm',  nombre: 'Metro', toBase: v => v, fromBase: v => v },
-                { id: 'ft', label: 'ft', nombre: 'Pie', toBase: v => v * 0.3048, fromBase: v => v / 0.3048 },
-                { id: 'in', label: 'in', nombre: 'Pulgada', toBase: v => v * 0.0254, fromBase: v => v / 0.0254 },
                 { id: 'cm', label: 'cm', nombre: 'Centímetro', toBase: v => v * 0.01, fromBase: v => v / 0.01 },
                 { id: 'km', label: 'km', nombre: 'Kilómetro', toBase: v => v * 1000, fromBase: v => v / 1000 },
-                { id: 'mi', label: 'mi', nombre: 'Milla', toBase: v => v * 1609.34, fromBase: v => v / 1609.34 },
-                { id: 'yd', label: 'yd', nombre: 'Yarda', toBase: v => v * 0.9144, fromBase: v => v / 0.9144 }
+                { id: 'mm', label: 'mm', nombre: 'Milímetro', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'ft', label: 'ft', nombre: 'Pie', toBase: v => v * 0.3048, fromBase: v => v / 0.3048 },
+                { id: 'in', label: 'in', nombre: 'Pulgada', toBase: v => v * 0.0254, fromBase: v => v / 0.0254 },
+                { id: 'yd', label: 'yd', nombre: 'Yarda', toBase: v => v * 0.9144, fromBase: v => v / 0.9144 },
+                { id: 'mi', label: 'mi', nombre: 'Milla', toBase: v => v * 1609.344, fromBase: v => v / 1609.344 }
             ],
+            
             temp: [
                 { id: 'c', label: '°C', nombre: 'Celsius', toBase: v => v, fromBase: v => v },
-                { id: 'f', label: '°F', nombre: 'Fahrenheit', toBase: v => (v - 32) / 1.8, fromBase: v => v * 1.8 + 32 },
+                { id: 'f', label: '°F', nombre: 'Fahrenheit', toBase: v => (v - 32) * 5/9, fromBase: v => v * 9/5 + 32 },
                 { id: 'k', label: 'K',  nombre: 'Kelvin', toBase: v => v - 273.15, fromBase: v => v + 273.15 }
             ],
+            
             data: [
                 { id: 'b',  label: 'B',  nombre: 'Byte', toBase: v => v, fromBase: v => v },
                 { id: 'kb', label: 'KB', nombre: 'Kilobyte', toBase: v => v * 1024, fromBase: v => v / 1024 },
@@ -2180,6 +2177,7 @@
                 { id: 'tb', label: 'TB', nombre: 'Terabyte', toBase: v => v * 1099511627776, fromBase: v => v / 1099511627776 },
                 { id: 'mbit', label: 'Mb', nombre: 'Megabit', toBase: v => v * 131072, fromBase: v => v / 131072 }
             ],
+            
             moneda: [
                 { id: 'usd', label: 'USD', nombre: 'Dólar estadounidense', fijo: true, toBase: v => v, fromBase: v => v },
                 { id: 'eur', label: 'EUR', nombre: 'Euro', toBase: v => v / 0.92, fromBase: v => v * 0.92 },
@@ -2197,29 +2195,47 @@
                 { id: 'cny', label: 'CNY', nombre: 'Yuan chino', toBase: v => v / 7.2, fromBase: v => v * 7.2 },
                 { id: 'chf', label: 'CHF', nombre: 'Franco suizo', toBase: v => v / 0.88, fromBase: v => v * 0.88 }
             ],
+            
             velocidad: [
                 { id: 'kmh', label: 'km/h', nombre: 'Kilómetros por hora', toBase: v => v, fromBase: v => v },
-                { id: 'mph', label: 'mph', nombre: 'Millas por hora', toBase: v => v * 1.6093, fromBase: v => v / 1.6093 },
-                { id: 'ms',  label: 'm/s', nombre: 'Metros por segundo', toBase: v => v * 3.6, fromBase: v => v / 3.6 }
+                { id: 'mph', label: 'mph', nombre: 'Millas por hora', toBase: v => v * 1.609344, fromBase: v => v / 1.609344 },
+                { id: 'ms',  label: 'm/s',  nombre: 'Metros por segundo', toBase: v => v * 3.6, fromBase: v => v / 3.6 },
+                { id: 'kn',  label: 'kn',   nombre: 'Nudo', toBase: v => v * 1.852, fromBase: v => v / 1.852 }
             ],
-            energia: [
-                { id: 'kw',  label: 'kW',  nombre: 'Kilovatio', toBase: v => v, fromBase: v => v },
-                { id: 'hp',  label: 'hp',  nombre: 'Caballo de fuerza', toBase: v => v * 0.7457, fromBase: v => v / 0.7457 },
-                { id: 'kwh', label: 'kWh', nombre: 'Kilovatio-hora', toBase: v => v * 3600000, fromBase: v => v / 3600000 },
-                { id: 'j',   label: 'J',   nombre: 'Julio', toBase: v => v / 3600000, fromBase: v => v * 3600000 }
+            
+            energia: [ // base = Julio
+                { id: 'j',    label: 'J',    nombre: 'Julio', toBase: v => v, fromBase: v => v },
+                { id: 'kj',   label: 'kJ',   nombre: 'Kilojulio', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'kwh',  label: 'kWh',  nombre: 'Kilovatio-hora', toBase: v => v * 3600000, fromBase: v => v / 3600000 },
+                { id: 'cal',  label: 'cal',  nombre: 'Caloría', toBase: v => v * 4.184, fromBase: v => v / 4.184 },
+                { id: 'kcal', label: 'kcal', nombre: 'Kilocaloría', toBase: v => v * 4184, fromBase: v => v / 4184 },
+                { id: 'btu',  label: 'BTU',  nombre: 'BTU', toBase: v => v * 1055.06, fromBase: v => v / 1055.06 }
             ],
+            
+            potencia: [ // base = Vatio
+                { id: 'w',      label: 'W',     nombre: 'Vatio', toBase: v => v, fromBase: v => v },
+                { id: 'kw',     label: 'kW',    nombre: 'Kilovatio', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'mw',     label: 'MW',    nombre: 'Megavatio', toBase: v => v * 1000000, fromBase: v => v / 1000000 },
+                { id: 'mw_mili',label: 'mW',    nombre: 'Miliwatio', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'hp',     label: 'hp',    nombre: 'Caballo de fuerza', toBase: v => v * 745.69987158, fromBase: v => v / 745.69987158 },
+                { id: 'btuh',   label: 'Btu/h', nombre: 'BTU por hora', toBase: v => v * 0.29307107, fromBase: v => v / 0.29307107 }
+            ],
+            
             area: [
                 { id: 'm2',  label: 'm²',  nombre: 'Metro cuadrado', toBase: v => v, fromBase: v => v },
-                { id: 'ft2', label: 'ft²', nombre: 'Pie cuadrado', toBase: v => v * 0.0929, fromBase: v => v / 0.0929 },
+                { id: 'cm2', label: 'cm²', nombre: 'Centímetro cuadrado', toBase: v => v * 0.0001, fromBase: v => v / 0.0001 },
+                { id: 'ft2', label: 'ft²', nombre: 'Pie cuadrado', toBase: v => v * 0.09290304, fromBase: v => v / 0.09290304 },
                 { id: 'ha',  label: 'ha',  nombre: 'Hectárea', toBase: v => v * 10000, fromBase: v => v / 10000 },
-                { id: 'ac',  label: 'ac',  nombre: 'Acre', toBase: v => v * 4046.86, fromBase: v => v / 4046.86 }
+                { id: 'ac',  label: 'ac',  nombre: 'Acre', toBase: v => v * 4046.8564224, fromBase: v => v / 4046.8564224 }
             ],
-            presion: [
+            
+            presion: [ // base = PSI
                 { id: 'psi', label: 'psi', nombre: 'PSI', toBase: v => v, fromBase: v => v },
-                { id: 'bar', label: 'bar', nombre: 'Bar', toBase: v => v / 0.0689, fromBase: v => v * 0.0689 },
-                { id: 'atm', label: 'atm', nombre: 'Atmósfera', toBase: v => v * 14.696, fromBase: v => v / 14.696 },
-                { id: 'kpa', label: 'kPa', nombre: 'Kilopascal', toBase: v => v / 6.89476, fromBase: v => v * 6.89476 }
+                { id: 'bar', label: 'bar', nombre: 'Bar', toBase: v => v * 14.5037738, fromBase: v => v / 14.5037738 },
+                { id: 'atm', label: 'atm', nombre: 'Atmósfera', toBase: v => v * 14.6959488, fromBase: v => v / 14.6959488 },
+                { id: 'kpa', label: 'kPa', nombre: 'Kilopascal', toBase: v => v * 0.145037738, fromBase: v => v / 0.145037738 }
             ],
+            
             tiempo: [
                 { id: 's',   label: 's',   nombre: 'Segundo', toBase: v => v, fromBase: v => v },
                 { id: 'min', label: 'min', nombre: 'Minuto', toBase: v => v * 60, fromBase: v => v / 60 },
@@ -2227,43 +2243,31 @@
                 { id: 'd',   label: 'd',   nombre: 'Día', toBase: v => v * 86400, fromBase: v => v / 86400 },
                 { id: 'sem', label: 'sem', nombre: 'Semana', toBase: v => v * 604800, fromBase: v => v / 604800 }
             ],
+            
             angulos: [
                 { id: 'deg', label: 'deg', nombre: 'Grado', toBase: v => v, fromBase: v => v },
-                { id: 'rad', label: 'rad', nombre: 'Radián', toBase: v => v * 57.2957795, fromBase: v => v / 57.2957795 }
+                { id: 'rad', label: 'rad', nombre: 'Radián', toBase: v => v * (180 / Math.PI), fromBase: v => v * (Math.PI / 180) }
             ],
+            
             combustible: [
                 { id: 'l100', label: 'L/100', nombre: 'Litros / 100 km', toBase: v => v, fromBase: v => v },
-                { id: 'mpg',  label: 'mpg', nombre: 'Millas por galón', toBase: v => (v === 0 ? 0 : 235.215 / v), fromBase: v => (v === 0 ? 0 : 235.215 / v) }
+                { id: 'mpg',  label: 'mpg',   nombre: 'Millas por galón', toBase: v => (v === 0 ? 0 : 235.215 / v), fromBase: v => (v === 0 ? 0 : 235.215 / v) }
             ],
-            iluminacion: [
-                { id: 'lx', label: 'lx', nombre: 'Lux', toBase: v => v, fromBase: v => v },
-                { id: 'fc', label: 'fc', nombre: 'Foot-candle', toBase: v => v * 10.7639, fromBase: v => v / 10.7639 },
-                { id: 'lm', label: 'lm', nombre: 'Lumen', toBase: v => v, fromBase: v => v },
-                { id: 'wled', label: 'W LED', nombre: 'Vatio LED (aprox.)', toBase: v => v * 90, fromBase: v => v / 90 }
-            ],
-            sonido: [
-                { id: 'hz',  label: 'Hz',  nombre: 'Hertz', toBase: v => v, fromBase: v => v },
-                { id: 'khz', label: 'kHz', nombre: 'Kilohertz', toBase: v => v * 1000, fromBase: v => v / 1000 }
-            ],
-            densidad: [
-                { id: 'gcm3', label: 'g/cm³', nombre: 'Gramo / cm³', toBase: v => v, fromBase: v => v },
-                { id: 'lbft3', label: 'lb/ft³', nombre: 'Libra / pie³', toBase: v => v / 62.4279, fromBase: v => v * 62.4279 }
-            ],
-            fuerza: [
-                { id: 'n', label: 'N', nombre: 'Newton', toBase: v => v, fromBase: v => v },
+            
+            fuerza: [ // base = Newton
+                { id: 'n',   label: 'N',   nombre: 'Newton', toBase: v => v, fromBase: v => v },
                 { id: 'lbf', label: 'lbf', nombre: 'Libra fuerza', toBase: v => v * 4.4482216153, fromBase: v => v / 4.4482216153 },
                 { id: 'kgf', label: 'kgf', nombre: 'Kilogramo fuerza', toBase: v => v * 9.80665, fromBase: v => v / 9.80665 },
                 { id: 'dyn', label: 'dyn', nombre: 'Dina', toBase: v => v * 0.00001, fromBase: v => v / 0.00001 }
             ],
-    
-            potencia: [
-                { id: 'w', label: 'W', nombre: 'Vatio', toBase: v => v, fromBase: v => v },
-                { id: 'kw', label: 'kW', nombre: 'Kilovatio', toBase: v => v * 1000, fromBase: v => v / 1000 },
-                { id: 'mw', label: 'MW', nombre: 'Megavatio', toBase: v => v * 1000000, fromBase: v => v / 1000000 },
-                { id: 'mw_mili', label: 'mW', nombre: 'Miliwatio', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
-                { id: 'hp', label: 'hp', nombre: 'Caballo de fuerza (mecánico)', toBase: v => v * 745.69987158, fromBase: v => v / 745.69987158 },
-                { id: 'cals', label: 'cal/s', nombre: 'Caloría por segundo', toBase: v => v * 4.1868, fromBase: v => v / 4.1868 },
-                { id: 'btuh', label: 'Btu/h', nombre: 'BTU por hora', toBase: v => v * 0.29307107, fromBase: v => v / 0.29307107 }
+            
+            data: [
+                { id: 'b',    label: 'B',  nombre: 'Byte', toBase: v => v, fromBase: v => v },
+                { id: 'kb',   label: 'KB', nombre: 'Kilobyte', toBase: v => v * 1024, fromBase: v => v / 1024 },
+                { id: 'mb',   label: 'MB', nombre: 'Megabyte', toBase: v => v * 1048576, fromBase: v => v / 1048576 },
+                { id: 'gb',   label: 'GB', nombre: 'Gigabyte', toBase: v => v * 1073741824, fromBase: v => v / 1073741824 },
+                { id: 'tb',   label: 'TB', nombre: 'Terabyte', toBase: v => v * 1099511627776, fromBase: v => v / 1099511627776 },
+                { id: 'mbit', label: 'Mb', nombre: 'Megabit', toBase: v => v * 131072, fromBase: v => v / 131072 }
             ]
         };
         

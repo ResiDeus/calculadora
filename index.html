@@ -1819,7 +1819,7 @@
                          Izquierda: paga/hora + horas/semana
                          Derecha: régimen, SS, Medicare, retención
                          ==================================================== -->
-<div id="vistaSubPantallaSalario" style="display:none; flex-direction:row; justify-content:space-between; align-items:stretch; width:96%; font-family:monospace; line-height:1.05; font-size:10px; gap:0; padding:0; overflow:hidden; z-index:95; box-sizing:border-box; height:78px !important; max-height:78px !important; position:absolute !important; top:10px !important; left:4px !important;">
+                    <div id="vistaSubPantallaSalario" style="display:none; flex-direction:row; justify-content:space-between; align-items:stretch; width:96%; font-family:monospace; line-height:1.05; font-size:10px; gap:0; padding:0; overflow:hidden; z-index:95; box-sizing:border-box; height:78px !important; max-height:78px !important; position:absolute !important; top:10px !important; left:4px !important;">
 
                         <!-- Izquierda -->
                         <div style="display:flex; flex-direction:column; gap:3px; width:46%; height:100%; justify-content:flex-start; overflow:hidden; margin:0; padding-right:5px; align-items:flex-start; box-sizing:border-box;">
@@ -1849,12 +1849,13 @@
                             </div>
                         </div>
 
-                        <!-- Derecha -->
-                        <div style="display:flex; flex-direction:column; width:54%; border-left:1px dotted rgba(0,240,255,0.45); padding-left:5px; height:100%; max-height:78px; justify-content:flex-start; gap:2px; overflow:hidden; box-sizing:border-box;">
-                            <div style="display:flex; gap:2px; width:100%; height:16px; margin-top:0;">
-                                <button id="tabW2" class="tab-btn-lcd" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
-                                <button id="tab1099" class="tab-btn-lcd" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
-                                <button id="tabExento" class="tab-btn-lcd active" style="font-size:8px; padding:2px 1px; font-weight:900;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
+                        <!-- Derecha + línea corta modificada -->
+                        <div style="display:flex; flex-direction:column; width:54%; border-left:1px dotted rgba(0,240,255,0.45); padding-left:5px; height:100%; max-height:78px; justify-content:space-between; gap:2px; overflow:hidden; box-sizing:border-box; margin-top:-2px;">
+                            <!-- Botones de régimen achicados a height:12px -->
+                            <div style="display:flex; gap:2px; width:100%; height:12px; margin-top:0;">
+                                <button id="tabW2" class="tab-btn-lcd" style="font-size:8px; padding:0px 1px; font-weight:900; height:12px; line-height:12px;" onclick="cambiarRegimenContributivo('W2')">NOMINA</button>
+                                <button id="tab1099" class="tab-btn-lcd" style="font-size:8px; padding:0px 1px; font-weight:900; height:12px; line-height:12px;" onclick="cambiarRegimenContributivo('1099')">FREELANCE</button>
+                                <button id="tabExento" class="tab-btn-lcd active" style="font-size:8px; padding:0px 1px; font-weight:900; height:12px; line-height:12px;" onclick="cambiarRegimenContributivo('EXENTO')">N/A</button>
                             </div>
                             <table style="width:100%; table-layout:fixed; border-collapse:collapse; height:16px;">
                                 <tr>
@@ -1870,7 +1871,7 @@
                                 <span id="lblTextoManual" style="font-size:8px; font-weight:900; color:#fff; white-space:nowrap; line-height:1;">RETENCIÓN MANUAL:</span>
                                 <div style="display:flex; align-items:center; height:16px; width:100%;">
                                     <span id="lblManualPctLcd" style="font-size:10px; font-weight:900; color:#fff; background:rgba(0,0,0,0.15); padding:1px 3px; border-radius:2px; margin-right:auto;">0.0%</span>
-                                    <div style="display:flex; gap:8px;">
+                                    <div style="display:flex; gap:6px;">
                                         <button id="btnManualMenos" class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('manual', -0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', -0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">-</button>
                                         <button id="btnManualMas" class="btn-hrs-lcd" style="width:16px; height:16px; font-size:11px;" onmousedown="iniciarAccionLcdControles('manual', 0.1)" ontouchstart="iniciarAccionLcdControlesTouch(event, 'manual', 0.1)" onmouseup="detenerAccionLcdControles()" onmouseleave="detenerAccionLcdControles()" ontouchend="detenerAccionLcdControles()">+</button>
                                     </div>
@@ -1878,6 +1879,7 @@
                             </div>
                         </div>
                     </div><!-- fin subpantalla salario -->
+
 
                     <!-- ========== SUBPANTALLA CONVERSIÓN ========== -->
                     <div id="vistaConversion" style="display:none; flex-direction:column; width:98%; height:100%; font-family:monospace; position:absolute; top:0; left:2px; right:2px; z-index:96; box-sizing:border-box; padding:2px 0 0; overflow:hidden; justify-content:space-between;">

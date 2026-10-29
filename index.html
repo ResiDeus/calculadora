@@ -1779,16 +1779,17 @@
             box-shadow: 0 0 16px #ffffff !important;
         }
 
-                /* Menú: Compras / Salario / Conversión = violeta oscuro */
+        /* Compras, Salario, Conversión y Obtener recibo: mismo violeta azul */
         #btnMenuCompras,
         #btnMenuSalario,
-        #btnMenuConv {
-            background: linear-gradient(90deg, #2e1065, #4c1d95, #5b21b6, #2e1065) !important;
+        #btnMenuConv,
+        #btnMenuRecibo {
+            background: linear-gradient(90deg, #312e81, #4f46e5, #6366f1, #312e81) !important;
             background-size: 300% auto !important;
-            border: 2px solid #7c3aed !important;
-            color: #ede9fe !important;
-            box-shadow: 0 0 10px rgba(76, 29, 149, 0.55) !important;
-            text-shadow: 0 0 6px rgba(124, 58, 237, 0.6) !important;
+            border: 2px solid #818cf8 !important;
+            color: #e0e7ff !important;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.55) !important;
+            text-shadow: 0 0 6px rgba(129, 140, 248, 0.7) !important;
         }
 
         /* Menú: Obtener recibo = violeta azulado */
@@ -2699,7 +2700,7 @@
                 apagarModoConversion();
             }
             if (!modoSalarioActivo) {
-                seleccionarMenu('sal');
+                seleccionarMenu('sal', true);
             }
             reproducirSonido('snd_menuItem');
         }
@@ -2717,7 +2718,7 @@
                 seleccionarMenu('sal');
             }
             if (!modoConversionActivo) {
-                toggleModoConversion();
+                toggleModoConversion(true);
             }
             reproducirSonido('snd_menuItem');
         }
@@ -3011,8 +3012,24 @@
                     return;
                 }
                 // Grupo 4 — botón MENU
-                if (tipo === 'snd_menu') {
-                    beep(1300, 0.14, 'square', 0.07, 320);
+                                if (tipo === 'snd_menu') {
+                    // Exclusivo tecla MENU: dos tonos cortos tipo "abrir panel"
+                    beep(180, 0.05, 'square', 0.09, 420);
+                    setTimeout(function () {
+                        try {
+                            var c2 = new (window.AudioContext || window.webkitAudioContext)();
+                            var o = c2.createOscillator();
+                            var g = c2.createGain();
+                            o.type = 'triangle';
+                            o.frequency.value = 900;
+                            g.gain.setValueAtTime(0.08, c2.currentTime);
+                            g.gain.exponentialRampToValueAtTime(0.001, c2.currentTime + 0.12);
+                            o.connect(g);
+                            g.connect(c2.destination);
+                            o.start();
+                            o.stop(c2.currentTime + 0.13);
+                        } catch (e) {}
+                    }, 55);
                     return;
                 }
                 // Grupo 5 — botones pantalla violeta (Compras, Salario, Conv, Recibo, Tema, Idioma)
@@ -3077,7 +3094,8 @@
                     return;
                 }
                 if (tipo === 'menu') {
-                    beep(1300, 0.14, 'square', 0.07, 320);
+                    // legado: ya no es el sonido de la tecla MENU
+                    beep(720, 0.11, 'triangle', 0.1, 480);
                     return;
                 }
                 beep(400, 0.1, 'sine', 0.1);
@@ -3618,15 +3636,20 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          * Prende o apaga una opción del menú.
          * f = 'sub' | 'ppl' | 'tip' | 'desc' | 'ivu' | 'sal' | 'paga'
          */
-        function seleccionarMenu(f) {
+        function seleccionarMenu(f, silencioso) {
             if (!sistemaEncendido) return;
             // En conversión no hacer nada si tocan "Valor"/precio
             if (modoConversionActivo && (f === 'sub' || f === 'paga')) return;
-            if (f === 'ppl' || f === 'tip' || f === 'desc' || f === 'ivu') {
-                reproducirSonido('snd_opcion');
-            } else {
-                reproducirSonido('menu');
+            if (!silencioso) {
+                if (f === 'ppl' || f === 'tip' || f === 'desc' || f === 'ivu') {
+                    reproducirSonido('snd_opcion');
+                } else if (f === 'sal') {
+                    // Salario desde fuera del menú: no usar sonido de MENU
+                    reproducirSonido('snd_menuItem');
+                } else {
+                    reproducirSonido('caja');
             }
+        }
 
             const lcd = document.getElementById('pantallaVerde');
             const bloqueListaCompras = document.getElementById('listaPrecios');
@@ -4069,7 +4092,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
         }
 
-        function toggleModoConversion() {
+        function toggleModoConversion(silencioso) {
             if (!sistemaEncendido) return;
 
             // Si vas a entrar a CONV y el salario está on → apagar salario primero
@@ -4097,7 +4120,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
                 if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
                 if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
-                reproducirSonido('menu');
+                if (!silencioso) reproducirSonido('snd_tabconv');
                 return;
             }
             
@@ -4603,6 +4626,11 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             document.body.classList.add(themes[temaActualIdx]);
             aplicarThemeColorSegunTema();
             reproducirSonido('snd_menuItem');
+        try {
+                localStorage.setItem('resi_tema_idx', String(temaActualIdx));
+                localStorage.setItem('resi_tema_name', themes[temaActualIdx]);
+            } catch (e) {}
+            if (typeof aplicarThemeColorSegunTema === 'function') aplicarThemeColorSegunTema();
         }
 
         /* ============================================================
@@ -4613,12 +4641,17 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             var idi = localStorage.getItem('resi_idioma');
             if (idi === 'es' || idi === 'en') idiomaActual = idi;
         } catch (e) {}
+
         try {
+            var nombreGuardado = localStorage.getItem('resi_tema_name');
             var ti = parseInt(localStorage.getItem('resi_tema_idx'), 10);
-            if (!isNaN(ti) && ti >= 0 && ti < themes.length) {
+            if (nombreGuardado && themes.indexOf(nombreGuardado) >= 0) {
+                temaActualIdx = themes.indexOf(nombreGuardado);
+            } else if (!isNaN(ti) && ti >= 0 && ti < themes.length) {
                 temaActualIdx = ti;
             }
         } catch (e) {}
+
         document.body.classList.remove(
             'theme-cyberpunk', 'theme-retro-gold', 'theme-matrix', 'theme-sunset', 'theme-puertorico'
         );

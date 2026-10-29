@@ -2588,7 +2588,7 @@
                 apagarModoConversion();
             }
             if (modoSalarioActivo) {
-                seleccionarMenu('sal');
+                seleccionarMenu('sal', true);
             }
 
             // Si el menú ya está abierto → cerrarlo
@@ -2663,7 +2663,7 @@
                 apagarModoConversion();
             }
             if (modoSalarioActivo) {
-                seleccionarMenu('sal');
+                seleccionarMenu('sal', true);
             }
 
             var lista = document.getElementById('listaPrecios');
@@ -2715,7 +2715,7 @@
             if (btnMenu) btnMenu.classList.remove('btn-on');
 
             if (modoSalarioActivo) {
-                seleccionarMenu('sal');
+                seleccionarMenu('sal', true);
             }
             if (!modoConversionActivo) {
                 toggleModoConversion(true);
@@ -4172,7 +4172,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             actualizarPantallaConversion();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
-            reproducirSonido('menu');
+            if (!silencioso) reproducirSonido('snd_tabconv');
         }
         
         /* ============================================================

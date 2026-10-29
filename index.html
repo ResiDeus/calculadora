@@ -142,11 +142,17 @@
            HTML Y BODY — sin franja blanca en iPhone, sin scroll raro
            ============================================================ */
         html {
-            background-color: #09011a !important;
+            background-color: var(--page-bg, #09011a) !important;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
         }
+
+        body.theme-cyberpunk { --page-bg: #09011a; }
+        body.theme-retro-gold { --page-bg: #1c1917; }
+        body.theme-matrix { --page-bg: #022c22; }
+        body.theme-sunset { --page-bg: #451a03; }
+        body.theme-puertorico { --page-bg: #020617; }
 
         * {
             box-sizing: border-box;
@@ -1773,6 +1779,28 @@
             box-shadow: 0 0 16px #ffffff !important;
         }
 
+                /* Menú: Compras / Salario / Conversión = violeta oscuro */
+        #btnMenuCompras,
+        #btnMenuSalario,
+        #btnMenuConv {
+            background: linear-gradient(90deg, #2e1065, #4c1d95, #5b21b6, #2e1065) !important;
+            background-size: 300% auto !important;
+            border: 2px solid #7c3aed !important;
+            color: #ede9fe !important;
+            box-shadow: 0 0 10px rgba(76, 29, 149, 0.55) !important;
+            text-shadow: 0 0 6px rgba(124, 58, 237, 0.6) !important;
+        }
+
+        /* Menú: Obtener recibo = violeta azulado */
+        #btnMenuRecibo {
+            background: linear-gradient(90deg, #312e81, #4f46e5, #6366f1, #312e81) !important;
+            background-size: 300% auto !important;
+            border: 2px solid #818cf8 !important;
+            color: #e0e7ff !important;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.55) !important;
+            text-shadow: 0 0 6px rgba(129, 140, 248, 0.7) !important;
+        }
+
         .lcd.modo-recibo-activo {
             background: #0a1628 !important;
             color: var(--receipt-glow) !important;
@@ -2521,7 +2549,7 @@
             aplicarIdiomaUI();
             var btnIdioma = document.getElementById('btnMenuIdioma');
             if (btnIdioma) btnIdioma.innerText = t('idiomaBtn');
-            reproducirSonido('menu');
+            reproducirSonido('snd_menuItem');
         }
 
         function apagarModoMenu() {
@@ -2568,7 +2596,8 @@
                 if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
                 if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
                 if (typeof calc === 'function') calc();
-                reproducirSonido('menu');
+                reproducirSonido('snd_menu');
+                
                 return;
             }
 
@@ -2611,7 +2640,8 @@
             }
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
-            reproducirSonido('menu');
+            reproducirSonido('snd_menu');
+            
         }
 
         // modo principal
@@ -2652,7 +2682,8 @@
             if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
-            reproducirSonido('menu');
+            reproducirSonido('snd_menuItem');
+            
         }
 
         function desdeMenuAbrirSalario() {
@@ -2670,7 +2701,7 @@
             if (!modoSalarioActivo) {
                 seleccionarMenu('sal');
             }
-            reproducirSonido('menu');
+            reproducirSonido('snd_menuItem');
         }
 
         function desdeMenuAbrirConversion() {
@@ -2688,7 +2719,7 @@
             if (!modoConversionActivo) {
                 toggleModoConversion();
             }
-            reproducirSonido('menu');
+            reproducirSonido('snd_menuItem');
         }
 
         function simboloOp(op) {
@@ -2719,7 +2750,7 @@
         function opMath(op) {
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
-            reproducirSonido('tecla');
+            reproducirSonido('snd_op');
 
             // Si ya había operación pendiente, primero resuélvela
             if (pendingOp && pendingVal !== null) {
@@ -2740,7 +2771,7 @@
         function equalsMath() {
             if (!sistemaEncendido || modoSalarioActivo) return;
             if (modoConversionActivo) return;
-            reproducirSonido('tecla');
+            reproducirSonido('snd_op');
 
             if (pendingOp && pendingVal !== null) {
                 evaluarPendiente(); // deja el resultado en sSub y lblSub
@@ -2948,15 +2979,15 @@
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const now = ctx.currentTime;
 
-                function beep(freq, dur, type, vol, slideTo) {
+                function beep(freq, dur, wave, vol, slideTo) {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    osc.type = type || 'sawtooth';
+                    osc.type = wave || 'sawtooth';
                     osc.frequency.setValueAtTime(freq, now);
                     if (slideTo) {
                         osc.frequency.exponentialRampToValueAtTime(Math.max(40, slideTo), now + dur);
                     }
-                    gain.gain.setValueAtTime(vol || 0.12, now);
+                    gain.gain.setValueAtTime(vol || 0.11, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
@@ -2964,62 +2995,65 @@
                     osc.stop(now + dur + 0.02);
                 }
 
+                // Grupo 1 — Backspace
+                if (tipo === 'snd_bksp') {
+                    beep(340, 0.07, 'square', 0.08, 160);
+                    return;
+                }
+                // Grupo 2 — ÷ × − + =
+                if (tipo === 'snd_op') {
+                    beep(610, 0.1, 'triangle', 0.12, 920);
+                    return;
+                }
+                // Grupo 3 — Serrucho / Propina / Descuento / IVU
+                if (tipo === 'snd_opcion') {
+                    beep(440, 0.09, 'sawtooth', 0.1, 660);
+                    return;
+                }
+                // Grupo 4 — botón MENU
+                if (tipo === 'snd_menu') {
+                    beep(1300, 0.14, 'square', 0.07, 320);
+                    return;
+                }
+                // Grupo 5 — botones pantalla violeta (Compras, Salario, Conv, Recibo, Tema, Idioma)
+                if (tipo === 'snd_menuItem') {
+                    beep(720, 0.11, 'triangle', 0.1, 480);
+                    return;
+                }
+                // Grupo 6 — W-2 / 1099 / N/A
+                if (tipo === 'snd_regimen') {
+                    beep(560, 0.09, 'square', 0.09, 420);
+                    return;
+                }
+                // Grupo 7 — S. Social / Medicare
+                if (tipo === 'snd_toggleimp') {
+                    beep(490, 0.08, 'triangle', 0.1, 740);
+                    return;
+                }
+                // Grupo 8 — WGHT VOL DIST TEMP VEL CURR FORC ENER POWR PSI TIME DATA
+                if (tipo === 'snd_tabconv') {
+                    beep(980, 0.07, 'triangle', 0.09, 1200);
+                    return;
+                }
+                // Grupo 9a — botones unidad (kg, lb, etc.)
+                if (tipo === 'snd_unidad') {
+                    beep(260, 0.09, 'sawtooth', 0.11, 520);
+                    return;
+                }
+                // Grupo 9b — SWAP
+                if (tipo === 'snd_swap') {
+                    beep(200, 0.1, 'square', 0.1, 1000);
+                    return;
+                }
+                // Grupo 10 — Copiar / Cerrar recibo
+                if (tipo === 'snd_recibo') {
+                    beep(800, 0.1, 'sine', 0.1, 360);
+                    return;
+                }
+
+                // Los que NO pediste cambiar (siguen igual)
                 if (tipo === 'add') {
-                    // AÑADIR — chord synthwave corto
                     beep(220, 0.18, 'sawtooth', 0.11, 440);
-                    setTimeout(function () { try {
-                        const c2 = new (window.AudioContext || window.webkitAudioContext)();
-                        const o = c2.createOscillator(); const g = c2.createGain();
-                        o.type = 'square'; o.frequency.value = 660;
-                        g.gain.value = 0.06; o.connect(g); g.connect(c2.destination);
-                        o.start(); g.gain.exponentialRampToValueAtTime(0.001, c2.currentTime + 0.15);
-                        o.stop(c2.currentTime + 0.16);
-                    } catch (e) {} }, 60);
-                    return;
-                }
-                if (tipo === 'menu') {
-                    // MENU — barrido agudo → grave
-                    beep(1200, 0.16, 'square', 0.08, 280);
-                    return;
-                }
-                if (tipo === 'op') {
-                    // ÷ × − + =  (mismo para los 5)
-                    beep(520, 0.09, 'triangle', 0.12, 780);
-                    return;
-                }
-                if (tipo === 'clear') {
-                    // BORRAR TODO
-                    beep(180, 0.22, 'sawtooth', 0.14, 60);
-                    return;
-                }
-                if (tipo === 'bksp') {
-                    // Backspace
-                    beep(400, 0.06, 'square', 0.07, 200);
-                    return;
-                }
-                if (tipo === 'tabconv') {
-                    // WGHT VOL DIST ... DATA
-                    beep(880, 0.07, 'triangle', 0.09, 1100);
-                    return;
-                }
-                if (tipo === 'swap') {
-                    // ⇄ swap
-                    beep(300, 0.08, 'sawtooth', 0.1, 900);
-                    return;
-                }
-                if (tipo === 'regimen') {
-                    // W-2 / 1099 / N/A
-                    beep(640, 0.08, 'square', 0.08, 480);
-                    return;
-                }
-                if (tipo === 'toggleimp') {
-                    // S. SOCIAL / MEDICARE
-                    beep(500, 0.07, 'triangle', 0.09, 700);
-                    return;
-                }
-                if (tipo === 'recibo') {
-                    // Copiar / Cerrar recibo
-                    beep(760, 0.1, 'sine', 0.1, 380);
                     return;
                 }
                 if (tipo === 'tecla') {
@@ -3038,7 +3072,14 @@
                     beep(600, 0.12, 'sine', 0.1, 300);
                     return;
                 }
-                // default
+                if (tipo === 'clear') {
+                    beep(180, 0.22, 'sawtooth', 0.14, 60);
+                    return;
+                }
+                if (tipo === 'menu') {
+                    beep(1300, 0.14, 'square', 0.07, 320);
+                    return;
+                }
                 beep(400, 0.1, 'sine', 0.1);
             } catch (e) {}
         }
@@ -3581,7 +3622,11 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (!sistemaEncendido) return;
             // En conversión no hacer nada si tocan "Valor"/precio
             if (modoConversionActivo && (f === 'sub' || f === 'paga')) return;
-            reproducirSonido('menu');
+            if (f === 'ppl' || f === 'tip' || f === 'desc' || f === 'ivu') {
+                reproducirSonido('snd_opcion');
+            } else {
+                reproducirSonido('menu');
+            }
 
             const lcd = document.getElementById('pantallaVerde');
             const bloqueListaCompras = document.getElementById('listaPrecios');
@@ -3781,7 +3826,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          */
         function cambiarRegimenContributivo(regimen) {
             if (!sistemaEncendido || !modoSalarioActivo) return;
-            reproducirSonido('menu');
+            reproducirSonido('snd_regimen');
             regimenContributivo = regimen;
 
             const lblTexto = document.getElementById('lblTextoManual');
@@ -3837,7 +3882,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         /** Prende/apaga Seguro Social o Medicare por separado */
         function toggleImpuestoIndividual(tipo) {
             if (!sistemaEncendido || !modoSalarioActivo || regimenContributivo === 'EXENTO') return;
-            reproducirSonido('paso');
+            reproducirSonido('snd_toggleimp');
 
             if (tipo === 'SS') ssActivo = !ssActivo;
             if (tipo === 'MED') medActivo = !medActivo;
@@ -3931,7 +3976,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 else idxUnidadDer = (idxUnidadDer + 1) % lista.length;
             }
             actualizarPantallaConversion();
-            reproducirSonido('paso');
+            reproducirSonido('snd_unidad');
         }
 
         function intercambiarUnidadesConv() {
@@ -3940,7 +3985,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             idxUnidadIzq = idxUnidadDer;
             idxUnidadDer = tmp;
             actualizarPantallaConversion();
-            reproducirSonido('menu');
+            reproducirSonido('snd_swap');
         }
         
         function setCatConversion(cat) {
@@ -3955,7 +4000,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 t.classList.toggle('active', t.dataset.cat === cat);
             });
             actualizarPantallaConversion();
-            reproducirSonido('menu');
+            reproducirSonido('snd_tabconv');
         }
 
         function actualizarPantallaConversion() {
@@ -4145,7 +4190,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (modoSalarioActivo) return;
 
             if (modoConversionActivo) {
-                reproducirSonido('tecla');
+                reproducirSonido('snd_bksp');
                 sConv = sConv.slice(0, -1);
                 if (!sConv) sConv = '0';
                 actualizarPantallaConversion();
@@ -4153,7 +4198,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             }
 
             if (mode !== 'sub') mode = 'sub';
-            reproducirSonido('tecla');
+            reproducirSonido('snd_bksp');
 
             sSub = sSub.slice(0, -1);
             if (!sSub) {
@@ -4458,11 +4503,11 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             actualizarHeaderIndicadores();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
-            reproducirSonido('caja');
+            reproducirSonido('snd_menuItem');
         }
 
         function cerrarHologramaRecibo() {
-            reproducirSonido('menu');
+            reproducirSonido('snd_recibo');
             modoReciboActivo = false;
             var lcd = document.getElementById('pantallaVerde');
             if (lcd) lcd.classList.remove('modo-recibo-activo');
@@ -4486,7 +4531,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
         function copiarTextoHolograma() {
             if (!sistemaEncendido) return;
-            reproducirSonido('caja');
+            reproducirSonido('snd_recibo');
             navigator.clipboard.writeText(textoReciboGlobal).then(function() {
                 var b1 = document.getElementById('btnCopiarReciboLcd');
                 var b2 = document.getElementById('btnCopiarHolo');
@@ -4512,15 +4557,22 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             };
             var nombre = themes[temaActualIdx] || 'theme-cyberpunk';
             var color = themeColors[nombre] || '#09011a';
+
             var meta = document.querySelector('meta[name="theme-color"]');
             if (!meta) {
                 meta = document.createElement('meta');
                 meta.setAttribute('name', 'theme-color');
                 document.head.appendChild(meta);
             }
+            // Truco: quitar y volver a poner para que iOS/Chrome refresquen la barra
+            meta.setAttribute('content', '');
             meta.setAttribute('content', color);
-            // Algunos navegadores móviles hacen caso a esto también:
+
             document.documentElement.style.backgroundColor = color;
+            document.body.style.backgroundColor = color;
+            if (document.documentElement) {
+                document.documentElement.style.setProperty('--page-bg', color);
+            }
         }
 
         function rotarTema() {
@@ -4549,8 +4601,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             temaActualIdx = (temaActualIdx + 1) % themes.length;
             document.body.classList.add(themes[temaActualIdx]);
-            try { localStorage.setItem('resi_tema_idx', String(temaActualIdx)); } catch (e) {}
             aplicarThemeColorSegunTema();
+            reproducirSonido('snd_menuItem');
         }
 
         /* ============================================================

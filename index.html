@@ -2533,6 +2533,7 @@
             if (wrap) wrap.style.display = 'block';
             if (btn) btn.classList.remove('btn-on');
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
         }
 
         function toggleModoMenu() {
@@ -2545,6 +2546,7 @@
                 if (lcdR) lcdR.classList.remove('modo-recibo-activo');
                 var vistaR = document.getElementById('vistaRecibo');
                 if (vistaR) vistaR.style.display = 'none';
+                if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             }
 
             if (modoConversionActivo && typeof apagarModoConversion === 'function') {
@@ -2641,6 +2643,7 @@
             if (typeof calc === 'function') calc();
             if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             reproducirSonido('menu');
         }
 
@@ -3228,15 +3231,17 @@
                 return;
             }
 
-            // Conversión → salir a modo compras (pantalla verde)
-            if (modoConversionActivo) {
-                if (typeof apagarModoConversion === 'function') {
-                    apagarModoConversion();
+                // Conversión → solo borrar el valor de la pantalla roja (NO salir a verde)
+                if (modoConversionActivo) {
+                    sConv = '0';
+                    if (typeof actualizarPantallaConversion === 'function') {
+                        actualizarPantallaConversion();
+                    }
+                    // Opcional: también limpiar el marcador de valor
+                    var lbl = document.getElementById('lblSub');
+                    if (lbl) lbl.innerText = '0';
+                    return;
                 }
-                if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
-                if (typeof calc === 'function') calc();
-                return;
-            }
 
             ejecutarResetTotal();
         }
@@ -3396,6 +3401,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (document.getElementById('lblSub')) document.getElementById('lblSub').classList.add('blink-num');
             if (document.getElementById('marcadorPrecioUnificado')) {
                 document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             }
 
             actualizarHeaderIndicadores();
@@ -3416,6 +3422,71 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (!fila) return;
             fila.style.pointerEvents = permitido ? 'auto' : 'none';
             fila.style.opacity = permitido ? '1' : '0.45';
+        }
+
+        function actualizarBloqueoTecladoSegunModo() {
+            var bloquearNumerosYOps = modoSalarioActivo || modoMenuActivo;
+            var bloquearOpsMatematicas = modoConversionActivo;
+            var bloquearAnadirYPrecio = modoSalarioActivo || modoMenuActivo || modoConversionActivo;
+        
+            // Todas las teclas del pad
+            document.querySelectorAll('.pad-num .btn-key').forEach(function(btn) {
+                // MENU siempre habilitado
+                if (btn.id === 'btnMenu') {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.pointerEvents = 'auto';
+                    return;
+                }
+        
+                var esOpMat = btn.classList.contains('btn-op'); // ÷ × − + =
+                var debeBloquear = false;
+        
+                if (bloquearNumerosYOps) {
+                    // Salario o Menú: todo menos MENU
+                    debeBloquear = true;
+                } else if (bloquearOpsMatematicas && esOpMat) {
+                    // Conversión: solo signos matemáticos
+                    debeBloquear = true;
+                }
+        
+                btn.disabled = debeBloquear;
+                btn.style.opacity = debeBloquear ? '0.35' : '1';
+                btn.style.pointerEvents = debeBloquear ? 'none' : 'auto';
+            });
+        
+            // Precio + AÑADIR
+            var marcador = document.getElementById('marcadorPrecioUnificado');
+            var btnAnadir = document.getElementById('btnAnadirGlobal');
+            var cajaSub = document.getElementById('cajaSub');
+        
+            if (bloquearAnadirYPrecio) {
+                if (marcador) {
+                    marcador.style.opacity = '0.4';
+                    marcador.style.pointerEvents = 'none';
+                }
+                if (btnAnadir) {
+                    btnAnadir.disabled = true;
+                    btnAnadir.style.opacity = '0.35';
+                    btnAnadir.style.pointerEvents = 'none';
+                }
+                if (cajaSub) {
+                    cajaSub.style.pointerEvents = 'none';
+                }
+            } else {
+                if (marcador) {
+                    marcador.style.opacity = '1';
+                    marcador.style.pointerEvents = 'auto';
+                }
+                if (btnAnadir) {
+                    btnAnadir.disabled = false;
+                    btnAnadir.style.opacity = '1';
+                    btnAnadir.style.pointerEvents = 'auto';
+                }
+                if (cajaSub) {
+                    cajaSub.style.pointerEvents = 'auto';
+                }
+            }
         }
 
         /** Actualiza el texto de la cabecera del LCD según el estado */
@@ -3524,6 +3595,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 actualizarHeaderIndicadores();
                 if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
                 if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+                if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
                 return;
             }
 
@@ -3894,6 +3966,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             mode = 'sub';
             if (document.getElementById('lblSub')) {
                 document.getElementById('lblSub').innerText = sSub;
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             }
         }
 
@@ -3924,6 +3997,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 calc();
                 if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
                 if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+                if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
                 reproducirSonido('menu');
                 return;
             }
@@ -4183,7 +4257,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             html += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '<br>';
             html += '-------------------------------</div>';
 
-            html += '<div style="text-align:left;">';
+            html += '<div style="text-align:center;">';
             if (preciosGuardados.length > 0) {
                 html += t('artsGuardados') + '<br>';
                 preciosGuardados.forEach((a, i) => {
@@ -4400,6 +4474,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         calc();
         if (typeof aplicarIdiomaUI === 'function') aplicarIdiomaUI();
         if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+        if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
         if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
     </script>
 

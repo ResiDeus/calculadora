@@ -1774,6 +1774,79 @@
             animation: none !important;
             box-shadow: 0 0 16px #ffffff !important;
         }
+
+        /* Vista recibo dentro del LCD */
+        .lcd.modo-recibo-activo {
+            background: #0a1628 !important;
+            color: var(--receipt-glow) !important;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.7), 0 0 12px rgba(0,255,102,0.25) !important;
+        }
+        .lcd.modo-recibo-activo .lcd-header {
+            border-bottom: 1px solid rgba(0,255,102,0.35) !important;
+            color: var(--receipt-glow) !important;
+        }
+        .lcd.modo-recibo-activo #listaPrecios,
+        .lcd.modo-recibo-activo #vistaConversion,
+        .lcd.modo-recibo-activo #vistaSubPantallaSalario,
+        .lcd.modo-recibo-activo #vistaMenu,
+        .lcd.modo-recibo-activo #lblArtText,
+        .lcd.modo-recibo-activo .lbl-lista-vacia-texto,
+        .lcd.modo-recibo-activo #flechaGuia,
+        .lcd.modo-recibo-activo .lcd-body {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        .lcd.modo-recibo-activo .lcd-wrapper,
+        .lcd.modo-recibo-activo .listaPrecios-container {
+            max-height: none !important;
+            overflow: visible !important;
+            min-height: 190px !important;
+        }
+        #vistaRecibo {
+            display: none;
+            position: absolute !important;
+            top: 0;
+            left: 2px;
+            right: 2px;
+            z-index: 99998;
+            max-height: 188px;
+            flex-direction: column;
+            gap: 4px;
+            font-family: monospace;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .lcd.modo-recibo-activo #vistaRecibo {
+            display: flex !important;
+        }
+        #textoContenidoReciboLcd {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            font-size: 9px;
+            line-height: 1.35;
+            white-space: pre-wrap;
+            color: var(--receipt-glow);
+            text-shadow: 0 0 3px var(--receipt-glow);
+            background: rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 6px;
+            padding: 6px;
+            max-height: 145px;
+        }
+        .btn-recibo-lcd {
+            flex: 1;
+            padding: 5px 4px;
+            font-size: 10px;
+            font-weight: 900;
+            font-family: monospace;
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid var(--receipt-glow);
+            background: rgba(0,0,0,0.4);
+            color: var(--receipt-glow);
+        }
         
     </style>
 </head>
@@ -1963,6 +2036,16 @@
                     </div>
                     <!-- fin subpantalla menu -->
 
+                    <!-- ========== SUBPANTALLA RECIBO (en el LCD, no popup) ========== -->
+                    <div id="vistaRecibo">
+                        <div id="textoContenidoReciboLcd">...</div>
+                        <div style="display:flex; gap:6px; flex-shrink:0;">
+                            <button type="button" class="btn-recibo-lcd" id="btnCopiarReciboLcd" onclick="copiarTextoHolograma()">Copiar</button>
+                            <button type="button" class="btn-recibo-lcd" id="btnCerrarReciboLcd" onclick="cerrarHologramaRecibo()">Cerrar</button>
+                        </div>
+                    </div>
+                    <!-- fin subpantalla recibo -->
+
                 </div><!-- fin listaPrecios-container -->
             </div><!-- fin lcd-wrapper -->
 
@@ -2129,7 +2212,7 @@
          OVERLAY: RECIBO HOLOGRÁFICO
          Detalle completo de la cuenta + botón pa' copiarlo
          ============================================================ -->
-    <div class="holograma-overlay" id="visorHolograma">
+        <div class="holograma-overlay" id="visorHolograma" style="display:none !important;">
         <div class="holograma-ticket">
             <div class="holograma-lineas"></div>
             <div style="font-weight: 900; text-align: center; letter-spacing: 1px; font-size: 14px;">RECIBO</div>
@@ -2233,25 +2316,84 @@
                 let modoMenuActivo = false;
                 var pendingOp = null;
                 var pendingVal = null;
-        let idiomaActual = 'es';
+                let idiomaActual = 'es';
+        let modoReciboActivo = false;
 
         var I18N = {
             es: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECIBO', salario: 'SALARIO', clear: 'CLEAR',
-                precio: 'Precio', valor: 'Valor', modoMenu: 'MODO: MENÚ',
+                precio: 'Precio', valor: 'Valor',
+                modoMenu: 'MODO: MENÚ', modoCompras: 'MODO: COMPRAS', modoSueldo: 'MODO: SUELDO',
+                modoConversion: 'MODO: CONVERSIÓN',
                 serrucho: 'Serrucho', propina: 'Propina', descuento: 'Descuento', ivu: 'IVU',
-                listaVacia: 'Lista vacía', temaBtn: 'CAMBIAR TEMA', idiomaBtn: 'CAMBIAR IDIOMA: ESPAÑOL'
+                listaVacia: 'Lista vacía',
+                temaBtn: 'CAMBIAR TEMA', idiomaBtn: 'IDIOMA: ES',
+                menuCompras: 'MODO: COMPRAS', menuSalario: 'MODO: SALARIO', menuConv: 'MODO: CONVERSIÓN',
+                menuRecibo: 'OBTENER RECIBO',
+                anadir: 'AÑADIR',
+                serruchoCu: 'SERRUCHO (C/U):', serruchoNa: 'SERRUCHO (C/U): N/A',
+                descuentoLbl: 'DESCUENTO:', propinaLbl: 'PROPINA:', ivuLbl: 'IVU:',
+                conIvuDto: '(con IVU y DTO)',
+                pagaHora: 'PAGA POR HORA:', horasSemana: 'HORAS SEMANA:',
+                retManual: 'RETENCIÓN MANUAL:', retAdicional: 'RETENCIÓN ADICIONAL:',
+                retTotal: 'RETENCIÓN TOTAL:',
+                totSemanal: 'TOTAL SEMANAL  :', totBisemanal: 'TOTAL BISEMANAL:',
+                totMensual: 'TOTAL MENSUAL  :', totAnual: 'TOTAL ANUAL    :',
+                reciboTitulo: 'RECIBO', detalleCuenta: 'DETALLE DE LA CUENTA',
+                fecha: 'Fecha', hora: 'Hora',
+                artsGuardados: 'Artículos Guardados:',
+                artN: 'Art.', precioBase: 'Precio Base', totalArt: 'Total Art.',
+                descuentoTotal: 'Descuento Total', ivuAcum: 'IVU Acumulado',
+                propinaRec: 'Propina', totalFinal: 'TOTAL FINAL',
+                serruchoComp: 'SERRUCHO COMPARTIDO', cuotaCabeza: 'CUOTA POR CABEZA',
+                gracias: '¡Gracias por usar la app!',
+                copiar: 'Copiar', copiado: '¡Copiado!', cerrar: 'Cerrar',
+                noArts: 'No hay artículos guardados.',
+                subtotal: 'Subtotal', panas: 'panas',
+                taxTag: 'IVU', discTag: 'DTO', tipTag: 'TIP'
             },
             en: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECEIPT', salario: 'WAGE', clear: 'CLEAR',
-                precio: 'Price', valor: 'Value', modoMenu: 'MODE: MENU',
+                precio: 'Price', valor: 'Value',
+                modoMenu: 'MODE: MENU', modoCompras: 'MODE: SHOPPING', modoSueldo: 'MODE: SALARY',
+                modoConversion: 'MODE: CONVERSION',
                 serrucho: 'Split', propina: 'Tip', descuento: 'Discount', ivu: 'TAX',
-                listaVacia: 'Empty list', temaBtn: 'CHANGE THEME', idiomaBtn: 'SPANISH ↔ ENGLISH'
+                listaVacia: 'Empty list',
+                temaBtn: 'CHANGE THEME', idiomaBtn: 'LANGUAGE: EN',
+                menuCompras: 'MODE: SHOPPING', menuSalario: 'MODE: SALARY', menuConv: 'MODE: CONVERSION',
+                menuRecibo: 'GET RECEIPT',
+                anadir: 'ADD',
+                serruchoCu: 'SPLIT (EACH):', serruchoNa: 'SPLIT (EACH): N/A',
+                descuentoLbl: 'DISCOUNT:', propinaLbl: 'TIP:', ivuLbl: 'TAX:',
+                conIvuDto: '(w/ TAX & DISC.)',
+                pagaHora: 'HOURLY RATE:', horasSemana: 'HOURS/WEEK:',
+                retManual: 'MANUAL RETENTION:', retAdicional: 'ADDITIONAL RETENTION:',
+                retTotal: 'TOTAL RETENTION:',
+                totSemanal: 'WEEKLY TOTAL  :', totBisemanal: 'BIWEEKLY TOTAL:',
+                totMensual: 'MONTHLY TOTAL  :', totAnual: 'ANNUAL TOTAL   :',
+                reciboTitulo: 'RECEIPT', detalleCuenta: 'ACCOUNT DETAILS',
+                fecha: 'Date', hora: 'Time',
+                artsGuardados: 'Saved items:',
+                artN: 'Item', precioBase: 'Base price', totalArt: 'Item total',
+                descuentoTotal: 'Total discount', ivuAcum: 'Accumulated tax',
+                propinaRec: 'Tip', totalFinal: 'GRAND TOTAL',
+                serruchoComp: 'SHARED SPLIT', cuotaCabeza: 'Cost per person',
+                gracias: 'Thank you for using our app!',
+                copiar: 'Copy', copiado: 'Copied!', cerrar: 'Close',
+                noArts: 'No saved items.',
+                subtotal: 'Subtotal', panas: 'people',
+                taxTag: 'TAX', discTag: 'DISC', tipTag: 'TIP'
             }
         };
 
         function t(key) {
             return (I18N[idiomaActual] && I18N[idiomaActual][key]) || key;
+        }
+
+        function nombreUnidad(u) {
+            if (!u) return '';
+            if (idiomaActual === 'en' && u.nombreEn) return u.nombreEn;
+            return u.nombre;
         }
 
         function aplicarIdiomaUI() {
@@ -2260,38 +2402,110 @@
                 if (el) el.innerText = t(key);
             }
             set('btnMenu', 'menu');
-            set('btnConv', 'conv');
-            set('btnReceipt', 'recibo');
-            set('btnModoSalario', 'salario');
-            set('btnClearMaster', 'clear');
             set('btnMenuTema', 'temaBtn');
             set('btnMenuIdioma', 'idiomaBtn');
+            set('btnMenuCompras', 'menuCompras');
+            set('btnMenuSalario', 'menuSalario');
+            set('btnMenuConv', 'menuConv');
+            set('btnMenuRecibo', 'menuRecibo');
+            set('btnAnadirGlobal', 'anadir');
+            set('btnCopiarReciboLcd', 'copiar');
+            set('btnCerrarReciboLcd', 'cerrar');
+            set('btnCopiarHolo', 'copiar');
+
             var tit = document.querySelector('#cajaSub .lbl-title');
             if (tit) tit.innerText = modoConversionActivo ? t('valor') : t('precio');
+
             [['cajaPpl','serrucho'],['cajaTip','propina'],['cajaDesc','descuento'],['btnToggleIvu','ivu']].forEach(function (par) {
                 var box = document.getElementById(par[0]);
                 if (!box) return;
                 var title = box.querySelector('.lbl-title');
                 if (title) title.innerText = t(par[1]);
             });
+
+            var vac = document.getElementById('lblArtText');
+            if (vac && preciosGuardados.length === 0) vac.innerText = t('listaVacia');
+
+            // Labels de salario (texto fijo en HTML)
+            var salRoot = document.getElementById('vistaSubPantallaSalario');
+            if (salRoot) {
+                var spans = salRoot.querySelectorAll('span');
+                spans.forEach(function(sp) {
+                    var tx = (sp.innerText || '').trim().toUpperCase();
+                    if (tx.indexOf('PAGA POR HORA') === 0 || tx.indexOf('HOURLY RATE') === 0) {
+                        sp.innerText = t('pagaHora');
+                    }
+                    if (tx.indexOf('HORAS SEMANA') === 0 || tx.indexOf('HOURS/WEEK') === 0 || tx.indexOf('HOURS PER WEEK') === 0) {
+                        sp.innerText = t('horasSemana');
+                    }
+                });
+            }
+            var lblMan = document.getElementById('lblTextoManual');
+            if (lblMan) {
+                lblMan.innerText = (regimenContributivo === 'EXENTO') ? t('retManual') : t('retAdicional');
+            }
+
+            // Prefijos de totales de salario
+            function setPrefixById(id, key) {
+                var el = document.getElementById(id);
+                if (!el || !el.parentNode) return;
+                var parent = el.parentNode;
+                var html = parent.innerHTML;
+                // dejar solo el span del valor y poner el prefijo nuevo
+                parent.innerHTML = t(key) + ' <span id="' + id + '">' + el.innerText + '</span>';
+            }
+            var retEl = document.getElementById('outSalRetencion');
+            if (retEl && retEl.parentNode) {
+                var valR = retEl.innerText;
+                retEl.parentNode.innerHTML = t('retTotal') + ' <span id="outSalRetencion">' + valR + '</span>';
+            }
+            setPrefixById('outSalSemanal', 'totSemanal');
+            setPrefixById('outSalBisemanal', 'totBisemanal');
+            setPrefixById('outSalMensual', 'totMensual');
+            setPrefixById('outSalAnual', 'totAnual');
+
+            // Filas compras
+                        var od = document.getElementById('outDesc');
+            var rowDesc = document.getElementById('rowDesc');
+            if (rowDesc && od) {
+                rowDesc.innerHTML = t('descuentoLbl') + ' <span id="outDesc">' + od.innerText + '</span>';
+            }
+            var ot = document.getElementById('outTip');
+            var rowTip = document.getElementById('rowTip');
+            if (rowTip && ot) {
+                rowTip.innerHTML = t('propinaLbl') + ' <span id="outTip">' + ot.innerText + '</span>';
+            }
+            var oi = document.getElementById('outIvu');
+            var rowIvu = document.getElementById('rowIvu');
+            if (rowIvu && oi) {
+                rowIvu.innerHTML = t('ivuLbl') + ' <span id="outIvu">' + oi.innerText + '</span>';
+            }
+
+            if (modoMenuActivo) {
+                var header = document.getElementById('txtHeaderIndicadores');
+                if (header) header.innerText = t('modoMenu');
+            } else if (typeof actualizarHeaderIndicadores === 'function') {
+                actualizarHeaderIndicadores();
+            }
+
+            if (preciosGuardados.length > 0) {
+                var lista = document.getElementById('listaPrecios');
+                if (lista && typeof pintarListaCompras === 'function') pintarListaCompras(lista);
+            }
+            if (typeof calc === 'function') calc();
+            if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') {
+                actualizarPantallaConversion();
+            }
+            if (modoReciboActivo && typeof regenerarTextoRecibo === 'function') {
+                regenerarTextoRecibo();
+            }
         }
 
         function alternarIdioma() {
             idiomaActual = (idiomaActual === 'es') ? 'en' : 'es';
-
-            if (typeof aplicarIdiomaUI === 'function') {
-                aplicarIdiomaUI();
-            }
-
+            aplicarIdiomaUI();
             var btnIdioma = document.getElementById('btnMenuIdioma');
-            if (btnIdioma) {
-                btnIdioma.innerText = (idiomaActual === 'es') ? 'CAMBIAR IDIOMA: ESPAÑOL' : 'CAMBIAR IDIOMA: ENGLISH';
-            }
-
-            if (modoConversionActivo && typeof actualizarPantallaConversion === 'function') {
-                actualizarPantallaConversion();
-            }
-
+            if (btnIdioma) btnIdioma.innerText = t('idiomaBtn');
             reproducirSonido('menu');
         }
 

@@ -4599,7 +4599,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             }
         }
 
-                function rotarTema() {
+        function rotarTema() {
             document.body.classList.remove(
                 'theme-cyberpunk',
                 'theme-retro-gold',
@@ -4618,12 +4618,6 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             if (typeof aplicarThemeColorSegunTema === 'function') aplicarThemeColorSegunTema();
             reproducirSonido('snd_menuItem');
-        }
-        try {
-                localStorage.setItem('resi_tema_idx', String(temaActualIdx));
-                localStorage.setItem('resi_tema_name', themes[temaActualIdx]);
-            } catch (e) {}
-            if (typeof aplicarThemeColorSegunTema === 'function') aplicarThemeColorSegunTema();
         }
 
         /* ============================================================

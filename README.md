@@ -1,6 +1,6 @@
 # Calculadora de Resi
 
-Calculadora tipo PWA hecha en Puerto Rico para echar cuentas de **compras**, **salario** y **conversiones** de unidades, con recibo, temas neon y soporte ES/EN.
+Calculadora tipo PWA hecha en Puerto Rico para sacar cuentas de **compras**, **salario** y **conversiones** de unidades, con temas y soporte ES/EN.
 
 ## Qué hace
 

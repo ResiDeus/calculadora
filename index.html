@@ -56,7 +56,7 @@
             --receipt-glow: #00ff66;
             --btn-bg-theme: linear-gradient(135deg, #150624 0%, #250b3e 50%, #150624 100%);
             --num-bg-theme: linear-gradient(180deg, #2d0e54 0%, #11021f 100%);
-            --blue-tech: linear-gradient(45deg, #0066ff, #00f0ff, #0066ff);
+            --blue-tech: linear-gradient(45deg, #003d99, #0066cc, #003d99);
         }
         body.theme-cyberpunk #marcadorPrecioUnificado {
             background-image:
@@ -2175,7 +2175,7 @@
 
             <!-- FILA 1 -->
             <button type="button" id="btnMenu" class="btn-key btn-menu" onclick="toggleModoMenu()">MENU</button>
-            <button type="button" class="btn-key" style="grid-column: span 2; font-size: 0.95rem;" onclick="ejecutarClearDirecto()">CLEAR</button>
+            <button type="button" id="btnClearPad" class="btn-key" style="grid-column: span 2; font-size: 0.72rem;" onclick="ejecutarClearDirecto()">BORRAR TODO</button>
             <button type="button" class="btn-key btn-op btn-divide" onclick="opMath('/')">÷</button>
 
             <!-- FILA 2 -->
@@ -2347,7 +2347,10 @@
                 copiar: 'Copiar', copiado: '¡Copiado!', cerrar: 'Cerrar',
                 noArts: 'No hay artículos guardados.',
                 subtotal: 'Subtotal', panas: 'panas',
-                taxTag: 'IVU', discTag: 'DTO', tipTag: 'TIP'
+                taxTag: 'IVU', discTag: 'DTO', tipTag: 'TIP',
+                clearAll: 'BORRAR TODO',
+                socialSec: 'S. SOCIAL',
+                deslizar: '▼ deslizar'
             },
             en: {
                 menu: 'MENU', conv: 'CONV.', recibo: 'RECEIPT', salario: 'WAGE', clear: 'CLEAR',
@@ -2379,7 +2382,10 @@
                 copiar: 'Copy', copiado: 'Copied!', cerrar: 'Close',
                 noArts: 'No saved items.',
                 subtotal: 'Subtotal', panas: 'people',
-                taxTag: 'TAX', discTag: 'DISC', tipTag: 'TIP'
+                taxTag: 'TAX', discTag: 'DISC', tipTag: 'TIP',
+                clearAll: 'CLEAR ALL',
+                socialSec: 'Social Sec.',
+                deslizar: '▼ scroll'
             }
         };
 
@@ -2409,6 +2415,13 @@
             set('btnCopiarReciboLcd', 'copiar');
             set('btnCerrarReciboLcd', 'cerrar');
             set('btnCopiarHolo', 'copiar');
+            set('btnClearPad', 'clearAll');
+
+            var btnSS = document.getElementById('toggleSS');
+            if (btnSS) btnSS.innerText = t('socialSec');
+
+            var flecha = document.getElementById('flechaGuia');
+            if (flecha) flecha.innerText = t('deslizar');
 
             var tit = document.querySelector('#cajaSub .lbl-title');
             if (tit) tit.innerText = modoConversionActivo ? t('valor') : t('precio');
@@ -2519,10 +2532,20 @@
             if (lista) lista.style.display = 'block';
             if (wrap) wrap.style.display = 'block';
             if (btn) btn.classList.remove('btn-on');
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
         }
 
         function toggleModoMenu() {
             if (!sistemaEncendido) return;
+
+            // Si estoy en el recibo → cerrarlo y seguir al menú
+            if (typeof modoReciboActivo !== 'undefined' && modoReciboActivo) {
+                modoReciboActivo = false;
+                var lcdR = document.getElementById('pantallaVerde');
+                if (lcdR) lcdR.classList.remove('modo-recibo-activo');
+                var vistaR = document.getElementById('vistaRecibo');
+                if (vistaR) vistaR.style.display = 'none';
+            }
 
             if (modoConversionActivo && typeof apagarModoConversion === 'function') {
                 apagarModoConversion();
@@ -2577,11 +2600,12 @@
             if (header) {
                 header.innerText = (typeof t === 'function') ? t('modoMenu') : 'MODO: MENÚ';
             }
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             reproducirSonido('menu');
         }
 
         // modo principal
-                function desdeMenuAbrirCompras() {
+        function desdeMenuAbrirCompras() {
             modoMenuActivo = false;
             var vistaMenu = document.getElementById('vistaMenu');
             if (vistaMenu) vistaMenu.style.display = 'none';
@@ -2615,6 +2639,8 @@
 
             if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
             if (typeof calc === 'function') calc();
+            if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             reproducirSonido('menu');
         }
 
@@ -3376,6 +3402,22 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             calc();
         }
 
+        function enModoComprasPuro() {
+            return sistemaEncendido
+                && !modoSalarioActivo
+                && !modoConversionActivo
+                && !(typeof modoMenuActivo !== 'undefined' && modoMenuActivo)
+                && !(typeof modoReciboActivo !== 'undefined' && modoReciboActivo);
+        }
+
+        function actualizarBloqueoOpcionesCompras() {
+            var permitido = enModoComprasPuro();
+            var fila = document.querySelector('.row-opciones-pasos');
+            if (!fila) return;
+            fila.style.pointerEvents = permitido ? 'auto' : 'none';
+            fila.style.opacity = permitido ? '1' : '0.45';
+        }
+
         /** Actualiza el texto de la cabecera del LCD según el estado */
             function actualizarHeaderIndicadores() {
             if (!sistemaEncendido) return;
@@ -3480,6 +3522,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                     calc();
                 }
                 actualizarHeaderIndicadores();
+                if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
+                if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
                 return;
             }
 
@@ -3570,6 +3614,17 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             calc();
         }
 
+        function actualizarFlechaDeslizar() {
+            var flecha = document.getElementById('flechaGuia');
+            if (!flecha) return;
+            flecha.innerText = t('deslizar');
+            if (enModoComprasPuro() && preciosGuardados.length >= 3) {
+                flecha.style.display = 'block';
+            } else {
+                flecha.style.display = 'none';
+            }
+        }
+
         /** Dibuja la lista de artículos en el LCD (evita código repetido) */
         function pintarListaCompras(contenedor) {
             if (!contenedor) return;
@@ -3586,11 +3641,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
             'TOTAL: $' + totalFinal.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">' + t('conIvuDto') + '</span></div>';
           
-            if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo && !(typeof modoReciboActivo !== 'undefined' && modoReciboActivo)) {
-            document.getElementById('flechaGuia').style.display = "block";
-            } else if (document.getElementById('flechaGuia')) {
-            document.getElementById('flechaGuia').style.display = "none";
-        }
+            if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
     }
 
 
@@ -3830,7 +3881,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (lista) lista.style.display = 'block';
             if (wrapCompras) wrapCompras.style.display = 'block';
             if (btnConv) btnConv.classList.remove('btn-on');
-            if (tituloPrecio) tituloPrecio.innerText = 'Precio';
+            if (tituloPrecio) tituloPrecio.innerText = t('precio');
             if (signo) signo.style.display = '';
 
             if (lista) {
@@ -3871,6 +3922,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 apagarModoConversion();
                 actualizarHeaderIndicadores();
                 calc();
+                if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
+                if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
                 reproducirSonido('menu');
                 return;
             }
@@ -3908,7 +3961,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (wrapSal) wrapSal.style.display = 'none';
             if (vistaSal) vistaSal.style.display = 'none';
             if (btnConv) btnConv.classList.add('btn-on');
-            if (tituloPrecio) tituloPrecio.innerText = 'Valor';
+            if (tituloPrecio) tituloPrecio.innerText = t('valor');
             if (signo) signo.style.display = 'none';
             if (lblArt) lblArt.style.display = 'none';
 
@@ -3921,6 +3974,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 t.classList.toggle('active', t.dataset.cat === 'peso');
             });
             actualizarPantallaConversion();
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             reproducirSonido('menu');
         }
         
@@ -4107,7 +4161,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          * Arma el texto del recibo y abre el overlay.
          * Si hay precio pendiente en el teclado, lo mete primero a la lista.
          */
-        function regenerarTextoRecibo() {
+            function regenerarTextoRecibo() {
             let numPplRaw = parseInt(sPpl);
             let nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
             let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
@@ -4120,24 +4174,72 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             let propinaTotal = subtotalDescontado * (tPct / 100);
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
 
+            // HTML: centro arriba y gracias; izquierda el detalle
+            let html = '';
+            html += '<div style="text-align:center;">';
+            html += '===============================<br>';
+            html += t('detalleCuenta') + '<br>';
+            html += '===============================<br>';
+            html += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '<br>';
+            html += '-------------------------------</div>';
+
+            html += '<div style="text-align:left;">';
+            if (preciosGuardados.length > 0) {
+                html += t('artsGuardados') + '<br>';
+                preciosGuardados.forEach((a, i) => {
+                    let ivuFormateadoStr = a.porcientoIvuUsado.toFixed(2);
+                    html += ' ' + t('artN') + ' #' + (i + 1) + '<br>';
+                    html += '  ' + t('precioBase') + '   : $' + a.precio.toFixed(2) + '<br>';
+                    if (a.descuento > 0) {
+                        html += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '<br>';
+                    }
+                    if (a.ivuCalculado > 0) {
+                        html += '  ' + t('ivu') + ' (' + ivuFormateadoStr + '%): +$' + a.ivuCalculado.toFixed(2) + '<br>';
+                    }
+                    html += '  ' + t('totalArt') + '    : $' + a.total.toFixed(2) + '<br>';
+                    html += ' -----------------------------<br>';
+                });
+            } else {
+                html += ' ' + t('noArts') + '<br>';
+                html += ' -------------------------------<br>';
+            }
+
+            html += t('subtotal') + '        : $' + nSub.toFixed(2) + '<br>';
+            if (rebajaTotal > 0) {
+                html += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '<br>';
+            }
+            if (impuestoTotal > 0) {
+                html += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '<br>';
+            }
+            if (propinaTotal > 0) {
+                html += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '<br>';
+            }
+            html += '===============================<br>';
+            html += t('totalFinal') + '     : $' + totalNetoGlobal.toFixed(2) + '<br>';
+            html += '===============================<br>';
+
+            if (modoSerruchoActivo && numPplRaw > 1) {
+                html += t('serruchoComp') + ': ' + numPplRaw + ' ' + t('panas') + '<br>';
+                html += t('cuotaCabeza') + ': $' + (totalNetoGlobal / nPpl).toFixed(2) + '<br>';
+                html += '===============================<br>';
+            }
+            html += '</div>';
+
+            html += '<div style="text-align:center;">' + t('gracias') + '</div>';
+
+            // Texto plano para copiar
             let txt = '===============================\n';
             txt += '     ' + t('detalleCuenta') + '\n';
             txt += '===============================\n';
             txt += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '\n';
             txt += '-------------------------------\n';
-
             if (preciosGuardados.length > 0) {
                 txt += t('artsGuardados') + '\n';
                 preciosGuardados.forEach((a, i) => {
-                    let ivuFormateadoStr = a.porcientoIvuUsado.toFixed(2);
                     txt += ' ' + t('artN') + ' #' + (i + 1) + '\n';
                     txt += '  ' + t('precioBase') + '   : $' + a.precio.toFixed(2) + '\n';
-                    if (a.descuento > 0) {
-                        txt += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '\n';
-                    }
-                    if (a.ivuCalculado > 0) {
-                        txt += '  ' + t('ivu') + ' (' + ivuFormateadoStr + '%): +$' + a.ivuCalculado.toFixed(2) + '\n';
-                    }
+                    if (a.descuento > 0) txt += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '\n';
+                    if (a.ivuCalculado > 0) txt += '  ' + t('ivu') + ' (' + a.porcientoIvuUsado.toFixed(2) + '%): +$' + a.ivuCalculado.toFixed(2) + '\n';
                     txt += '  ' + t('totalArt') + '    : $' + a.total.toFixed(2) + '\n';
                     txt += ' -----------------------------\n';
                 });
@@ -4145,21 +4247,13 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 txt += ' ' + t('noArts') + '\n';
                 txt += ' -------------------------------\n';
             }
-
             txt += t('subtotal') + '        : $' + nSub.toFixed(2) + '\n';
-            if (rebajaTotal > 0) {
-                txt += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '\n';
-            }
-            if (impuestoTotal > 0) {
-                txt += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '\n';
-            }
-            if (propinaTotal > 0) {
-                txt += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '\n';
-            }
+            if (rebajaTotal > 0) txt += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '\n';
+            if (impuestoTotal > 0) txt += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '\n';
+            if (propinaTotal > 0) txt += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '\n';
             txt += '===============================\n';
             txt += t('totalFinal') + '     : $' + totalNetoGlobal.toFixed(2) + '\n';
             txt += '===============================\n';
-
             if (modoSerruchoActivo && numPplRaw > 1) {
                 txt += t('serruchoComp') + ': ' + numPplRaw + ' ' + t('panas') + '\n';
                 txt += t('cuotaCabeza') + ': $' + (totalNetoGlobal / nPpl).toFixed(2) + '\n';
@@ -4169,7 +4263,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             textoReciboGlobal = txt;
             var elLcd = document.getElementById('textoContenidoReciboLcd');
-            if (elLcd) elLcd.innerText = txt;
+            if (elLcd) elLcd.innerHTML = html;
             var elHolo = document.getElementById('textoContenidoHolo');
             if (elHolo) elHolo.innerText = txt;
         }
@@ -4218,6 +4312,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (btnX) btnX.innerText = t('cerrar');
 
             actualizarHeaderIndicadores();
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
             reproducirSonido('caja');
         }
 
@@ -4239,6 +4334,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
             if (typeof calc === 'function') calc();
+            if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
+            if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
         }
 
         function copiarTextoHolograma() {
@@ -4302,6 +4399,8 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         actualizarHeaderIndicadores();
         calc();
         if (typeof aplicarIdiomaUI === 'function') aplicarIdiomaUI();
+        if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+        if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
     </script>
 
 </body>

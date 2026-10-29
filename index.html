@@ -3431,6 +3431,7 @@
             sSub = "0";
             cuentaAcumulada = 0;
             preciosGuardados = [];
+            if (typeof guardarListaCompras === 'function') guardarListaCompras();
             modoSalarioActivo = false;
             pendingOp = null;
             pendingVal = null;

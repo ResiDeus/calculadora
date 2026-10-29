@@ -1775,7 +1775,6 @@
             box-shadow: 0 0 16px #ffffff !important;
         }
 
-        /* Vista recibo dentro del LCD */
         .lcd.modo-recibo-activo {
             background: #0a1628 !important;
             color: var(--receipt-glow) !important;
@@ -2036,7 +2035,6 @@
                     </div>
                     <!-- fin subpantalla menu -->
 
-                    <!-- ========== SUBPANTALLA RECIBO (en el LCD, no popup) ========== -->
                     <div id="vistaRecibo">
                         <div id="textoContenidoReciboLcd">...</div>
                         <div style="display:flex; gap:6px; flex-shrink:0;">
@@ -2044,7 +2042,6 @@
                             <button type="button" class="btn-recibo-lcd" id="btnCerrarReciboLcd" onclick="cerrarHologramaRecibo()">Cerrar</button>
                         </div>
                     </div>
-                    <!-- fin subpantalla recibo -->
 
                 </div><!-- fin listaPrecios-container -->
             </div><!-- fin lcd-wrapper -->
@@ -2748,39 +2745,39 @@
         // Base: peso=kg, cocina=ml, largo=m, temp=°C, data=byte
         const UNIDADES_CONV = {
             peso: [
-                { id: 'kg', label: 'kg', nombre: 'Kilogramo', toBase: v => v, fromBase: v => v },
-                { id: 'lb', label: 'lb', nombre: 'Libra', toBase: v => v * 0.45359237, fromBase: v => v / 0.45359237 },
-                { id: 'g',  label: 'g',  nombre: 'Gramo', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
-                { id: 'oz', label: 'oz', nombre: 'Onza', toBase: v => v * 0.028349523125, fromBase: v => v / 0.028349523125 },
-                { id: 't',  label: 't',  nombre: 'Tonelada métrica', toBase: v => v * 1000, fromBase: v => v / 1000 }
+                { id: 'kg', label: 'kg', nombre: 'Kilogramo', nombreEn: 'Kilogram', toBase: v => v, fromBase: v => v },
+                { id: 'lb', label: 'lb', nombre: 'Libra', nombreEn: 'Pound', toBase: v => v * 0.45359237, fromBase: v => v / 0.45359237 },
+                { id: 'g',  label: 'g',  nombre: 'Gramo', nombreEn: 'Gram', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'oz', label: 'oz', nombre: 'Onza', nombreEn: 'Ounce', toBase: v => v * 0.028349523125, fromBase: v => v / 0.028349523125 },
+                { id: 't',  label: 't',  nombre: 'Tonelada métrica', nombreEn: 'Metric ton', toBase: v => v * 1000, fromBase: v => v / 1000 }
             ],
             
-            cocina: [ // volumen
-                { id: 'ml',   label: 'ml',   nombre: 'Mililitro', toBase: v => v, fromBase: v => v },
-                { id: 'l',    label: 'L',    nombre: 'Litro', toBase: v => v * 1000, fromBase: v => v / 1000 },
-                { id: 'cup',  label: 'cup',  nombre: 'Taza', toBase: v => v * 240, fromBase: v => v / 240 },
-                { id: 'tbsp', label: 'tbsp', nombre: 'Cucharada', toBase: v => v * 15, fromBase: v => v / 15 },
-                { id: 'tsp',  label: 'tsp',  nombre: 'Cucharadita', toBase: v => v * 5, fromBase: v => v / 5 },
-                { id: 'floz', label: 'fl oz', nombre: 'Onza líquida', toBase: v => v * 29.5735, fromBase: v => v / 29.5735 },
-                { id: 'gal',  label: 'gal',  nombre: 'Galón USA', toBase: v => v * 3785.41, fromBase: v => v / 3785.41 },
-                { id: 'pt',   label: 'pt',   nombre: 'Pinta', toBase: v => v * 473.176, fromBase: v => v / 473.176 }
+            cocina: [
+                { id: 'ml',   label: 'ml',   nombre: 'Mililitro', nombreEn: 'Milliliter', toBase: v => v, fromBase: v => v },
+                { id: 'l',    label: 'L',    nombre: 'Litro', nombreEn: 'Liter', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'cup',  label: 'cup',  nombre: 'Taza', nombreEn: 'Cup', toBase: v => v * 240, fromBase: v => v / 240 },
+                { id: 'tbsp', label: 'tbsp', nombre: 'Cucharada', nombreEn: 'Tablespoon', toBase: v => v * 15, fromBase: v => v / 15 },
+                { id: 'tsp',  label: 'tsp',  nombre: 'Cucharadita', nombreEn: 'Teaspoon', toBase: v => v * 5, fromBase: v => v / 5 },
+                { id: 'floz', label: 'fl oz', nombre: 'Onza líquida', nombreEn: 'Fluid ounce', toBase: v => v * 29.5735, fromBase: v => v / 29.5735 },
+                { id: 'gal',  label: 'gal',  nombre: 'Galón USA', nombreEn: 'US gallon', toBase: v => v * 3785.41, fromBase: v => v / 3785.41 },
+                { id: 'pt',   label: 'pt',   nombre: 'Pinta', nombreEn: 'Pint', toBase: v => v * 473.176, fromBase: v => v / 473.176 }
             ],
             
             largo: [
-                { id: 'm',  label: 'm',  nombre: 'Metro', toBase: v => v, fromBase: v => v },
-                { id: 'cm', label: 'cm', nombre: 'Centímetro', toBase: v => v * 0.01, fromBase: v => v / 0.01 },
-                { id: 'km', label: 'km', nombre: 'Kilómetro', toBase: v => v * 1000, fromBase: v => v / 1000 },
-                { id: 'mm', label: 'mm', nombre: 'Milímetro', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
-                { id: 'ft', label: 'ft', nombre: 'Pie', toBase: v => v * 0.3048, fromBase: v => v / 0.3048 },
-                { id: 'in', label: 'in', nombre: 'Pulgada', toBase: v => v * 0.0254, fromBase: v => v / 0.0254 },
-                { id: 'yd', label: 'yd', nombre: 'Yarda', toBase: v => v * 0.9144, fromBase: v => v / 0.9144 },
-                { id: 'mi', label: 'mi', nombre: 'Milla', toBase: v => v * 1609.344, fromBase: v => v / 1609.344 }
+                { id: 'm',  label: 'm',  nombre: 'Metro', nombreEn: 'Meter', toBase: v => v, fromBase: v => v },
+                { id: 'cm', label: 'cm', nombre: 'Centímetro', nombreEn: 'Centimeter', toBase: v => v * 0.01, fromBase: v => v / 0.01 },
+                { id: 'km', label: 'km', nombre: 'Kilómetro', nombreEn: 'Kilometer', toBase: v => v * 1000, fromBase: v => v / 1000 },
+                { id: 'mm', label: 'mm', nombre: 'Milímetro', nombreEn: 'Millimeter', toBase: v => v * 0.001, fromBase: v => v / 0.001 },
+                { id: 'ft', label: 'ft', nombre: 'Pie', nombreEn: 'Foot', toBase: v => v * 0.3048, fromBase: v => v / 0.3048 },
+                { id: 'in', label: 'in', nombre: 'Pulgada', nombreEn: 'Inch', toBase: v => v * 0.0254, fromBase: v => v / 0.0254 },
+                { id: 'yd', label: 'yd', nombre: 'Yarda', nombreEn: 'Yard', toBase: v => v * 0.9144, fromBase: v => v / 0.9144 },
+                { id: 'mi', label: 'mi', nombre: 'Milla', nombreEn: 'Mile', toBase: v => v * 1609.344, fromBase: v => v / 1609.344 }
             ],
             
             temp: [
-                { id: 'c', label: '°C', nombre: 'Celsius', toBase: v => v, fromBase: v => v },
-                { id: 'f', label: '°F', nombre: 'Fahrenheit', toBase: v => (v - 32) * 5/9, fromBase: v => v * 9/5 + 32 },
-                { id: 'k', label: 'K',  nombre: 'Kelvin', toBase: v => v - 273.15, fromBase: v => v + 273.15 }
+                { id: 'c', label: '°C', nombre: 'Celsius', nombreEn: 'Celsius', toBase: v => v, fromBase: v => v },
+                { id: 'f', label: '°F', nombre: 'Fahrenheit', nombreEn: 'Fahrenheit', toBase: v => (v - 32) * 5/9, fromBase: v => v * 9/5 + 32 },
+                { id: 'k', label: 'K',  nombre: 'Kelvin', nombreEn: 'Kelvin', toBase: v => v - 273.15, fromBase: v => v + 273.15 }
             ],
             
             data: [
@@ -3183,6 +3180,11 @@
                 function ejecutarClearDirecto() {
             reproducirSonido('menu');
 
+            // Si el recibo está abierto → cerrarlo primero
+            if (typeof modoReciboActivo !== 'undefined' && modoReciboActivo) {
+                cerrarHologramaRecibo();
+            }
+
             // Menú violeta → salir y limpiar todo
             if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo) {
                 modoMenuActivo = false;
@@ -3375,18 +3377,30 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         }
 
         /** Actualiza el texto de la cabecera del LCD según el estado */
-        function actualizarHeaderIndicadores() {
+            function actualizarHeaderIndicadores() {
             if (!sistemaEncendido) return;
+            if (typeof modoReciboActivo !== 'undefined' && modoReciboActivo) {
+                document.getElementById('txtHeaderIndicadores').innerText = t('reciboTitulo');
+                return;
+            }
+            if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo) {
+                document.getElementById('txtHeaderIndicadores').innerText = t('modoMenu');
+                return;
+            }
             if (modoSalarioActivo) {
-                document.getElementById('txtHeaderIndicadores').innerText = "MODO: SUELDO";
+                document.getElementById('txtHeaderIndicadores').innerText = t('modoSueldo');
+                return;
+            }
+            if (modoConversionActivo) {
+                document.getElementById('txtHeaderIndicadores').innerText = t('modoConversion');
                 return;
             }
             let subpartes = [];
-            if (modoIvuActivo) subpartes.push(`IVU: ${ivu.toFixed(1)}%`);
-            if (incluirPropina) subpartes.push(`TIP: ${memoriaTipPct}%`);
-            if (modoDescuentoActivo) subpartes.push(`DTO: -${memoriaDescuentoPct}%`);
+            if (modoIvuActivo) subpartes.push(t('taxTag') + ': ' + ivu.toFixed(1) + '%');
+            if (incluirPropina) subpartes.push(t('tipTag') + ': ' + memoriaTipPct + '%');
+            if (modoDescuentoActivo) subpartes.push(t('discTag') + ': -' + memoriaDescuentoPct + '%');
             document.getElementById('txtHeaderIndicadores').innerText =
-                subpartes.length > 0 ? subpartes.join(' | ') : "MODO: COMPRAS";
+                subpartes.length > 0 ? subpartes.join(' | ') : t('modoCompras');
         }
 
         /* ============================================================
@@ -3558,27 +3572,26 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
         /** Dibuja la lista de artículos en el LCD (evita código repetido) */
         function pintarListaCompras(contenedor) {
-          if (!contenedor) return;
-          contenedor.innerHTML = preciosGuardados.map((item, i) =>
+            if (!contenedor) return;
+            contenedor.innerHTML = preciosGuardados.map((item, i) =>
             '<div>• (' + (i + 1) + '): $' + item.precio.toFixed(2) +
-            ' <span style="font-size:8px; opacity:0.75;">(IVU:$' +
-            item.ivuCalculado.toFixed(2) + '/DTO:-$' +
+            ' <span style="font-size:8px; opacity:0.75;">(' + t('taxTag') + ':$' +
+            item.ivuCalculado.toFixed(2) + '/' + t('discTag') + ':-$' +
             item.descuento.toFixed(2) + ')</span></div>'
-          ).join('');
+            ).join('');
           
-          // Modificado: Ahora suma el precio base + IVU y resta el descuento de cada artículo
-          let totalFinal = preciosGuardados.reduce((sum, item) => sum + item.precio + item.ivuCalculado - item.descuento, 0);
+            let totalFinal = preciosGuardados.reduce((sum, item) => sum + item.precio + item.ivuCalculado - item.descuento, 0);
           
-          contenedor.innerHTML +=
+            contenedor.innerHTML +=
             '<div style="border-top:1px dashed rgba(0,0,0,0.3); font-weight:900; margin-top:2px;">' +
-            'TOTAL: $' + totalFinal.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">(con IVU y DTO)</span></div>';
+            'TOTAL: $' + totalFinal.toFixed(2) + ' <span style="font-size:8px; opacity:0.8;">' + t('conIvuDto') + '</span></div>';
           
-          if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo) {
+            if (preciosGuardados.length >= 3 && document.getElementById('flechaGuia') && !modoMenuActivo && !modoConversionActivo && !modoSalarioActivo && !(typeof modoReciboActivo !== 'undefined' && modoReciboActivo)) {
             document.getElementById('flechaGuia').style.display = "block";
-          } else if (document.getElementById('flechaGuia')) {
+            } else if (document.getElementById('flechaGuia')) {
             document.getElementById('flechaGuia').style.display = "none";
-          }
         }
+    }
 
 
         /* ============================================================
@@ -3787,7 +3800,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             if (btnIzq) btnIzq.innerText = uIzq.label;
             if (btnDer) btnDer.innerText = uDer.label;
-            if (lblFormula) lblFormula.innerText = uIzq.nombre + ' → ' + uDer.nombre;
+            if (lblFormula) lblFormula.innerText = nombreUnidad(uIzq) + ' → ' + nombreUnidad(uDer);
             if (lblResultado) {
                 let textoRes;
                 if (catConversion === 'temp') textoRes = res.toFixed(2);
@@ -3797,7 +3810,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
                 lblResultado.innerText = '= ' + textoRes + ' ' + uDer.label;
             }
             if (lblSub) lblSub.innerText = sConv;
-            if (header) header.innerText = 'MODO: CONVERSIÓN';
+            if (header) header.innerText = t('modoConversion');
         }
 
         /** Apaga conversión sin tocar salario (uso interno) */
@@ -4072,13 +4085,13 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
     document.getElementById('rowIvu').style.color = "#000";
 
     if (modoSerruchoActivo) {
-        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): `;
+        document.getElementById('txtSerruchoLabelType').innerText = t('serruchoCu') + ' ';
         document.getElementById('outPerPersonaLine').innerText = '$' + porSerrucho.toFixed(2);
         document.getElementById('rowPersonaCuota').style.opacity = "1";
         document.getElementById('rowPersonaCuota').style.color = "#000";
     } else {
-        document.getElementById('txtSerruchoLabelType').innerText = `SERRUCHO (C/U): N/A`;
-        document.getElementById('outPerPersonaLine').innerText = ``;
+        document.getElementById('txtSerruchoLabelType').innerText = t('serruchoNa');
+        document.getElementById('outPerPersonaLine').innerText = '';
         document.getElementById('rowPersonaCuota').style.opacity = "1";
         document.getElementById('rowPersonaCuota').style.color = "#000";
     }
@@ -4094,20 +4107,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          * Arma el texto del recibo y abre el overlay.
          * Si hay precio pendiente en el teclado, lo mete primero a la lista.
          */
-        function abrirHologramaRecibo() {
-            if (!sistemaEncendido) return;
-
-            let precioColgadoEnTeclado = parseFloat(sSub) || 0;
-
-            if (precioColgadoEnTeclado > 0) {
-                if (modoSalarioActivo) {
-                    seleccionarMenu('sal'); // Apaga modo salario
-                }
-                addProducto();
-            }
-
-            reproducirSonido('caja');
-
+        function regenerarTextoRecibo() {
             let numPplRaw = parseInt(sPpl);
             let nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
             let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
@@ -4120,74 +4120,137 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             let propinaTotal = subtotalDescontado * (tPct / 100);
             let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
 
-            // Construcción del texto del recibo
-            let txt = `===============================\n`;
-            txt += `     DETALLE DE LA CUENTA\n`;
-            txt += `===============================\n`;
-            txt += `Fecha: ${new Date().toLocaleDateString()} | Hora: ${new Date().toLocaleTimeString()}\n`;
-            txt += `-------------------------------\n`;
+            let txt = '===============================\n';
+            txt += '     ' + t('detalleCuenta') + '\n';
+            txt += '===============================\n';
+            txt += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '\n';
+            txt += '-------------------------------\n';
 
             if (preciosGuardados.length > 0) {
-                txt += `Artículos Guardados:\n`;
+                txt += t('artsGuardados') + '\n';
                 preciosGuardados.forEach((a, i) => {
                     let ivuFormateadoStr = a.porcientoIvuUsado.toFixed(2);
-                    txt += ` Art. #${i + 1}\n`;
-                    txt += `  Precio Base   : $${a.precio.toFixed(2)}\n`;
+                    txt += ' ' + t('artN') + ' #' + (i + 1) + '\n';
+                    txt += '  ' + t('precioBase') + '   : $' + a.precio.toFixed(2) + '\n';
                     if (a.descuento > 0) {
-                        txt += `  Descuento     : -$${a.descuento.toFixed(2)}\n`;
+                        txt += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '\n';
                     }
                     if (a.ivuCalculado > 0) {
-                        txt += `  IVU (${ivuFormateadoStr}%): +$${a.ivuCalculado.toFixed(2)}\n`;
+                        txt += '  ' + t('ivu') + ' (' + ivuFormateadoStr + '%): +$' + a.ivuCalculado.toFixed(2) + '\n';
                     }
-                    txt += `  Total Art.    : $${a.total.toFixed(2)}\n`;
-                    txt += ` -----------------------------\n`;
+                    txt += '  ' + t('totalArt') + '    : $' + a.total.toFixed(2) + '\n';
+                    txt += ' -----------------------------\n';
                 });
             } else {
-                txt += ` No hay artículos guardados.\n`;
-                txt += ` -------------------------------\n`;
+                txt += ' ' + t('noArts') + '\n';
+                txt += ' -------------------------------\n';
             }
 
-            txt += `Subtotal        : $${nSub.toFixed(2)}\n`;
+            txt += t('subtotal') + '        : $' + nSub.toFixed(2) + '\n';
             if (rebajaTotal > 0) {
-                txt += `Descuento Total : -$${rebajaTotal.toFixed(2)}\n`;
+                txt += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '\n';
             }
             if (impuestoTotal > 0) {
-                txt += `IVU Acumulado   : +$${impuestoTotal.toFixed(2)}\n`;
+                txt += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '\n';
             }
             if (propinaTotal > 0) {
-                txt += `Propina (${tPct}%)   : $${propinaTotal.toFixed(2)}\n`;
+                txt += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '\n';
             }
-            txt += `===============================\n`;
-            txt += `TOTAL FINAL     : $${totalNetoGlobal.toFixed(2)}\n`;
-            txt += `===============================\n`;
+            txt += '===============================\n';
+            txt += t('totalFinal') + '     : $' + totalNetoGlobal.toFixed(2) + '\n';
+            txt += '===============================\n';
 
             if (modoSerruchoActivo && numPplRaw > 1) {
-                txt += `SERRUCHO COMPARTIDO: ${numPplRaw} panas\n`;
-                txt += `CUOTA POR CABEZA: $${(totalNetoGlobal / nPpl).toFixed(2)}\n`;
-                txt += `===============================\n`;
+                txt += t('serruchoComp') + ': ' + numPplRaw + ' ' + t('panas') + '\n';
+                txt += t('cuotaCabeza') + ': $' + (totalNetoGlobal / nPpl).toFixed(2) + '\n';
+                txt += '===============================\n';
             }
-            txt += `    ¡Gracias por usar la app!`;
+            txt += '    ' + t('gracias');
 
             textoReciboGlobal = txt;
-            document.getElementById('textoContenidoHolo').innerText = txt;
-            document.getElementById('btnCopiarHolo').innerText = "Copiar";
-            document.getElementById('visorHolograma').classList.add('activo');
+            var elLcd = document.getElementById('textoContenidoReciboLcd');
+            if (elLcd) elLcd.innerText = txt;
+            var elHolo = document.getElementById('textoContenidoHolo');
+            if (elHolo) elHolo.innerText = txt;
         }
 
-        /** Cierra el overlay del recibo */
+        function abrirHologramaRecibo() {
+            if (!sistemaEncendido) return;
+
+            let precioColgadoEnTeclado = parseFloat(sSub) || 0;
+            if (precioColgadoEnTeclado > 0) {
+                if (modoSalarioActivo) {
+                    seleccionarMenu('sal');
+                }
+                addProducto();
+            }
+
+            if (typeof modoMenuActivo !== 'undefined' && modoMenuActivo) apagarModoMenu();
+            if (modoConversionActivo) apagarModoConversion();
+            if (modoSalarioActivo) {
+                modoSalarioActivo = false;
+                var lcdTmp = document.getElementById('pantallaVerde');
+                if (lcdTmp) lcdTmp.classList.remove('modo-salario-activo');
+                var vs = document.getElementById('vistaSubPantallaSalario');
+                if (vs) vs.style.display = 'none';
+                var ws = document.getElementById('wrapperDataSalarioLcd');
+                if (ws) ws.style.display = 'none';
+            }
+
+            modoReciboActivo = true;
+            var lcd = document.getElementById('pantallaVerde');
+            if (lcd) {
+                lcd.classList.add('modo-recibo-activo');
+                lcd.classList.remove('modo-menu-activo', 'modo-conversion-activo', 'modo-salario-activo');
+            }
+            var vista = document.getElementById('vistaRecibo');
+            if (vista) vista.style.display = 'flex';
+
+            var lista = document.getElementById('listaPrecios');
+            var wrap = document.getElementById('wrapperDataComprasLcd');
+            if (lista) lista.style.display = 'none';
+            if (wrap) wrap.style.display = 'none';
+
+            regenerarTextoRecibo();
+            var btnC = document.getElementById('btnCopiarReciboLcd');
+            if (btnC) btnC.innerText = t('copiar');
+            var btnX = document.getElementById('btnCerrarReciboLcd');
+            if (btnX) btnX.innerText = t('cerrar');
+
+            actualizarHeaderIndicadores();
+            reproducirSonido('caja');
+        }
+
         function cerrarHologramaRecibo() {
             reproducirSonido('menu');
-            document.getElementById('visorHolograma').classList.remove('activo');
+            modoReciboActivo = false;
+            var lcd = document.getElementById('pantallaVerde');
+            if (lcd) lcd.classList.remove('modo-recibo-activo');
+            var vista = document.getElementById('vistaRecibo');
+            if (vista) vista.style.display = 'none';
+
+            var lista = document.getElementById('listaPrecios');
+            var wrap = document.getElementById('wrapperDataComprasLcd');
+            if (lista) lista.style.display = 'block';
+            if (wrap) wrap.style.display = 'block';
+
+            var vis = document.getElementById('visorHolograma');
+            if (vis) vis.classList.remove('activo');
+
+            if (typeof actualizarHeaderIndicadores === 'function') actualizarHeaderIndicadores();
+            if (typeof calc === 'function') calc();
         }
 
-        /** Copia el texto del recibo al portapapeles */
         function copiarTextoHolograma() {
             if (!sistemaEncendido) return;
             reproducirSonido('caja');
-            navigator.clipboard.writeText(textoReciboGlobal).then(() => {
-                document.getElementById('btnCopiarHolo').innerText = "¡Copiado!";
-            }).catch(() => {
-                alert("Error al copiar, usa captura.");
+            navigator.clipboard.writeText(textoReciboGlobal).then(function() {
+                var b1 = document.getElementById('btnCopiarReciboLcd');
+                var b2 = document.getElementById('btnCopiarHolo');
+                if (b1) b1.innerText = t('copiado');
+                if (b2) b2.innerText = t('copiado');
+            }).catch(function() {
+                alert('Error');
             });
         }
 

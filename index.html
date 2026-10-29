@@ -1074,8 +1074,6 @@
             position: relative;
             overflow: hidden;
             z-index: 10;
-            opacity: 1 !important;
-            pointer-events: auto !important;
             background-repeat: no-repeat !important;
             background-position: center right !important;
             background-size: contain !important;
@@ -2603,6 +2601,7 @@
                 header.innerText = (typeof t === 'function') ? t('modoMenu') : 'MODO: MENÚ';
             }
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             reproducirSonido('menu');
         }
 
@@ -3401,12 +3400,12 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (document.getElementById('lblSub')) document.getElementById('lblSub').classList.add('blink-num');
             if (document.getElementById('marcadorPrecioUnificado')) {
                 document.getElementById('marcadorPrecioUnificado').className = "contenedor-precio-unificado precio-on";
-            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             }
-
+            
             actualizarHeaderIndicadores();
             calc();
-        }
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
+            }
 
         function enModoComprasPuro() {
             return sistemaEncendido
@@ -3966,6 +3965,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             mode = 'sub';
             if (document.getElementById('lblSub')) {
                 document.getElementById('lblSub').innerText = sSub;
+            }
             if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             }
         }
@@ -4049,6 +4049,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             });
             actualizarPantallaConversion();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             reproducirSonido('menu');
         }
         

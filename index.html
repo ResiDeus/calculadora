@@ -1844,6 +1844,12 @@
             background: rgba(0,0,0,0.4);
             color: var(--receipt-glow);
         }
+
+        #textoContenidoReciboLcd {
+            font-family: ui-monospace, "Courier New", monospace !important;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0 !important;
+        }
         
     </style>
 </head>
@@ -1882,7 +1888,7 @@
                     </div>
 
                     <!-- Flechita "▼ deslizar" cuando hay muchos items -->
-                    <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 35px !important; right: 4px; font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase;">▼ deslizar</div>
+                    <div class="scroll-hint" id="flechaGuia" style="position: absolute; bottom: 25px !important; right: 4px; font-size: 10px !important; font-weight: 900; background: rgba(146, 176, 67, 0.95); padding: 2px 5px; border-radius: 2px; color: #000; z-index: 130; display: none; white-space: nowrap; line-height: 1; text-transform: uppercase;">▼ deslizar</div>
 
                     <!-- ====================================================
                          SUBPANTALLA DE SALARIO (solo en modo salario)
@@ -3424,66 +3430,70 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
         }
 
         function actualizarBloqueoTecladoSegunModo() {
-            var bloquearNumerosYOps = modoSalarioActivo || modoMenuActivo;
-            var bloquearOpsMatematicas = modoConversionActivo;
-            var bloquearAnadirYPrecio = modoSalarioActivo || modoMenuActivo || modoConversionActivo;
-        
-            // Todas las teclas del pad
-            document.querySelectorAll('.pad-num .btn-key').forEach(function(btn) {
-                // MENU siempre habilitado
+            var bloquearTodoPad = !!(modoSalarioActivo || modoMenuActivo || modoReciboActivo);
+            var bloquearOpsMat = !!modoConversionActivo;
+            var bloquearAnadir = !!(modoSalarioActivo || modoMenuActivo || modoConversionActivo || modoReciboActivo);
+            // En conversión: el marcador de VALOR se ve y se usa; solo AÑADIR se apaga
+            var bloquearMarcadorCompleto = !!(modoSalarioActivo || modoMenuActivo || modoReciboActivo);
+
+            document.querySelectorAll('.pad-num .btn-key').forEach(function (btn) {
                 if (btn.id === 'btnMenu') {
                     btn.disabled = false;
                     btn.style.opacity = '1';
                     btn.style.pointerEvents = 'auto';
+                    btn.style.filter = '';
                     return;
                 }
-        
-                var esOpMat = btn.classList.contains('btn-op'); // ÷ × − + =
+
+                var esOpMat = btn.classList.contains('btn-op');
                 var debeBloquear = false;
-        
-                if (bloquearNumerosYOps) {
-                    // Salario o Menú: todo menos MENU
+
+                if (bloquearTodoPad) {
                     debeBloquear = true;
-                } else if (bloquearOpsMatematicas && esOpMat) {
-                    // Conversión: solo signos matemáticos
+                } else if (bloquearOpsMat && esOpMat) {
                     debeBloquear = true;
                 }
-        
+
                 btn.disabled = debeBloquear;
                 btn.style.opacity = debeBloquear ? '0.35' : '1';
                 btn.style.pointerEvents = debeBloquear ? 'none' : 'auto';
+                btn.style.filter = debeBloquear ? 'grayscale(0.5) brightness(0.75)' : '';
             });
-        
-            // Precio + AÑADIR
+
             var marcador = document.getElementById('marcadorPrecioUnificado');
             var btnAnadir = document.getElementById('btnAnadirGlobal');
             var cajaSub = document.getElementById('cajaSub');
-        
-            if (bloquearAnadirYPrecio) {
+
+            if (bloquearMarcadorCompleto) {
                 if (marcador) {
                     marcador.style.opacity = '0.4';
                     marcador.style.pointerEvents = 'none';
+                    marcador.style.filter = 'grayscale(0.4) brightness(0.75)';
                 }
+                if (cajaSub) cajaSub.style.pointerEvents = 'none';
+            } else {
+                // Compras O conversión: marcador/VALOR activo
+                if (marcador) {
+                    marcador.style.opacity = '1';
+                    marcador.style.pointerEvents = 'auto';
+                    marcador.style.filter = '';
+                }
+                if (cajaSub) cajaSub.style.pointerEvents = 'auto';
+            }
+
+            if (bloquearAnadir) {
                 if (btnAnadir) {
                     btnAnadir.disabled = true;
                     btnAnadir.style.opacity = '0.35';
                     btnAnadir.style.pointerEvents = 'none';
-                }
-                if (cajaSub) {
-                    cajaSub.style.pointerEvents = 'none';
+                    btnAnadir.style.filter = 'grayscale(0.5) brightness(0.75)';
                 }
             } else {
-                if (marcador) {
-                    marcador.style.opacity = '1';
-                    marcador.style.pointerEvents = 'auto';
-                }
                 if (btnAnadir) {
                     btnAnadir.disabled = false;
                     btnAnadir.style.opacity = '1';
                     btnAnadir.style.pointerEvents = 'auto';
-                }
-                if (cajaSub) {
-                    cajaSub.style.pointerEvents = 'auto';
+                    btnAnadir.style.filter = '';
                 }
             }
         }
@@ -4235,102 +4245,119 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
          * Arma el texto del recibo y abre el overlay.
          * Si hay precio pendiente en el teclado, lo mete primero a la lista.
          */
-            function regenerarTextoRecibo() {
-            let numPplRaw = parseInt(sPpl);
-            let nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
-            let tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
+        function regenerarTextoRecibo() {
+            var numPplRaw = parseInt(sPpl);
+            var nPpl = (modoSerruchoActivo && !isNaN(numPplRaw) && numPplRaw > 1) ? numPplRaw : 1;
+            var tPct = incluirPropina ? (parseFloat(memoriaTipPct) || 0) : 0;
 
-            let nSub = preciosGuardados.reduce((sum, item) => sum + item.precio, 0);
-            let rebajaTotal = preciosGuardados.reduce((sum, item) => sum + item.descuento, 0);
-            let impuestoTotal = preciosGuardados.reduce((sum, item) => sum + item.ivuCalculado, 0);
+            var nSub = preciosGuardados.reduce(function (sum, item) { return sum + item.precio; }, 0);
+            var rebajaTotal = preciosGuardados.reduce(function (sum, item) { return sum + item.descuento; }, 0);
+            var impuestoTotal = preciosGuardados.reduce(function (sum, item) { return sum + item.ivuCalculado; }, 0);
 
-            let subtotalDescontado = nSub - rebajaTotal;
-            let propinaTotal = subtotalDescontado * (tPct / 100);
-            let totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
+            var subtotalDescontado = nSub - rebajaTotal;
+            var propinaTotal = subtotalDescontado * (tPct / 100);
+            var totalNetoGlobal = subtotalDescontado + impuestoTotal + propinaTotal;
 
-            // HTML: centro arriba y gracias; izquierda el detalle
-            let html = '';
-            html += '<div style="text-align:center;">';
+            function money(n) {
+                var s = (n < 0 ? '-' : '') + '$' + Math.abs(n).toFixed(2);
+                return s;
+            }
+            function linea(label, valor) {
+                // columna fija: label a la izquierda, valor a la derecha
+                var L = 18;
+                var lab = (label + '                    ').slice(0, L);
+                return lab + valor;
+            }
+
+            var html = '';
+            html += '<div style="text-align:center; font-family:monospace; white-space:pre;">';
             html += '===============================<br>';
             html += t('detalleCuenta') + '<br>';
             html += '===============================<br>';
-            html += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '<br>';
+            html += t('fecha') + ': ' + new Date().toLocaleDateString() + '<br>';
+            html += t('hora') + ':  ' + new Date().toLocaleTimeString() + '<br>';
             html += '-------------------------------</div>';
 
-            html += '<div style="text-align:center;">';
+            html += '<div style="text-align:left; font-family:monospace; white-space:pre; letter-spacing:0;">';
             if (preciosGuardados.length > 0) {
                 html += t('artsGuardados') + '<br>';
-                preciosGuardados.forEach((a, i) => {
-                    let ivuFormateadoStr = a.porcientoIvuUsado.toFixed(2);
-                    html += ' ' + t('artN') + ' #' + (i + 1) + '<br>';
-                    html += '  ' + t('precioBase') + '   : $' + a.precio.toFixed(2) + '<br>';
+                preciosGuardados.forEach(function (a, i) {
+                    html += '-------------------------------<br>';
+                    html += linea(t('artN') + ' #' + (i + 1), '') + '<br>';
+                    html += linea(t('precioBase'), money(a.precio)) + '<br>';
                     if (a.descuento > 0) {
-                        html += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '<br>';
+                        html += linea(t('descuento'), '-' + money(a.descuento).replace('$-', '$')) + '<br>';
                     }
                     if (a.ivuCalculado > 0) {
-                        html += '  ' + t('ivu') + ' (' + ivuFormateadoStr + '%): +$' + a.ivuCalculado.toFixed(2) + '<br>';
+                        html += linea(t('ivu') + ' ' + a.porcientoIvuUsado.toFixed(1) + '%', '+' + money(a.ivuCalculado).replace('$', '')) + '<br>';
                     }
-                    html += '  ' + t('totalArt') + '    : $' + a.total.toFixed(2) + '<br>';
-                    html += ' -----------------------------<br>';
+                    html += linea(t('totalArt'), money(a.total)) + '<br>';
                 });
+                html += '-------------------------------<br>';
             } else {
-                html += ' ' + t('noArts') + '<br>';
-                html += ' -------------------------------<br>';
+                html += t('noArts') + '<br>';
+                html += '-------------------------------<br>';
             }
 
-            html += t('subtotal') + '        : $' + nSub.toFixed(2) + '<br>';
+            html += linea(t('subtotal'), money(nSub)) + '<br>';
             if (rebajaTotal > 0) {
-                html += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '<br>';
+                html += linea(t('descuentoTotal'), '-' + money(rebajaTotal).replace('$-', '$')) + '<br>';
             }
             if (impuestoTotal > 0) {
-                html += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '<br>';
+                html += linea(t('ivuAcum'), '+' + money(impuestoTotal).replace('$', '')) + '<br>';
             }
             if (propinaTotal > 0) {
-                html += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '<br>';
+                html += linea(t('propinaRec') + ' ' + tPct + '%', money(propinaTotal)) + '<br>';
             }
             html += '===============================<br>';
-            html += t('totalFinal') + '     : $' + totalNetoGlobal.toFixed(2) + '<br>';
+            html += '<b>' + linea(t('totalFinal'), money(totalNetoGlobal)) + '</b><br>';
             html += '===============================<br>';
 
             if (modoSerruchoActivo && numPplRaw > 1) {
-                html += t('serruchoComp') + ': ' + numPplRaw + ' ' + t('panas') + '<br>';
-                html += t('cuotaCabeza') + ': $' + (totalNetoGlobal / nPpl).toFixed(2) + '<br>';
+                html += linea(t('serruchoComp'), numPplRaw + ' ' + t('panas')) + '<br>';
+                html += linea(t('cuotaCabeza'), money(totalNetoGlobal / nPpl)) + '<br>';
                 html += '===============================<br>';
             }
             html += '</div>';
 
-            html += '<div style="text-align:center;">' + t('gracias') + '</div>';
+            html += '<div style="text-align:center; font-family:monospace;">' + t('gracias') + '</div>';
 
-            // Texto plano para copiar
-            let txt = '===============================\n';
+            // Texto plano para copiar (también alineado)
+            function lineTxt(label, valor) {
+                var lab = (label + '                    ').slice(0, 18);
+                return lab + valor + '\n';
+            }
+            var txt = '===============================\n';
             txt += '     ' + t('detalleCuenta') + '\n';
             txt += '===============================\n';
-            txt += t('fecha') + ': ' + new Date().toLocaleDateString() + ' | ' + t('hora') + ': ' + new Date().toLocaleTimeString() + '\n';
+            txt += t('fecha') + ': ' + new Date().toLocaleDateString() + '\n';
+            txt += t('hora') + ':  ' + new Date().toLocaleTimeString() + '\n';
             txt += '-------------------------------\n';
             if (preciosGuardados.length > 0) {
                 txt += t('artsGuardados') + '\n';
-                preciosGuardados.forEach((a, i) => {
-                    txt += ' ' + t('artN') + ' #' + (i + 1) + '\n';
-                    txt += '  ' + t('precioBase') + '   : $' + a.precio.toFixed(2) + '\n';
-                    if (a.descuento > 0) txt += '  ' + t('descuento') + '     : -$' + a.descuento.toFixed(2) + '\n';
-                    if (a.ivuCalculado > 0) txt += '  ' + t('ivu') + ' (' + a.porcientoIvuUsado.toFixed(2) + '%): +$' + a.ivuCalculado.toFixed(2) + '\n';
-                    txt += '  ' + t('totalArt') + '    : $' + a.total.toFixed(2) + '\n';
-                    txt += ' -----------------------------\n';
+                preciosGuardados.forEach(function (a, i) {
+                    txt += '-------------------------------\n';
+                    txt += lineTxt(t('artN') + ' #' + (i + 1), '');
+                    txt += lineTxt(t('precioBase'), money(a.precio));
+                    if (a.descuento > 0) txt += lineTxt(t('descuento'), '-$' + a.descuento.toFixed(2));
+                    if (a.ivuCalculado > 0) txt += lineTxt(t('ivu') + ' ' + a.porcientoIvuUsado.toFixed(1) + '%', '+$' + a.ivuCalculado.toFixed(2));
+                    txt += lineTxt(t('totalArt'), money(a.total));
                 });
+                txt += '-------------------------------\n';
             } else {
-                txt += ' ' + t('noArts') + '\n';
-                txt += ' -------------------------------\n';
+                txt += t('noArts') + '\n';
+                txt += '-------------------------------\n';
             }
-            txt += t('subtotal') + '        : $' + nSub.toFixed(2) + '\n';
-            if (rebajaTotal > 0) txt += t('descuentoTotal') + ' : -$' + rebajaTotal.toFixed(2) + '\n';
-            if (impuestoTotal > 0) txt += t('ivuAcum') + '   : +$' + impuestoTotal.toFixed(2) + '\n';
-            if (propinaTotal > 0) txt += t('propinaRec') + ' (' + tPct + '%)   : $' + propinaTotal.toFixed(2) + '\n';
+            txt += lineTxt(t('subtotal'), money(nSub));
+            if (rebajaTotal > 0) txt += lineTxt(t('descuentoTotal'), '-$' + rebajaTotal.toFixed(2));
+            if (impuestoTotal > 0) txt += lineTxt(t('ivuAcum'), '+$' + impuestoTotal.toFixed(2));
+            if (propinaTotal > 0) txt += lineTxt(t('propinaRec') + ' ' + tPct + '%', money(propinaTotal));
             txt += '===============================\n';
-            txt += t('totalFinal') + '     : $' + totalNetoGlobal.toFixed(2) + '\n';
+            txt += lineTxt(t('totalFinal'), money(totalNetoGlobal));
             txt += '===============================\n';
             if (modoSerruchoActivo && numPplRaw > 1) {
-                txt += t('serruchoComp') + ': ' + numPplRaw + ' ' + t('panas') + '\n';
-                txt += t('cuotaCabeza') + ': $' + (totalNetoGlobal / nPpl).toFixed(2) + '\n';
+                txt += lineTxt(t('serruchoComp'), numPplRaw + ' ' + t('panas'));
+                txt += lineTxt(t('cuotaCabeza'), money(totalNetoGlobal / nPpl));
                 txt += '===============================\n';
             }
             txt += '    ' + t('gracias');
@@ -4387,6 +4414,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             actualizarHeaderIndicadores();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
             reproducirSonido('caja');
         }
 
@@ -4410,6 +4438,7 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
             if (typeof calc === 'function') calc();
             if (typeof actualizarFlechaDeslizar === 'function') actualizarFlechaDeslizar();
             if (typeof actualizarBloqueoOpcionesCompras === 'function') actualizarBloqueoOpcionesCompras();
+            if (typeof actualizarBloqueoTecladoSegunModo === 'function') actualizarBloqueoTecladoSegunModo();
         }
 
         function copiarTextoHolograma() {
@@ -4456,6 +4485,19 @@ if (btnSalTmp) btnSalTmp.className = "btn-salario-bottom btn-on";
 
             temaActualIdx = (temaActualIdx + 1) % themes.length;
             document.body.classList.add(themes[temaActualIdx]);
+
+            // Colores de barra de estado / header del browser (theme-color)
+            var themeColors = {
+                'theme-cyberpunk': '#09011a',
+                'theme-retro-gold': '#1c1917',
+                'theme-matrix': '#022c22',
+                'theme-sunset': '#451a03',
+                'theme-puertorico': '#020617'
+            };
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) {
+                meta.setAttribute('content', themeColors[themes[temaActualIdx]] || '#09011a');
+            }
         }
 
         /* ============================================================
